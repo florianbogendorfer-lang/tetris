@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tetris</title>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #0b0b0b;
+        color: #f5f5f5;
+        font-family: "Segoe UI", system-ui, sans-serif;
+      }
+      .tetris-shell {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: auto 1fr;
+        align-items: start;
+        padding: 24px;
+        background: rgba(0, 0, 0, 0.5);
+        border: 1px solid #1f1f1f;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      }
+      canvas {
+        border: 2px solid #111;
+        background: #111;
+      }
+      .panel {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-width: 200px;
+      }
+      .panel h1 {
+        margin: 0;
+        font-size: 20px;
+      }
+      .panel p {
+        margin: 0;
+        line-height: 1.4;
+      }
+      .stats {
+        font-family: "Consolas", "SFMono-Regular", monospace;
+        font-size: 16px;
+        background: #121212;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #1c1c1c;
+      }
+      .controls {
+        font-family: "Consolas", "SFMono-Regular", monospace;
+        font-size: 14px;
+        color: #cfcfcf;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="tetris-shell">
+      <canvas id="board" width="240" height="480" aria-label="Tetris Spielfeld"></canvas>
+      <section class="panel">
+        <h1>Tetris</h1>
+        <p>Spiele direkt im Browser. Viel Spaß!</p>
+        <div class="stats" id="stats">Score: 0 | Lines: 0 | Level: 1</div>
+        <div class="controls">
+          Controls: ←/→ = move, ↓ = soft drop, ↑ = rotate, Space = hard drop, P = pause
+        </div>
+        <p id="status"></p>
+      </section>
+    </main>
+
+    <script>
+      (() => {
+        const WIDTH = 10;
+        const HEIGHT = 20;
+        const BLOCK = 24;
+        const COLORS = [
+          "#000000",
+          "#00f0f0",
+          "#0000f0",
+          "#f0a000",
+          "#f0f000",
+          "#00f000",
+          "#a000f0",
+          "#f00000",
+        ];
+
+        const SHAPES = {
+          I: [
+            [0, 0, 0, 0],
+            [1, 1, 1, 1],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+          ],
+          J: [
+            [1, 0, 0],
+            [1, 1, 1],
+            [0, 0, 0],
+          ],
+          L: [
+            [0, 0, 1],
+            [1, 1, 1],
+            [0, 0, 0],
+          ],
+          O: [
+            [1, 1],
+            [1, 1],
+          ],
+          S: [
+            [0, 1, 1],
+            [1, 1, 0],
+            [0, 0, 0],
+          ],
+          T: [
+            [0, 1, 0],
+            [1, 1, 1],
+            [0, 0, 0],
+          ],
+          Z: [
+            [1, 1, 0],
+            [0, 1, 1],
+            [0, 0, 0],
+          ],
+        };
+
+        const TYPES = Object.keys(SHAPES);
+        const canvas = document.getElementById("board");
+        const context = canvas.getContext("2d");
+        const stats = document.getElementById("stats");
+        const status = document.getElementById("status");
+
+        const grid = Array.from({ length: HEIGHT }, () => Array(WIDTH).fill(0));
+        let current = null;
+        let score = 0;
+        let lines = 0;
+        let level = 1;
+        let dropInterval = 800;
+        let dropCounter = 0;
+        let lastTime = 0;
+        let paused = false;
+        let gameOver = false;
+
+        const rotateMatrix = (matrix) => matrix[0].map((_, i) => matrix.map((row) => row[i]).reverse());
+
+        const randomPiece = () => {
+          const type = TYPES[Math.floor(Math.random() * TYPES.length)];
+          const shape = SHAPES[type].map((row) => row.slice());
+          const colorIndex = TYPES.indexOf(type) + 1;
+          return {
+            x: Math.floor(WIDTH / 2) - Math.ceil(shape[0].length / 2),
+            y: 0,
+            matrix: shape,
+            color: colorIndex,
+          };
+        };
+
+        const merge = (piece) => {
+          piece.matrix.forEach((row, y) => {
+            row.forEach((value, x) => {
+              if (value) {
+                grid[piece.y + y][piece.x + x] = piece.color;
+              }
+            });
+          });
+        };
+
+        const collide = (piece) => {
+          for (let y = 0; y < piece.matrix.length; y += 1) {
+            for (let x = 0; x < piece.matrix[y].length; x += 1) {
+              if (piece.matrix[y][x]) {
+                const gridY = piece.y + y;
+                const gridX = piece.x + x;
+                if (gridX < 0 || gridX >= WIDTH || gridY >= HEIGHT) {
+                  return true;
+                }
+                if (gridY >= 0 && grid[gridY][gridX]) {
+                  return true;
+                }
+              }
+            }
+          }
+          return false;
+        };
+
+        const clearLines = () => {
+          let cleared = 0;
+          for (let y = HEIGHT - 1; y >= 0; y -= 1) {
+            if (grid[y].every((value) => value > 0)) {
+              grid.splice(y, 1);
+              grid.unshift(Array(WIDTH).fill(0));
+              cleared += 1;
+              y += 1;
+            }
+          }
+          if (cleared > 0) {
+            const points = [0, 40, 100, 300, 1200];
+            score += points[cleared] * level;
+            lines += cleared;
+            level = Math.floor(lines / 10) + 1;
+            dropInterval = Math.max(100, 800 - (level - 1) * 70);
+          }
+        };
+
+        const drawCell = (x, y, colorIndex) => {
+          context.fillStyle = COLORS[colorIndex];
+          context.fillRect(x * BLOCK, y * BLOCK, BLOCK, BLOCK);
+          context.strokeStyle = "rgba(0,0,0,0.3)";
+          context.strokeRect(x * BLOCK, y * BLOCK, BLOCK, BLOCK);
+        };
+
+        const draw = () => {
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          grid.forEach((row, y) => {
+            row.forEach((value, x) => {
+              if (value) {
+                drawCell(x, y, value);
+              }
+            });
+          });
+          if (current) {
+            current.matrix.forEach((row, y) => {
+              row.forEach((value, x) => {
+                if (value) {
+                  drawCell(current.x + x, current.y + y, current.color);
+                }
+              });
+            });
+          }
+        };
+
+        const updateInfo = () => {
+          stats.textContent = `Score: ${score} | Lines: ${lines} | Level: ${level}`;
+        };
+
+        const spawn = () => {
+          current = randomPiece();
+          if (collide(current)) {
+            gameOver = true;
+            status.textContent = `Game Over! Final Score: ${score}. Reload to play again.`;
+          }
+        };
+
+        const move = (dir) => {
+          current.x += dir;
+          if (collide(current)) {
+            current.x -= dir;
+          }
+        };
+
+        const drop = () => {
+          current.y += 1;
+          if (collide(current)) {
+            current.y -= 1;
+            merge(current);
+            clearLines();
+            spawn();
+          }
+          dropCounter = 0;
+        };
+
+        const hardDrop = () => {
+          while (!collide(current)) {
+            current.y += 1;
+          }
+          current.y -= 1;
+          merge(current);
+          clearLines();
+          spawn();
+          dropCounter = 0;
+        };
+
+        const rotate = () => {
+          const rotated = rotateMatrix(current.matrix);
+          const previous = current.matrix;
+          current.matrix = rotated;
+          if (collide(current)) {
+            current.matrix = previous;
+          }
+        };
+
+        const update = (time = 0) => {
+          if (gameOver) {
+            return;
+          }
+          if (paused) {
+            requestAnimationFrame(update);
+            return;
+          }
+          const deltaTime = time - lastTime;
+          lastTime = time;
+          dropCounter += deltaTime;
+          if (dropCounter > dropInterval) {
+            drop();
+          }
+          draw();
+          updateInfo();
+          requestAnimationFrame(update);
+        };
+
+        const handleKey = (event) => {
+          if (gameOver) return;
+          if (event.key === "ArrowLeft") {
+            move(-1);
+          } else if (event.key === "ArrowRight") {
+            move(1);
+          } else if (event.key === "ArrowDown") {
+            drop();
+          } else if (event.key === "ArrowUp") {
+            rotate();
+          } else if (event.code === "Space") {
+            hardDrop();
+          } else if (event.key.toLowerCase() === "p") {
+            paused = !paused;
+          }
+        };
+
+        document.addEventListener("keydown", handleKey);
+        spawn();
+        updateInfo();
+        update();
+      })();
+    </script>
+  </body>
+</html>
