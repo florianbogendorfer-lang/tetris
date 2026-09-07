@@ -25,8 +25,28 @@ eine falsche wirft sie zurück in Fach 1. Fach 5 heißt „sitzt“.
 Fragen aus niedrigen Fächern kommen deutlich häufiger dran (Gewichtung
 16 : 8 : 4 : 2 : 1), damit die Wackelkandidaten die Zeit bekommen.
 
-Über jeder Frage steht die aktuelle Verteilung in Prozent — am Anfang
-100 % in Fach 1, danach wandert das Band nach rechts.
+Die fünf Fächer haben feste Farben: **rot – orange – gelb – hellgrün – grün**.
+Über jeder Frage stehen sie als fünf Balken; jeder ist so weit in seiner Farbe
+gefüllt, wie viele Fragen gerade darin liegen, der Rest bleibt blass in
+derselben Farbe. Am Anfang ist Fach 1 voll rot und der Rest leer — mit der Zeit
+läuft die Farbe nach rechts ins Grüne.
+
+In der Übersicht steht darüber der **Gesamtfortschritt** als eine Zahl: Fach 1
+zählt nichts, Fach 5 zählt voll, also 0 % am Anfang und 100 %, wenn alles sitzt.
+
+## Gemischt oder einzeln üben
+
+Voreingestellt ist **Alle** — alle Themenbereiche durcheinander. Das ist der
+bessere Weg: KV, UV, PV und RECHT sind sich ähnlich, und in der Prüfung kommen
+sie gemischt. Übt man blockweise, weiß man vorher schon, aus welcher Ecke die
+Antwort kommt, und trainiert das Einordnen nie mit.
+
+Deshalb steht der Themenbereich beim gemischten Üben **erst nach dem Prüfen**
+über der Frage — vorher wäre er die halbe Antwort. Übt man eine einzelne
+Kartei, steht er von Anfang an da.
+
+Blockweise lohnt sich trotzdem für frischen Stoff: einmal allein durch, dann
+zurück ins Gemischte.
 
 ## Bedienung
 

@@ -14,8 +14,12 @@
   --ok:#1c6b3f; --ok-soft:#e0f0e5; --ok-line:#7cb894;
   --no:#a92a1f; --no-soft:#fbe6e3; --no-line:#dd9b93;
   --pick:#8a5a12; --pick-soft:#fbf0dc;
-  /* Farbverlauf der fünf Fächer: grau (neu) bis grün (sitzt) */
-  --b1:#c2beb2; --b2:#a3bcaa; --b3:#79a992; --b4:#468670; --b5:#1f5f4e;
+  /* Die fünf Fächer: rot - orange - gelb - hellgrün - grün.
+     --fN färbt Balken und Rahmen, --fNt ist die Textfassung (dunkler,
+     damit vor allem das Gelb auf hellem Grund lesbar bleibt). */
+  --f1:#d94f45; --f2:#e8862a; --f3:#e0b30c; --f4:#7cb342; --f5:#1f8a4d;
+  --f1t:#b3352b; --f2t:#b3600d; --f3t:#8a6a08; --f4t:#4d7d20; --f5t:#146639;
+  --track:.20;
   --r:14px; --shadow:0 1px 2px rgba(0,0,0,.05), 0 6px 20px -12px rgba(0,0,0,.28);
   --tap:60px;
 }
@@ -27,7 +31,9 @@
     --ok:#78c898; --ok-soft:#1e3327; --ok-line:#3f6b50;
     --no:#f0938a; --no-soft:#3a2320; --no-line:#7d453e;
     --pick:#e0b467; --pick-soft:#38301f;
-    --b1:#4a5055; --b2:#4f6f60; --b3:#57907a; --b4:#57a68a; --b5:#5fb99c;
+    --f1:#e8615a; --f2:#f0954a; --f3:#e3c341; --f4:#90c95c; --f5:#46b878;
+    --f1t:#f0918a; --f2t:#f5b078; --f3t:#e8d071; --f4t:#a9d67f; --f5t:#6fc996;
+    --track:.26;
     --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -14px rgba(0,0,0,.8);
   }
 }
@@ -38,7 +44,9 @@
   --ok:#78c898; --ok-soft:#1e3327; --ok-line:#3f6b50;
   --no:#f0938a; --no-soft:#3a2320; --no-line:#7d453e;
   --pick:#e0b467; --pick-soft:#38301f;
-  --b1:#4a5055; --b2:#4f6f60; --b3:#57907a; --b4:#57a68a; --b5:#5fb99c;
+--f1:#e8615a; --f2:#f0954a; --f3:#e3c341; --f4:#90c95c; --f5:#46b878;
+  --f1t:#f0918a; --f2t:#f5b078; --f3t:#e8d071; --f4t:#a9d67f; --f5t:#6fc996;
+  --track:.26;
   --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -14px rgba(0,0,0,.8);
 }
 
@@ -115,38 +123,52 @@ h1,h2,h3{margin:0;line-height:1.25;font-weight:650}
 .tile .name{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .tile .meta{font-size:12.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
 
-/* ---------- Fächer ---------- */
-.boxes{display:flex;flex-direction:column;gap:8px}
+/* ---------- Anzeige eines Fachs ----------
+   Die Spur trägt dieselbe Farbe wie die Füllung, nur blass. So sieht man
+   auch am leeren Fach, welche Farbe es hat — und wie voll es werden kann. */
+.gauge{position:relative;overflow:hidden;border-radius:99px;background:var(--panel-2)}
+.gauge > i{position:absolute;top:0;bottom:0;left:0;display:block}
+.gauge > .track{right:0;opacity:var(--track)}
+.gauge > .fill{border-radius:99px;transition:width .45s cubic-bezier(.4,0,.2,1)}
+
+/* ---------- Gesamtfortschritt ---------- */
+.total{
+  display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+  padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--line);
+}
+.total .k{font-size:14px;font-weight:600;color:var(--ink-2)}
+.total .v{font-size:34px;font-weight:750;letter-spacing:-.025em;font-variant-numeric:tabular-nums}
+.total .s{font-size:12.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+
+/* ---------- Fächer in der Übersicht ---------- */
+.boxes{display:flex;flex-direction:column;gap:9px}
 .boxrow{display:flex;align-items:center;gap:12px}
 .boxrow .n{
-  width:34px;height:34px;flex:none;border-radius:9px;border:1px solid var(--line-2);
+  width:34px;height:34px;flex:none;border-radius:9px;border:2px solid var(--line-2);
   display:grid;place-items:center;font-weight:700;font-size:14px;background:var(--panel-2);
 }
 .boxrow.on .n{box-shadow:0 0 0 2px var(--ink)}
-.bar{flex:1;height:12px;border-radius:99px;background:var(--panel-2);border:1px solid var(--line);overflow:hidden}
-.bar > i{display:block;height:100%;border-radius:99px;transition:width .35s ease}
+.boxrow .gauge{flex:1;height:14px}
 .boxrow .pct{
   width:52px;text-align:right;font-variant-numeric:tabular-nums;
   font-size:15px;font-weight:700;letter-spacing:-.01em;
 }
 .boxrow .v{width:52px;text-align:right;font-variant-numeric:tabular-nums;font-size:13px;color:var(--ink-2)}
 .boxrow.clickable{cursor:pointer}
-.boxrow.clickable:hover .n{border-color:var(--ink-2)}
+.boxrow.clickable:hover .n{filter:brightness(.94)}
 
 /* ---------- Fächer-Anzeige während des Lernens ---------- */
-.pctstrip{max-width:760px;margin:0 auto;padding:0 16px 10px}
-.stack{
-  display:flex;height:10px;border-radius:99px;overflow:hidden;
-  background:var(--panel-2);border:1px solid var(--line);
+.pctstrip{
+  max-width:760px;margin:0 auto;padding:0 16px 10px;
+  display:grid;grid-template-columns:repeat(5,1fr);gap:5px;
 }
-.stack > i{display:block;height:100%;transition:width .35s ease;min-width:0}
-.pctkeys{
-  display:flex;justify-content:space-between;gap:4px;margin-top:6px;
-  font-size:12px;font-variant-numeric:tabular-nums;color:var(--ink-2);
+.pctstrip .cell{display:flex;flex-direction:column;gap:5px;min-width:0}
+.pctstrip .gauge{height:9px}
+.pctstrip .val{
+  font-size:12px;font-weight:700;text-align:center;
+  font-variant-numeric:tabular-nums;letter-spacing:-.02em;
 }
-.pctkeys > span{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
-.pctkeys .dot{width:8px;height:8px;border-radius:99px;flex:none}
-.pctkeys b{color:var(--ink);font-weight:700}
+.pctstrip .val.zero{opacity:.45}
 
 /* ============================ Frage ============================ */
 .qtext{font-size:19px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere;font-weight:520}
@@ -300,8 +322,8 @@ input[type=file]{display:none}
 
     <div class="card">
       <div class="lbl">Fächer <span class="muted" style="text-transform:none;letter-spacing:0;font-weight:500">— zum Üben eines einzelnen Fachs antippen</span></div>
+      <div class="total" id="home-total"></div>
       <div class="boxes" id="boxes"></div>
-      <div class="stat" style="margin-top:16px" id="home-stat"></div>
     </div>
 
     <div class="actions">
@@ -513,11 +535,29 @@ function spread(list) {
   var counts = [0, 0, 0, 0, 0];
   list.forEach(function (c) { counts[boxOf(c) - 1]++; });
   var total = list.length;
+  // Gesamtfortschritt: Fach 1 zählt nichts, Fach 5 zählt voll.
+  var reached = counts.reduce(function (sum, n, i) { return sum + n * i; }, 0);
   return {
     total: total,
     counts: counts,
-    pct: counts.map(function (n) { return total ? n / total * 100 : 0; })
+    pct: counts.map(function (n) { return total ? n / total * 100 : 0; }),
+    score: total ? reached / (total * (BOXES - 1)) * 100 : 0
   };
+}
+
+/* Ein Fach als Balken: blasse Spur in der Fachfarbe, darüber die
+   gesättigte Füllung bis zum erreichten Anteil. */
+function gauge(fach, pct) {
+  var g = el('div', 'gauge');
+  var track = el('i', 'track');
+  track.style.background = 'var(--f' + fach + ')';
+  var fill = el('i', 'fill');
+  fill.style.background = 'var(--f' + fach + ')';
+  fill.style.width = pct + '%';
+  if (pct > 0) fill.style.minWidth = '7px';   // sonst verschwindet 1 % ganz
+  g.appendChild(track);
+  g.appendChild(fill);
+  return g;
 }
 
 function drawBoxes() {
@@ -530,19 +570,15 @@ function drawBoxes() {
       var row = el('div', 'boxrow' + (ui.box === i ? ' on' : '') + (n ? ' clickable' : ''));
 
       var num = el('div', 'n', String(i));
-      num.style.background = 'var(--b' + i + ')';
-      num.style.borderColor = 'var(--b' + i + ')';
-      num.style.color = i >= 3 ? 'var(--panel)' : 'var(--ink)';
+      num.style.borderColor = 'var(--f' + i + ')';
+      num.style.color = 'var(--f' + i + 't)';
       row.appendChild(num);
 
-      var bar = el('div', 'bar');
-      var fill = el('i');
-      fill.style.width = p + '%';
-      fill.style.background = 'var(--b' + i + ')';
-      bar.appendChild(fill);
-      row.appendChild(bar);
+      row.appendChild(gauge(i, p));
 
-      row.appendChild(el('div', 'pct', Math.round(p) + ' %'));
+      var pct = el('div', 'pct', Math.round(p) + ' %');
+      pct.style.color = p > 0 ? 'var(--f' + i + 't)' : 'var(--ink-2)';
+      row.appendChild(pct);
       row.appendChild(el('div', 'v', n + (i === BOXES ? ' ✓' : '')));
 
       if (n) {
@@ -562,43 +598,40 @@ function drawStrip() {
   if (!s.total) { host.classList.add('hide'); return; }
   host.classList.remove('hide');
 
-  var stack = el('div', 'stack');
-  var keys = el('div', 'pctkeys');
   for (var i = 1; i <= BOXES; i++) {
-    var seg = el('i');
-    seg.style.width = s.pct[i - 1] + '%';
-    seg.style.background = 'var(--b' + i + ')';
-    seg.title = 'Fach ' + i + ': ' + s.counts[i - 1] + ' Fragen';
-    stack.appendChild(seg);
+    var p = s.pct[i - 1];
+    var cell = el('div', 'cell');
+    cell.title = 'Fach ' + i + ': ' + s.counts[i - 1] + ' von ' + s.total + ' Fragen';
+    cell.appendChild(gauge(i, p));
 
-    var k = el('span');
-    var dot = el('span', 'dot');
-    dot.style.background = 'var(--b' + i + ')';
-    k.appendChild(dot);
-    k.appendChild(el('span', null, String(i)));
-    k.appendChild(el('b', null, Math.round(s.pct[i - 1]) + ' %'));
-    keys.appendChild(k);
+    var val = el('div', 'val' + (p > 0 ? '' : ' zero'), Math.round(p) + ' %');
+    val.style.color = p > 0 ? 'var(--f' + i + 't)' : 'var(--ink-2)';
+    cell.appendChild(val);
+    host.appendChild(cell);
   }
-  host.appendChild(stack);
-  host.appendChild(keys);
 }
 
-function drawHomeStat() {
-  var list = cardsOf(ui.cat);
-  var seen = list.filter(function (c) { return progress[c.id]; }).length;
-  var learned = list.filter(function (c) { return boxOf(c) === BOXES; }).length;
-  var host = clear($('home-stat'));
-  [[list.length, 'Fragen'], [seen, 'begonnen'], [learned, 'in Fach ' + BOXES]]
-    .forEach(function (p) {
-      var d = el('div');
-      d.appendChild(el('div', 'v', String(p[0])));
-      d.appendChild(el('div', 'k', p[1]));
-      host.appendChild(d);
-    });
+function scoreFach(score) {
+  return score >= 80 ? 5 : score >= 55 ? 4 : score >= 30 ? 3 : score >= 10 ? 2 : 1;
+}
+
+function drawTotal() {
+  var s = spread(cardsOf(ui.cat));
+  var host = clear($('home-total'));
+
+  var left = el('div');
+  left.appendChild(el('div', 'k', 'Gesamtfortschritt'));
+  left.appendChild(el('div', 's',
+    s.counts[BOXES - 1] + ' von ' + s.total + ' Fragen sitzen in Fach ' + BOXES));
+  host.appendChild(left);
+
+  var v = el('div', 'v', Math.round(s.score) + ' %');
+  v.style.color = 'var(--f' + scoreFach(s.score) + 't)';
+  host.appendChild(v);
 }
 
 function drawHome() {
-  drawTiles(); drawBoxes(); drawHomeStat();
+  drawTiles(); drawBoxes(); drawTotal();
   var n = pool().length;
   var b = $('btn-start');
   b.disabled = !n;
@@ -684,8 +717,15 @@ function show(card) {
   ui.gaps = [];
 
   var tags = clear($('q-tags'));
-  tags.appendChild(el('span', 'tag', card.cat));
-  tags.appendChild(el('span', 'tag hi', 'Fach ' + boxOf(card)));
+  // Beim gemischten Üben gehört das Einordnen zur Aufgabe: erst nach dem
+  // Prüfen steht da, aus welchem Bereich die Frage kam.
+  ui.catTag = el('span', 'tag' + (ui.cat === 'ALLE' ? ' hide' : ''), card.cat);
+  tags.appendChild(ui.catTag);
+  var fach = el('span', 'tag hi', 'Fach ' + boxOf(card));
+  fach.style.background = 'transparent';
+  fach.style.borderColor = 'var(--f' + boxOf(card) + ')';
+  fach.style.color = 'var(--f' + boxOf(card) + 't)';
+  tags.appendChild(fach);
   if (card.kind === 'choice' && card.correct.length > 1 && cfg.showCount) {
     tags.appendChild(el('span', 'tag', card.correct.length + ' richtige Antworten'));
   } else if (card.kind === 'choice' && card.correct.length > 1) {
@@ -909,6 +949,7 @@ function grade() {
   }
 
   ui.locked = true;
+  if (ui.catTag) ui.catTag.classList.remove('hide');
   if (card.kind === 'gaps') drawQuestionText();
   record(card, ok);
   drawStrip();

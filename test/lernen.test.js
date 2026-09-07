@@ -125,9 +125,14 @@ const SOLVE = (right) => {
   }
   ok(wronglyOk === 0, 'keine falsche Antwort wurde als richtig gewertet');
   ok(fell >= 20, fell + '/25 falsche Antworten landeten in Fach 1');
-  ok(await p.locator('#pct .stack i').count() === 5, 'Prozentband bleibt während der Frage sichtbar');
-  const strip = await p.locator('#pct .pctkeys').innerText();
-  console.log('       Band: ' + strip.replace(/\n/g, ' '));
+  ok(await p.locator('#pct .cell').count() === 5, 'fünf Fächer-Balken bleiben während der Frage sichtbar');
+  const fills = await p.evaluate(() => [...document.querySelectorAll('#pct .cell')].map(c => ({
+    breite: c.querySelector('.fill').style.width,
+    wert: c.querySelector('.val').textContent
+  })));
+  ok(fills.every(f => f.breite.replace(' ', '').startsWith(parseInt(f.wert, 10) === 0 ? '0' : '')),
+     'Füllung passt zum Prozentwert');
+  console.log('       Balken: ' + fills.map(f => f.wert.replace(/\s/g, '')).join(' '));
 
   await p.click('#btn-home');
   const p2 = await p.locator('#boxes .pct').allInnerTexts();
@@ -140,6 +145,24 @@ const SOLVE = (right) => {
   await p.reload();
   ok(JSON.stringify(p2) === JSON.stringify(await p.locator('#boxes .pct').allInnerTexts()),
      'Verteilung überlebt den Neustart');
+
+  console.log('\n== Themenbereich erst nach dem Prüfen ==');
+  await p.locator('#tiles .tile').first().click();      // "Alle" = gemischt
+  await p.click('#btn-start');
+  // Das Etikett steckt im DOM, ist aber ausgeblendet - auf Sichtbarkeit prüfen.
+  ok(!(await p.locator('#q-tags .tag').first().isVisible()),
+     'gemischt: Bereich ist vor dem Antworten verdeckt');
+  await answer(true);
+  ok((await p.locator('#q-tags .tag').first().innerText()) === 'KV',
+     'nach dem Prüfen steht der Bereich da');
+  await p.click('#btn-check');
+  await p.click('#btn-home');
+  await p.locator('#tiles .tile').nth(1).click();       // nur KV
+  await p.click('#btn-start');
+  ok((await p.locator('#q-tags .tag').first().innerText()) === 'KV',
+     'einzelne Kartei: Bereich steht von Anfang an da');
+  await p.click('#btn-home');
+  await p.locator('#tiles .tile').first().click();
 
   console.log('\n== Fachfilter ==');
   await p.locator('#boxes .boxrow').nth(1).click();
