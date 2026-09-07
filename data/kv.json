@@ -313,7 +313,6 @@
      "answer": "Krankheitsverhütung"
     }
    ],
-   "shared": true,
    "cat": "KV",
    "src": "ddwtos",
    "id": "8nbhvvsggz4x"
@@ -548,48 +547,23 @@
     {
      "label": null,
      "options": [
-      "Versicherungsfall der Arbeitsunfähigkeit infolge Krankheit",
-      "Versicherungsfall der Krankheit",
-      "Versicherungsfall der Wiedereingliederung nach langem Krankenstand",
       "Arbeitsunfähigkeit",
       "Wiedereingliederung",
-      "Krankheit",
-      "Ende der Versicherung",
-      "Beginn der Versicherung",
-      "ab Beginn der Versicherung",
-      "nach dem Ende der Versicherung",
-      "ab dem Ende der Versicherung"
+      "Krankheit"
      ],
      "answer": "Krankheit"
     },
     {
      "label": null,
      "options": [
-      "Versicherungsfall der Arbeitsunfähigkeit infolge Krankheit",
-      "Versicherungsfall der Krankheit",
-      "Versicherungsfall der Wiedereingliederung nach langem Krankenstand",
-      "Arbeitsunfähigkeit",
-      "Wiedereingliederung",
-      "Krankheit",
       "Ende der Versicherung",
-      "Beginn der Versicherung",
-      "ab Beginn der Versicherung",
-      "nach dem Ende der Versicherung",
-      "ab dem Ende der Versicherung"
+      "Beginn der Versicherung"
      ],
      "answer": "Beginn der Versicherung"
     },
     {
      "label": null,
      "options": [
-      "Versicherungsfall der Arbeitsunfähigkeit infolge Krankheit",
-      "Versicherungsfall der Krankheit",
-      "Versicherungsfall der Wiedereingliederung nach langem Krankenstand",
-      "Arbeitsunfähigkeit",
-      "Wiedereingliederung",
-      "Krankheit",
-      "Ende der Versicherung",
-      "Beginn der Versicherung",
       "ab Beginn der Versicherung",
       "nach dem Ende der Versicherung",
       "ab dem Ende der Versicherung"
@@ -597,10 +571,9 @@
      "answer": "ab Beginn der Versicherung"
     }
    ],
-   "shared": true,
    "cat": "KV",
    "src": "ddwtos",
-   "id": "a3g1d1rkqcnf"
+   "id": "1ah7lod17jo2"
   },
   {
    "kind": "text",
@@ -738,7 +711,6 @@
      "answer": "Angehörige, die über die Familienversicherung mitversichert werden können"
     }
    ],
-   "shared": true,
    "cat": "KV",
    "src": "ddwtos",
    "id": "1v8h3lq1dlh6"
@@ -981,7 +953,6 @@
      "answer": "13 Wochen"
     }
    ],
-   "shared": true,
    "cat": "KV",
    "src": "ddwtos",
    "id": "ysuohm12us8t"
@@ -1006,7 +977,6 @@
      "answer": "GSVG"
     }
    ],
-   "shared": true,
    "cat": "KV",
    "src": "ddwtos",
    "id": "7lzair2amuun"
@@ -6616,7 +6586,6 @@
      "answer": "13 Wochen"
     }
    ],
-   "shared": true,
    "cat": "KV",
    "src": "ddwtos",
    "id": "ysuohm12us8t-2"
@@ -6908,7 +6877,6 @@
      "answer": "Krankheitsverhütung"
     }
    ],
-   "shared": true,
    "cat": "KV",
    "src": "ddwtos",
    "id": "8nbhvvsggz4x-2"
@@ -6940,48 +6908,23 @@
     {
      "label": null,
      "options": [
-      "Versicherungsfall der Wiedereingliederung nach langem Krankenstand",
-      "Versicherungsfall der Arbeitsunfähigkeit infolge Krankheit",
-      "Versicherungsfall der Krankheit",
       "Arbeitsunfähigkeit",
       "Wiedereingliederung",
-      "Krankheit",
-      "Ende der Versicherung",
-      "Beginn der Versicherung",
-      "nach dem Ende der Versicherung",
-      "ab dem Ende der Versicherung",
-      "ab Beginn der Versicherung"
+      "Krankheit"
      ],
      "answer": "Krankheit"
     },
     {
      "label": null,
      "options": [
-      "Versicherungsfall der Wiedereingliederung nach langem Krankenstand",
-      "Versicherungsfall der Arbeitsunfähigkeit infolge Krankheit",
-      "Versicherungsfall der Krankheit",
-      "Arbeitsunfähigkeit",
-      "Wiedereingliederung",
-      "Krankheit",
       "Ende der Versicherung",
-      "Beginn der Versicherung",
-      "nach dem Ende der Versicherung",
-      "ab dem Ende der Versicherung",
-      "ab Beginn der Versicherung"
+      "Beginn der Versicherung"
      ],
      "answer": "Beginn der Versicherung"
     },
     {
      "label": null,
      "options": [
-      "Versicherungsfall der Wiedereingliederung nach langem Krankenstand",
-      "Versicherungsfall der Arbeitsunfähigkeit infolge Krankheit",
-      "Versicherungsfall der Krankheit",
-      "Arbeitsunfähigkeit",
-      "Wiedereingliederung",
-      "Krankheit",
-      "Ende der Versicherung",
-      "Beginn der Versicherung",
       "nach dem Ende der Versicherung",
       "ab dem Ende der Versicherung",
       "ab Beginn der Versicherung"
@@ -6989,10 +6932,9 @@
      "answer": "ab Beginn der Versicherung"
     }
    ],
-   "shared": true,
    "cat": "KV",
    "src": "ddwtos",
-   "id": "a3g1d1rkqcnf-2"
+   "id": "1ah7lod17jo2-2"
   },
   {
    "kind": "choice",
@@ -7135,7 +7077,6 @@
      "answer": "Angehörige, die über die Familienversicherung mitversichert werden können"
     }
    ],
-   "shared": true,
    "cat": "KV",
    "src": "ddwtos",
    "id": "1v8h3lq1dlh6-2"
@@ -7426,7 +7367,6 @@
      "answer": "GSVG"
     }
    ],
-   "shared": true,
    "cat": "KV",
    "src": "ddwtos",
    "id": "7lzair2amuun-2"

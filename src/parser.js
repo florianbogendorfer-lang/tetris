@@ -240,38 +240,51 @@
     return { kind: 'gaps', text: text, blanks: blanks };
   }
 
-  /* ddwtos: Begriffe in Lücken ziehen - alle Lücken teilen sich einen Pool */
+  function groupOf(node) {
+    var cls = node && typeof node.className === 'string' ? node.className : '';
+    var m = cls.match(/\bgroup(\d+)\b/);
+    return m ? m[1] : '1';
+  }
+
+  /* ddwtos: Begriffe in Lücken ziehen. Die Begriffe sind in Gruppen
+     eingeteilt — eine Lücke nimmt nur Wörter ihrer eigenen Gruppe.
+     Gruppen, zu denen keine Lücke gehört, bleiben außen vor. */
   function parseDragText(el) {
     var qtext = el.querySelector('.qtext');
     if (!qtext) return null;
-    var n = 0;
+    var groups = [];
 
     var text = blockText(qtext, {
       skip: isNoise,
       mark: function (node) {
         if (!hasClass(node, 'drop')) return null;
-        return ' ' + GAP_OPEN + (++n) + GAP_CLOSE + ' ';
+        groups.push(groupOf(node));
+        return ' ' + GAP_OPEN + groups.length + GAP_CLOSE + ' ';
       }
     });
-    if (!n) return null;
+    if (!groups.length) return null;
 
-    var pool = [];
+    var pools = {};
     var homes = el.querySelectorAll('.answercontainer .draghome');
     for (var i = 0; i < homes.length; i++) {
-      var t = txt(homes[i]);
-      if (t && pool.indexOf(t) < 0) pool.push(t);
+      var g = groupOf(homes[i]), t = txt(homes[i]);
+      if (!t) continue;
+      var pool = pools[g] || (pools[g] = []);
+      if (pool.indexOf(t) < 0) pool.push(t);
     }
-    if (!pool.length) return null;
 
     var solutions = bracketAnswers(el);
-    if (solutions.length !== n) return null;
+    if (solutions.length !== groups.length) return null;
 
-    var blanks = solutions.map(function (a) {
-      return { label: null, options: pool.slice(), answer: snap(a, pool) };
+    var blanks = groups.map(function (g, i) {
+      var options = pools[g] || [];
+      return { label: null, options: options, answer: snap(solutions[i], options) };
     });
-    if (blanks.some(function (b) { return !b.answer; })) return null;
+    if (blanks.some(function (b) {
+      return !b.answer || !b.options.length || b.options.indexOf(b.answer) < 0;
+    })) return null;
 
-    return { kind: 'gaps', text: text, blanks: blanks, shared: true };
+    return { kind: 'gaps', text: text, blanks: blanks };
   }
 
   /* match: Zuordnungstabelle */

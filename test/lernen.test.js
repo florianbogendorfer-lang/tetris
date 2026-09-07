@@ -98,6 +98,8 @@ const SOLVE = (right) => {
   ok(misses === 0, 'jede Karte in den Daten wiedergefunden (' + misses + ' Ausreißer)');
   ok(good === 40 - misses, good + '/' + (40 - misses) + ' Musterlösungen wurden als richtig gewertet');
   console.log('       Typen: ' + Object.entries(kinds).map(([k,v]) => k+'×'+v).join(', '));
+  ok(!(await p.locator('#q-tags .tag', { hasText: 'RICHTIGE ANTWORTEN' }).count()),
+     'Anzahl der richtigen Antworten wird nicht verraten');
   ok(armedBad.length === 0, 'Prüfen-Knopf erst nach Auswahl aktiv' +
      (armedBad.length ? ': ' + [...new Set(armedBad)].join(' / ') : ''));
 
@@ -161,13 +163,43 @@ const SOLVE = (right) => {
     await p.click('#btn-check');
   }
   const before = await p.locator('#q-body .opt').first().innerText();
-  await p.keyboard.press('a');
+  ok((await p.locator('#q-body .opt .k').allInnerTexts()).slice(0, 10).join('') === '123456789Q'.slice(0, await p.locator('#q-body .opt').count()),
+     'Knöpfe sind mit 1,2,3 … beschriftet: ' + (await p.locator('#q-body .opt .k').allInnerTexts()).join(''));
+  await p.keyboard.press('1');
   await p.waitForSelector('#q-verdict .verdict', { timeout: 3000 });
   const picked = await p.locator('#q-body .opt[aria-pressed="true"] .t').innerText();
-  ok(before.includes(picked), 'Taste A wählt die erste Antwort');
+  ok(before.includes(picked), 'Taste 1 wählt die erste Antwort');
   await p.keyboard.press('Enter');
   await p.waitForTimeout(200);
   ok(!(await p.locator('#q-verdict .verdict').count()), 'Enter blättert weiter');
+
+  console.log('\n== Tastatur über mehrere Lücken ==');
+  await p.click('#btn-home');
+  await p.click('#btn-start');
+  for (let i = 0; i < 200; i++) {
+    const n = await p.locator('#q-body .blank').count();
+    if (n >= 3) break;
+    const r = await answer(false);
+    if (!r) { await p.click('#btn-check'); continue; }
+    await p.click('#btn-check');
+  }
+  const keys = await p.locator('#q-body .opt .k').allInnerTexts();
+  ok(new Set(keys).size === keys.length,
+     'jede Taste kommt nur einmal vor: ' + keys.join(' '));
+  ok(keys.join('') === '123456789QWERTZUIOP'.slice(0, keys.length),
+     'durchgehend nummeriert über alle Lücken: ' + keys.join(' '));
+  // die Taste der letzten Lücke drücken
+  const last = keys[keys.length - 1];
+  await p.keyboard.press(last.toLowerCase());
+  const gap = await p.evaluate(() => {
+    const b = document.querySelector('#q-body .opt[aria-pressed="true"]');
+    return b ? { blank: b.dataset.blank, text: b.querySelector('.t').textContent } : null;
+  });
+  ok(gap && gap.blank === String(await p.locator('#q-body .blank').count() - 1),
+     'Taste "' + last + '" trifft die letzte Lücke: ' + JSON.stringify(gap));
+  const marks = await p.locator('#q-text .gap').allInnerTexts();
+  ok(marks.some(m => /[\u2460-\u2473]/.test(m)),
+     'Lücken im Text sind eingekreist nummeriert: ' + marks.join(' '));
 
   console.log('\n== Verwaltung ==');
   await p.click('#btn-home');           // "Verwalten" ist beim Lernen ausgeblendet

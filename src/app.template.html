@@ -193,7 +193,7 @@ h1,h2,h3{margin:0;line-height:1.25;font-weight:650}
 
 /* ---------- Lücken ---------- */
 .gap{
-  display:inline-block;min-width:76px;padding:1px 10px;margin:0 2px;border-radius:8px;
+  display:inline-block;min-width:52px;padding:1px 10px;margin:0 2px;border-radius:8px;
   background:var(--panel-2);border:1.5px dashed var(--line-2);font-weight:650;text-align:center;
 }
 .gap.set{border-style:solid;background:var(--pick-soft);border-color:var(--pick);color:var(--pick)}
@@ -349,8 +349,8 @@ input[type=file]{display:none}
         <button class="sw" id="sw-shuffle" type="button" aria-pressed="true" aria-label="Antworten mischen"></button>
       </div>
       <div class="toggle">
-        <div><div class="t">Anzahl richtiger Antworten zeigen</div><div class="s">Bei Mehrfachauswahl einblenden, wie viele stimmen</div></div>
-        <button class="sw" id="sw-count" type="button" aria-pressed="true" aria-label="Anzahl richtiger Antworten zeigen"></button>
+        <div><div class="t">Anzahl richtiger Antworten verraten</div><div class="s">Aus, wie in Moodle — dort steht sie auch nicht dabei</div></div>
+        <button class="sw" id="sw-count" type="button" aria-pressed="false" aria-label="Anzahl richtiger Antworten verraten"></button>
       </div>
       <div class="toggle">
         <div><div class="t">Darstellung</div><div class="s">Hell, dunkel oder wie das System</div></div>
@@ -422,7 +422,7 @@ var store = {
 var progress = store.read(LS.prog, {});          // id -> {b, r, w, t}
 var imported = store.read(LS.sets, {});          // cat -> {cards, at, file}
 var cfg = Object.assign(
-  { shuffle: true, showCount: true, theme: 'auto' },
+  { shuffle: true, showCount: false, theme: 'auto' },
   store.read(LS.cfg, {})
 );
 
@@ -664,7 +664,17 @@ function shuffled(n) {
    Frage anzeigen
    ===================================================================== */
 
-var LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+// Beschriftung der Antwortknöpfe: erst die Ziffern, danach die obere
+// Buchstabenreihe — so liegt jede Taste dort, wo der Finger schon ist.
+var KEYS = '123456789QWERTZUIOP';
+function keyLabel(pos) { return KEYS.charAt(pos) || String(pos + 1); }
+
+// Lücken werden eingekreist nummeriert. Die Antwortknöpfe tragen eckige
+// Ziffern und zählen über alle Lücken hinweg durch — sonst gäbe es die
+// „1“ dreimal und keine Taste wäre eindeutig.
+function gapLabel(n) {
+  return n >= 1 && n <= 20 ? String.fromCharCode(0x245F + n) : String(n);
+}
 var GAP_RE = /(\d+)/g;
 
 function show(card) {
@@ -725,12 +735,12 @@ function drawQuestionText() {
     if (m.index > at) host.appendChild(document.createTextNode(text.slice(at, m.index)));
     var i = parseInt(m[1], 10) - 1;
     var pick = ui.gaps[i];
-    var chip = el('span', 'gap' + (pick ? ' set' : ''), pick || (' ' + (i + 1) + ' '));
+    var chip = el('span', 'gap' + (pick ? ' set' : ''), pick || gapLabel(i + 1));
     chip.dataset.gap = String(i);
     if (ui.locked) {
       chip.classList.remove('set');
       chip.classList.add(pick === card.blanks[i].answer ? 'ok' : 'no');
-      if (!pick) chip.textContent = ' ' + (i + 1) + ' ';
+      if (!pick) chip.textContent = gapLabel(i + 1);
     }
     host.appendChild(chip);
     at = m.index + m[0].length;
@@ -738,11 +748,12 @@ function drawQuestionText() {
   if (at < text.length) host.appendChild(document.createTextNode(text.slice(at)));
 }
 
-function optionButton(letter, label) {
+function optionButton(hotkey, label) {
   var b = el('button', 'opt');
   b.type = 'button';
   b.setAttribute('aria-pressed', 'false');
-  b.appendChild(el('span', 'k', letter));
+  b.dataset.key = hotkey;
+  b.appendChild(el('span', 'k', hotkey));
   b.appendChild(el('span', 't', label));
   return b;
 }
@@ -760,7 +771,7 @@ function buildChoice(card) {
 
   var host = el('div', 'opts' + (compact(card.options) ? ' inline' : ''));
   ui.order.forEach(function (src, pos) {
-    var b = optionButton(LETTERS[pos] || String(pos + 1), card.options[src]);
+    var b = optionButton(keyLabel(pos), card.options[src]);
     b.dataset.src = String(src);
     b.onclick = function () {
       if (ui.locked) return;
@@ -783,16 +794,17 @@ function buildChoice(card) {
 /* ---------- Lücken ---------- */
 function buildGaps(card) {
   var host = el('div');
+  var nth = 0;                       // zählt über alle Lücken hinweg weiter
   card.blanks.forEach(function (blank, i) {
     var wrap = el('div', 'blank');
     var lbl = el('div', 'lbl');
-    lbl.appendChild(el('span', 'idx', blank.label ? '' : 'Lücke ' + (i + 1)));
+    lbl.appendChild(el('span', 'idx', blank.label ? '' : 'Lücke ' + gapLabel(i + 1)));
     if (blank.label) lbl.appendChild(document.createTextNode(blank.label));
     wrap.appendChild(lbl);
 
     var opts = el('div', 'opts' + (compact(blank.options) ? ' inline' : ''));
     shuffled(blank.options.length).forEach(function (src, pos) {
-      var b = optionButton(LETTERS[pos] || String(pos + 1), blank.options[src]);
+      var b = optionButton(keyLabel(nth++), blank.options[src]);
       b.dataset.blank = String(i);
       b.onclick = function () {
         if (ui.locked) return;
@@ -1196,7 +1208,7 @@ $('file-backup').onchange = function (e) {
       if (!confirm('Sicherung laden? Fortschritt und Fragensätze werden überschrieben.')) return;
       progress = data.progress || {};
       imported = data.sets || {};
-      cfg = Object.assign({ shuffle: true, showCount: true, theme: 'auto' }, data.settings || {});
+      cfg = Object.assign({ shuffle: true, showCount: false, theme: 'auto' }, data.settings || {});
       store.write(LS.prog, progress); store.write(LS.sets, imported); store.write(LS.cfg, cfg);
       rebuild(); applyTheme(); applySwitches(); drawSets(); drawManageStat();
       alert('Sicherung geladen.');
@@ -1231,13 +1243,10 @@ document.addEventListener('keydown', function (e) {
     return;
   }
   if (ui.locked) return;
-  // Die Knöpfe sind mit A, B, C ... beschriftet; Ziffern gehen auch.
-  var at = /^[a-zA-Z]$/.test(e.key) ? LETTERS.indexOf(e.key.toUpperCase())
-         : /^[1-9]$/.test(e.key) ? parseInt(e.key, 10) - 1 : -1;
-  if (at < 0) return;
-  var groups = $('q-body').querySelectorAll('.opts');
-  if (groups.length !== 1) return;              // bei mehreren Lücken nicht eindeutig
-  var opt = groups[0].children[at];
+  if (e.key.length !== 1) return;
+  var hotkey = e.key.toUpperCase();
+  if (KEYS.indexOf(hotkey) < 0) return;
+  var opt = $('q-body').querySelector('.opt[data-key="' + hotkey + '"]');
   if (opt) { e.preventDefault(); opt.click(); }
 });
 

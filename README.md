@@ -28,6 +28,17 @@ Fragen aus niedrigen Fächern kommen deutlich häufiger dran (Gewichtung
 Über jeder Frage steht die aktuelle Verteilung in Prozent — am Anfang
 100 % in Fach 1, danach wandert das Band nach rechts.
 
+## Bedienung
+
+Die Antwortknöpfe sind mit `1`–`9`, danach `Q W E R T Z U I O P` beschriftet;
+dieselbe Taste wählt die Antwort aus. Bei Lückentexten läuft die Nummerierung
+über alle Lücken durch, damit jede Taste eindeutig bleibt. Die Lücken selbst
+sind eingekreist nummeriert (①②③), damit sie nicht mit den Tasten kollidieren.
+`Enter` prüft bzw. blättert weiter.
+
+Wie viele Antworten richtig sind, wird **nicht** verraten — so wie in Moodle
+auch. Wer es doch will, schaltet es unter *Verwalten → Einstellungen* ein.
+
 ## Weitere Fragen importieren
 
 1. In Moodle den Test durchspielen und die Seite **„Überprüfung des
@@ -52,7 +63,7 @@ Karten.
 | `truefalse` | Wahr/Falsch |
 | `shortanswer` | freie Eingabe (mehrere Schreibweisen zählen) |
 | `gapselect` | Lückentext mit Auswahl je Lücke |
-| `ddwtos` | Lückentext mit gemeinsamem Wortvorrat |
+| `ddwtos` | Lückentext; jede Lücke nimmt nur Wörter ihrer eigenen Gruppe |
 | `match` | Zuordnung |
 
 ## Sicherung
