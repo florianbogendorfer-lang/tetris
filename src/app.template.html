@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Lernkartei Sozialversicherung</title>
+<style>
+/* ============================ Grundlagen ============================ */
+:root{
+  --bg:#f2f1ee; --panel:#ffffff; --panel-2:#f7f6f3; --ink:#1c1b19; --ink-2:#5d594f;
+  --line:#dedbd3; --line-2:#c9c5ba;
+  --accent:#1f5f4e; --accent-ink:#ffffff; --accent-soft:#e3efe9;
+  --ok:#1c6b3f; --ok-soft:#e0f0e5; --ok-line:#7cb894;
+  --no:#a92a1f; --no-soft:#fbe6e3; --no-line:#dd9b93;
+  --pick:#8a5a12; --pick-soft:#fbf0dc;
+  /* Farbverlauf der fünf Fächer: grau (neu) bis grün (sitzt) */
+  --b1:#c2beb2; --b2:#a3bcaa; --b3:#79a992; --b4:#468670; --b5:#1f5f4e;
+  --r:14px; --shadow:0 1px 2px rgba(0,0,0,.05), 0 6px 20px -12px rgba(0,0,0,.28);
+  --tap:60px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#16181a; --panel:#1f2225; --panel-2:#25292c; --ink:#eceae5; --ink-2:#a3a49f;
+    --line:#33383c; --line-2:#454b50;
+    --accent:#5fb99c; --accent-ink:#10221d; --accent-soft:#23342e;
+    --ok:#78c898; --ok-soft:#1e3327; --ok-line:#3f6b50;
+    --no:#f0938a; --no-soft:#3a2320; --no-line:#7d453e;
+    --pick:#e0b467; --pick-soft:#38301f;
+    --b1:#4a5055; --b2:#4f6f60; --b3:#57907a; --b4:#57a68a; --b5:#5fb99c;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -14px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#16181a; --panel:#1f2225; --panel-2:#25292c; --ink:#eceae5; --ink-2:#a3a49f;
+  --line:#33383c; --line-2:#454b50;
+  --accent:#5fb99c; --accent-ink:#10221d; --accent-soft:#23342e;
+  --ok:#78c898; --ok-soft:#1e3327; --ok-line:#3f6b50;
+  --no:#f0938a; --no-soft:#3a2320; --no-line:#7d453e;
+  --pick:#e0b467; --pick-soft:#38301f;
+  --b1:#4a5055; --b2:#4f6f60; --b3:#57907a; --b4:#57a68a; --b5:#5fb99c;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -14px rgba(0,0,0,.8);
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-padding:110px 0 96px}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  padding-env:0;
+}
+button{font:inherit;color:inherit}
+h1,h2,h3{margin:0;line-height:1.25;font-weight:650}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 40px}
+.hide{display:none !important}
+
+/* ============================ Kopfzeile ============================ */
+.top{
+  position:sticky; top:0; z-index:20; background:var(--bg);
+  border-bottom:1px solid var(--line);
+  padding-top:env(safe-area-inset-top);
+}
+.top-in{max-width:760px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:10px;min-height:56px}
+.brand{font-weight:700;letter-spacing:-.01em;font-size:17px}
+.crumb{
+  color:var(--ink-2);font-size:13px;font-variant-numeric:tabular-nums;
+  flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.spacer{flex:none}
+
+.iconbtn{
+  border:1px solid var(--line); background:var(--panel); border-radius:10px;
+  min-width:42px; height:42px; padding:0 12px; cursor:pointer; font-size:14px; font-weight:600;
+  display:inline-flex; align-items:center; justify-content:center; gap:6px;
+}
+.iconbtn:hover{border-color:var(--line-2)}
+.iconbtn:active{transform:translateY(1px)}
+
+/* ============================ Bausteine ============================ */
+.card{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--r);
+  box-shadow:var(--shadow); padding:18px; margin-top:16px;
+}
+.lbl{font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-2);margin-bottom:10px}
+.muted{color:var(--ink-2)}
+.small{font-size:13px}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border:1px solid var(--line-2); background:var(--panel); border-radius:12px;
+  padding:0 18px; min-height:52px; font-weight:600; cursor:pointer; text-align:center;
+}
+.btn:hover{border-color:var(--ink-2)}
+.btn:active{transform:translateY(1px)}
+.btn[disabled]{opacity:.45;cursor:default;transform:none}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.06)}
+.btn.wide{width:100%;min-height:var(--tap);font-size:17px}
+.btn.ghost{background:transparent}
+.btn.danger{color:var(--no);border-color:var(--no-line)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row.stretch > *{flex:1 1 160px}
+
+/* ---------- Themenbereiche ---------- */
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media (min-width:560px){.tiles{grid-template-columns:repeat(3,1fr)}}
+.tile{
+  border:1px solid var(--line-2); background:var(--panel); border-radius:var(--r);
+  padding:14px; min-height:92px; cursor:pointer; text-align:left;
+  display:flex; flex-direction:column; justify-content:space-between;
+}
+.tile:hover{border-color:var(--ink-2)}
+.tile[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.tile[disabled]{opacity:.5;cursor:default}
+.tile .name{font-size:20px;font-weight:700;letter-spacing:-.01em}
+.tile .meta{font-size:12.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+
+/* ---------- Fächer ---------- */
+.boxes{display:flex;flex-direction:column;gap:8px}
+.boxrow{display:flex;align-items:center;gap:12px}
+.boxrow .n{
+  width:34px;height:34px;flex:none;border-radius:9px;border:1px solid var(--line-2);
+  display:grid;place-items:center;font-weight:700;font-size:14px;background:var(--panel-2);
+}
+.boxrow.on .n{box-shadow:0 0 0 2px var(--ink)}
+.bar{flex:1;height:12px;border-radius:99px;background:var(--panel-2);border:1px solid var(--line);overflow:hidden}
+.bar > i{display:block;height:100%;border-radius:99px;transition:width .35s ease}
+.boxrow .pct{
+  width:52px;text-align:right;font-variant-numeric:tabular-nums;
+  font-size:15px;font-weight:700;letter-spacing:-.01em;
+}
+.boxrow .v{width:52px;text-align:right;font-variant-numeric:tabular-nums;font-size:13px;color:var(--ink-2)}
+.boxrow.clickable{cursor:pointer}
+.boxrow.clickable:hover .n{border-color:var(--ink-2)}
+
+/* ---------- Fächer-Anzeige während des Lernens ---------- */
+.pctstrip{max-width:760px;margin:0 auto;padding:0 16px 10px}
+.stack{
+  display:flex;height:10px;border-radius:99px;overflow:hidden;
+  background:var(--panel-2);border:1px solid var(--line);
+}
+.stack > i{display:block;height:100%;transition:width .35s ease;min-width:0}
+.pctkeys{
+  display:flex;justify-content:space-between;gap:4px;margin-top:6px;
+  font-size:12px;font-variant-numeric:tabular-nums;color:var(--ink-2);
+}
+.pctkeys > span{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.pctkeys .dot{width:8px;height:8px;border-radius:99px;flex:none}
+.pctkeys b{color:var(--ink);font-weight:700}
+
+/* ============================ Frage ============================ */
+.qtext{font-size:19px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere;font-weight:520}
+@media (min-width:560px){.qtext{font-size:21px}}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.tag{
+  font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  border:1px solid var(--line-2);border-radius:99px;padding:4px 10px;color:var(--ink-2);
+}
+.tag.hi{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+
+.opts{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+.opts.inline{flex-direction:row;flex-wrap:wrap}
+/* Enger geschnitten, damit zwei Spalten auch auf schmalen Handys
+   ohne Zeilenumbruch im Antworttext auskommen. */
+.opts.inline .opt{flex:1 0 auto;max-width:100%;padding:12px 14px;gap:9px;align-items:center}
+.opts.inline .opt .k{width:24px;height:24px;font-size:12px;margin-top:0}
+.opts.inline .opt .t{padding-top:0}
+.opt{
+  display:flex;align-items:flex-start;gap:12px;width:100%;text-align:left;
+  border:1.5px solid var(--line-2); background:var(--panel); border-radius:12px;
+  padding:14px 16px; min-height:var(--tap); cursor:pointer; font-size:16.5px; line-height:1.4;
+}
+.opt:hover{border-color:var(--ink-2)}
+.opt:active{transform:translateY(1px)}
+.opt .k{
+  flex:none;width:28px;height:28px;border-radius:8px;border:1.5px solid var(--line-2);
+  display:grid;place-items:center;font-size:13px;font-weight:700;color:var(--ink-2);margin-top:1px;
+}
+.opt .t{flex:1;padding-top:2px;overflow-wrap:break-word;hyphens:auto}
+.opt[aria-pressed="true"]{background:var(--pick-soft);border-color:var(--pick)}
+.opt[aria-pressed="true"] .k{background:var(--pick);border-color:var(--pick);color:var(--panel)}
+.opt.ok{background:var(--ok-soft);border-color:var(--ok-line)}
+.opt.ok .k{background:var(--ok);border-color:var(--ok);color:var(--panel)}
+.opt.no{background:var(--no-soft);border-color:var(--no-line)}
+.opt.no .k{background:var(--no);border-color:var(--no);color:var(--panel)}
+.opt.locked{cursor:default}
+.opt.locked:hover{border-color:var(--line-2)}
+.opt.locked[aria-pressed="true"]{border-color:var(--pick)}
+.opt.locked.ok:hover{border-color:var(--ok-line)}
+.opt.locked.no:hover{border-color:var(--no-line)}
+.mark{flex:none;font-size:18px;line-height:1;margin-top:5px;font-weight:700}
+.mark.ok{color:var(--ok)} .mark.no{color:var(--no)}
+
+/* ---------- Lücken ---------- */
+.gap{
+  display:inline-block;min-width:76px;padding:1px 10px;margin:0 2px;border-radius:8px;
+  background:var(--panel-2);border:1.5px dashed var(--line-2);font-weight:650;text-align:center;
+}
+.gap.set{border-style:solid;background:var(--pick-soft);border-color:var(--pick);color:var(--pick)}
+.gap.ok{border-style:solid;background:var(--ok-soft);border-color:var(--ok-line);color:var(--ok)}
+.gap.no{border-style:solid;background:var(--no-soft);border-color:var(--no-line);color:var(--no)}
+.blank{margin-top:18px}
+.blank > .lbl{margin-bottom:8px;text-transform:none;letter-spacing:0;font-size:14px;color:var(--ink);font-weight:650}
+.blank > .lbl .idx{color:var(--ink-2);font-weight:700;margin-right:6px}
+
+/* ---------- Freitext ---------- */
+.txtin{
+  width:100%;min-height:var(--tap);border:1.5px solid var(--line-2);border-radius:12px;
+  background:var(--panel);color:var(--ink);padding:12px 16px;font:inherit;font-size:17px;margin-top:16px;
+}
+.txtin:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+.txtin.ok{border-color:var(--ok-line);background:var(--ok-soft)}
+.txtin.no{border-color:var(--no-line);background:var(--no-soft)}
+
+/* ---------- Auflösung ---------- */
+.verdict{margin-top:18px;border-radius:12px;padding:14px 16px;border:1.5px solid}
+.verdict.ok{background:var(--ok-soft);border-color:var(--ok-line)}
+.verdict.no{background:var(--no-soft);border-color:var(--no-line)}
+.verdict .head{font-weight:750;font-size:17px;display:flex;align-items:center;gap:8px}
+.verdict.ok .head{color:var(--ok)} .verdict.no .head{color:var(--no)}
+.verdict .sol{margin-top:8px;font-size:15.5px;white-space:pre-wrap;overflow-wrap:anywhere}
+.verdict .move{margin-top:10px;font-size:13.5px;color:var(--ink-2);font-weight:600}
+
+.actions{
+  position:sticky;bottom:0;z-index:10;background:var(--bg);
+  border-top:1px solid var(--line);
+  padding:14px 0 calc(14px + env(safe-area-inset-bottom));margin-top:20px;
+}
+.actions::before{
+  content:"";position:absolute;left:0;right:0;top:-24px;height:24px;
+  background:linear-gradient(to top,var(--bg),transparent);pointer-events:none;
+}
+
+/* ============================ Verwaltung ============================ */
+.list{display:flex;flex-direction:column;gap:8px}
+.item{
+  display:flex;align-items:center;gap:12px;border:1px solid var(--line);
+  border-radius:12px;padding:12px 14px;background:var(--panel-2);
+}
+.item .grow{flex:1;min-width:0}
+.item .t{font-weight:650}
+.item .s{font-size:13px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.toggle{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 0;border-top:1px solid var(--line)}
+.toggle:first-of-type{border-top:0}
+.toggle .t{font-weight:600}
+.toggle .s{font-size:13px;color:var(--ink-2)}
+.sw{
+  flex:none;width:52px;height:31px;border-radius:99px;border:1px solid var(--line-2);
+  background:var(--panel-2);position:relative;cursor:pointer;transition:background .15s,border-color .15s;
+}
+.sw::after{
+  content:"";position:absolute;top:3px;left:3px;width:23px;height:23px;border-radius:99px;
+  background:var(--panel);box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .15s;
+}
+.sw[aria-pressed="true"]{background:var(--accent);border-color:var(--accent)}
+.sw[aria-pressed="true"]::after{transform:translateX(21px)}
+.seg{display:flex;border:1px solid var(--line-2);border-radius:10px;overflow:hidden}
+.seg button{border:0;background:var(--panel);padding:9px 14px;cursor:pointer;font-size:14px;font-weight:600}
+.seg button + button{border-left:1px solid var(--line-2)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+
+.note{
+  border-left:3px solid var(--accent);background:var(--accent-soft);
+  border-radius:0 10px 10px 0;padding:12px 14px;font-size:14px;margin-top:12px;
+}
+.note.warn{border-left-color:var(--no);background:var(--no-soft)}
+code{background:var(--panel-2);border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:.9em}
+
+.stat{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center}
+.stat > div{background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:12px 8px}
+.stat .v{font-size:24px;font-weight:750;font-variant-numeric:tabular-nums}
+.stat .k{font-size:12px;color:var(--ink-2);margin-top:2px}
+
+.empty{text-align:center;padding:40px 16px;color:var(--ink-2)}
+.empty .big{font-size:40px;margin-bottom:8px}
+input[type=file]{display:none}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <span class="brand">Lernkartei</span>
+    <span class="crumb" id="crumb"></span>
+    <span class="spacer"></span>
+    <button class="iconbtn hide" id="btn-home" type="button">Übersicht</button>
+    <button class="iconbtn" id="btn-manage" type="button">Verwalten</button>
+  </div>
+  <div class="pctstrip hide" id="pct"></div>
+</header>
+
+<main class="wrap">
+
+  <!-- ==================== Übersicht ==================== -->
+  <section id="s-home">
+    <div class="card">
+      <div class="lbl">Themenbereich</div>
+      <div class="tiles" id="tiles"></div>
+    </div>
+
+    <div class="card">
+      <div class="lbl">Fächer <span class="muted" style="text-transform:none;letter-spacing:0;font-weight:500">— zum Üben eines einzelnen Fachs antippen</span></div>
+      <div class="boxes" id="boxes"></div>
+      <div class="stat" style="margin-top:16px" id="home-stat"></div>
+    </div>
+
+    <div class="actions">
+      <button class="btn primary wide" id="btn-start" type="button">Lernen starten</button>
+    </div>
+  </section>
+
+  <!-- ==================== Lernen ==================== -->
+  <section id="s-learn" class="hide">
+    <div class="card">
+      <div class="tags" id="q-tags"></div>
+      <div class="qtext" id="q-text"></div>
+      <div id="q-body"></div>
+      <div id="q-verdict"></div>
+    </div>
+    <div class="actions">
+      <button class="btn primary wide" id="btn-check" type="button">Prüfen</button>
+    </div>
+  </section>
+
+  <!-- ==================== Verwaltung ==================== -->
+  <section id="s-manage" class="hide">
+    <div class="card">
+      <div class="lbl">Fragen importieren</div>
+      <p class="small muted" style="margin:0 0 14px">
+        Speichere in Moodle die Seite <em>„Überprüfung des Testversuchs“</em> als vollständige
+        HTML-Datei (Strg&nbsp;+&nbsp;S) und wähle sie hier aus. Die Datei bleibt auf deinem Gerät —
+        es wird nichts hochgeladen. Der Themenbereich wird aus dem Seitentitel erkannt und kann
+        vor dem Speichern geändert werden.
+      </p>
+      <button class="btn wide" id="btn-pick" type="button">HTML-Datei auswählen</button>
+      <input type="file" id="file" accept=".html,.htm,text/html" multiple>
+      <div id="import-out"></div>
+    </div>
+
+    <div class="card">
+      <div class="lbl">Fragensätze</div>
+      <div class="list" id="sets"></div>
+    </div>
+
+    <div class="card">
+      <div class="lbl">Einstellungen</div>
+      <div class="toggle">
+        <div><div class="t">Antworten mischen</div><div class="s">Reihenfolge bei jedem Aufruf neu würfeln</div></div>
+        <button class="sw" id="sw-shuffle" type="button" aria-pressed="true" aria-label="Antworten mischen"></button>
+      </div>
+      <div class="toggle">
+        <div><div class="t">Anzahl richtiger Antworten zeigen</div><div class="s">Bei Mehrfachauswahl einblenden, wie viele stimmen</div></div>
+        <button class="sw" id="sw-count" type="button" aria-pressed="true" aria-label="Anzahl richtiger Antworten zeigen"></button>
+      </div>
+      <div class="toggle">
+        <div><div class="t">Darstellung</div><div class="s">Hell, dunkel oder wie das System</div></div>
+        <div class="seg" id="seg-theme">
+          <button type="button" data-theme="auto">Auto</button>
+          <button type="button" data-theme="light">Hell</button>
+          <button type="button" data-theme="dark">Dunkel</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="lbl">Fortschritt</div>
+      <div class="stat" id="manage-stat"></div>
+      <div class="row stretch" style="margin-top:14px">
+        <button class="btn" id="btn-export" type="button">Sicherung speichern</button>
+        <button class="btn" id="btn-import" type="button">Sicherung laden</button>
+        <input type="file" id="file-backup" accept=".json,application/json">
+      </div>
+      <div class="row stretch" style="margin-top:10px">
+        <button class="btn danger" id="btn-reset" type="button">Fortschritt zurücksetzen</button>
+      </div>
+      <div class="note small">
+        Alles liegt im <code>localStorage</code> dieses Browsers. Verschiebst du die Datei auf ein
+        anderes Gerät oder leerst du die Browserdaten, nimm deinen Fortschritt über die Sicherung mit.
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+/*__PARSER__*/
+</script>
+
+<script id="seed" type="application/json">/*__DATA__*/</script>
+
+<script>
+(function () {
+'use strict';
+
+/* =====================================================================
+   Daten
+   ===================================================================== */
+
+var SEED = JSON.parse(document.getElementById('seed').textContent);
+var CATS = ['KV', 'UV', 'PV', 'RECHT'];
+var CAT_NAME = {
+  KV: 'Krankenversicherung', UV: 'Unfallversicherung',
+  PV: 'Pensionsversicherung', RECHT: 'Recht'
+};
+var BOXES = 5;
+var LS = { prog: 'lk.progress.v1', sets: 'lk.sets.v1', cfg: 'lk.settings.v1' };
+
+var store = {
+  read: function (k, fallback) {
+    try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : fallback; }
+    catch (e) { return fallback; }
+  },
+  write: function (k, v) {
+    try { localStorage.setItem(k, JSON.stringify(v)); return true; }
+    catch (e) {
+      alert('Speichern fehlgeschlagen — der Speicher des Browsers ist voll oder gesperrt.');
+      return false;
+    }
+  }
+};
+
+var progress = store.read(LS.prog, {});          // id -> {b, r, w, t}
+var imported = store.read(LS.sets, {});          // cat -> {cards, at, file}
+var cfg = Object.assign(
+  { shuffle: true, showCount: true, theme: 'auto' },
+  store.read(LS.cfg, {})
+);
+
+/* Mitgelieferte und importierte Karten zu einem Stapel zusammenführen. */
+var deck = [];
+function rebuild() {
+  deck = [];
+  var byCat = {};
+  (SEED.cards || []).forEach(function (c) { (byCat[c.cat] = byCat[c.cat] || []).push(c); });
+  Object.keys(imported).forEach(function (cat) {
+    byCat[cat] = (imported[cat].cards || []).slice();      // Import ersetzt Mitgeliefertes
+  });
+  CATS.forEach(function (cat) { (byCat[cat] || []).forEach(function (c) { deck.push(c); }); });
+}
+rebuild();
+
+function cardsOf(cat) {
+  return cat === 'ALLE' ? deck : deck.filter(function (c) { return c.cat === cat; });
+}
+function boxOf(card) {
+  var p = progress[card.id];
+  return p && p.b >= 1 && p.b <= BOXES ? p.b : 1;
+}
+
+/* =====================================================================
+   Zustand der Oberfläche
+   ===================================================================== */
+
+var ui = {
+  screen: 'home',
+  cat: 'ALLE',
+  box: 0,            // 0 = alle Fächer
+  card: null,
+  order: [],         // Anzeigereihenfolge der Optionen
+  picked: [],        // Auswahl bei choice
+  gaps: [],          // Auswahl je Lücke
+  locked: false,
+  right: 0, wrong: 0, done: 0,
+  lastId: null
+};
+
+var $ = function (id) { return document.getElementById(id); };
+function el(tag, cls, text) {
+  var n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text !== undefined && text !== null) n.textContent = text;
+  return n;
+}
+function clear(n) { while (n.firstChild) n.removeChild(n.firstChild); return n; }
+
+/* =====================================================================
+   Übersicht
+   ===================================================================== */
+
+function drawTiles() {
+  var box = clear($('tiles'));
+
+  function tile(cat, label, sub) {
+    var n = el('button', 'tile');
+    n.type = 'button';
+    n.setAttribute('aria-pressed', ui.cat === cat ? 'true' : 'false');
+    n.appendChild(el('div', 'name', label));
+    n.appendChild(el('div', 'meta', sub));
+    return n;
+  }
+
+  var all = tile('ALLE', 'Alle', deck.length + (deck.length === 1 ? ' Frage' : ' Fragen'));
+  all.onclick = function () { ui.cat = 'ALLE'; drawHome(); };
+  box.appendChild(all);
+
+  CATS.forEach(function (cat) {
+    var list = cardsOf(cat);
+    var learned = list.filter(function (c) { return boxOf(c) === BOXES; }).length;
+    var sub = list.length
+      ? list.length + ' Fragen · ' + learned + ' sitzen'
+      : 'noch nicht importiert';
+    var n = tile(cat, cat, sub);
+    n.title = CAT_NAME[cat];
+    if (!list.length) { n.disabled = true; n.setAttribute('aria-pressed', 'false'); }
+    else n.onclick = function () { ui.cat = cat; drawHome(); };
+    box.appendChild(n);
+  });
+}
+
+/* Verteilung der Karten auf die fünf Fächer, in Stück und Prozent.
+   Am Anfang liegt alles in Fach 1 — also 100 % unten, 0 % darüber. */
+function spread(list) {
+  var counts = [0, 0, 0, 0, 0];
+  list.forEach(function (c) { counts[boxOf(c) - 1]++; });
+  var total = list.length;
+  return {
+    total: total,
+    counts: counts,
+    pct: counts.map(function (n) { return total ? n / total * 100 : 0; })
+  };
+}
+
+function drawBoxes() {
+  var host = clear($('boxes'));
+  var s = spread(cardsOf(ui.cat));
+
+  for (var i = 1; i <= BOXES; i++) {
+    (function (i) {
+      var n = s.counts[i - 1], p = s.pct[i - 1];
+      var row = el('div', 'boxrow' + (ui.box === i ? ' on' : '') + (n ? ' clickable' : ''));
+
+      var num = el('div', 'n', String(i));
+      num.style.background = 'var(--b' + i + ')';
+      num.style.borderColor = 'var(--b' + i + ')';
+      num.style.color = i >= 3 ? 'var(--panel)' : 'var(--ink)';
+      row.appendChild(num);
+
+      var bar = el('div', 'bar');
+      var fill = el('i');
+      fill.style.width = p + '%';
+      fill.style.background = 'var(--b' + i + ')';
+      bar.appendChild(fill);
+      row.appendChild(bar);
+
+      row.appendChild(el('div', 'pct', Math.round(p) + ' %'));
+      row.appendChild(el('div', 'v', n + (i === BOXES ? ' ✓' : '')));
+
+      if (n) {
+        row.onclick = function () { ui.box = ui.box === i ? 0 : i; drawHome(); };
+        row.title = ui.box === i ? 'Fachfilter aufheben' : 'Nur Fach ' + i + ' üben';
+      }
+      host.appendChild(row);
+    })(i);
+  }
+}
+
+/* Dieselbe Verteilung als schmales Band — bleibt beim Beantworten
+   der Fragen oben stehen. */
+function drawStrip() {
+  var host = clear($('pct'));
+  var s = spread(cardsOf(ui.cat));
+  if (!s.total) { host.classList.add('hide'); return; }
+  host.classList.remove('hide');
+
+  var stack = el('div', 'stack');
+  var keys = el('div', 'pctkeys');
+  for (var i = 1; i <= BOXES; i++) {
+    var seg = el('i');
+    seg.style.width = s.pct[i - 1] + '%';
+    seg.style.background = 'var(--b' + i + ')';
+    seg.title = 'Fach ' + i + ': ' + s.counts[i - 1] + ' Fragen';
+    stack.appendChild(seg);
+
+    var k = el('span');
+    var dot = el('span', 'dot');
+    dot.style.background = 'var(--b' + i + ')';
+    k.appendChild(dot);
+    k.appendChild(el('span', null, String(i)));
+    k.appendChild(el('b', null, Math.round(s.pct[i - 1]) + ' %'));
+    keys.appendChild(k);
+  }
+  host.appendChild(stack);
+  host.appendChild(keys);
+}
+
+function drawHomeStat() {
+  var list = cardsOf(ui.cat);
+  var seen = list.filter(function (c) { return progress[c.id]; }).length;
+  var learned = list.filter(function (c) { return boxOf(c) === BOXES; }).length;
+  var host = clear($('home-stat'));
+  [[list.length, 'Fragen'], [seen, 'begonnen'], [learned, 'in Fach ' + BOXES]]
+    .forEach(function (p) {
+      var d = el('div');
+      d.appendChild(el('div', 'v', String(p[0])));
+      d.appendChild(el('div', 'k', p[1]));
+      host.appendChild(d);
+    });
+}
+
+function drawHome() {
+  drawTiles(); drawBoxes(); drawHomeStat();
+  var n = pool().length;
+  var b = $('btn-start');
+  b.disabled = !n;
+  b.textContent = !deck.length ? 'Zuerst Fragen importieren'
+    : !n ? 'Keine Fragen in dieser Auswahl'
+    : 'Lernen starten · ' + n + (n === 1 ? ' Frage' : ' Fragen');
+  var bits = [];
+  if (ui.cat !== 'ALLE') bits.push(ui.cat);
+  if (ui.box) bits.push('nur Fach ' + ui.box);
+  $('crumb').textContent = bits.join(' · ');
+}
+
+/* =====================================================================
+   Kartenauswahl
+   ===================================================================== */
+
+function pool() {
+  var list = cardsOf(ui.cat);
+  return ui.box ? list.filter(function (c) { return boxOf(c) === ui.box; }) : list;
+}
+
+/* Niedrige Fächer kommen häufiger dran — je sicherer eine Frage sitzt,
+   desto seltener taucht sie auf. Bei gleichem Fach zuerst das, was am
+   längsten nicht gefragt wurde. */
+var WEIGHT = [16, 8, 4, 2, 1];
+
+function nextCard() {
+  var list = pool();
+  if (!list.length) return null;
+  if (list.length > 1 && ui.lastId) {
+    list = list.filter(function (c) { return c.id !== ui.lastId; });
+  }
+
+  var total = 0, weights = list.map(function (c) {
+    var w = WEIGHT[boxOf(c) - 1];
+    var p = progress[c.id];
+    if (!p) w *= 1.4;                                   // Ungesehenes zuerst
+    else if (Date.now() - (p.t || 0) > 6 * 3600e3) w *= 1.25;
+    total += w;
+    return w;
+  });
+
+  var hit = Math.random() * total;
+  for (var i = 0; i < list.length; i++) {
+    hit -= weights[i];
+    if (hit <= 0) return list[i];
+  }
+  return list[list.length - 1];
+}
+
+function shuffled(n) {
+  var a = [];
+  for (var i = 0; i < n; i++) a.push(i);
+  if (!cfg.shuffle) return a;
+  for (var j = a.length - 1; j > 0; j--) {
+    var k = Math.floor(Math.random() * (j + 1));
+    var t = a[j]; a[j] = a[k]; a[k] = t;
+  }
+  return a;
+}
+
+/* =====================================================================
+   Frage anzeigen
+   ===================================================================== */
+
+var LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+var GAP_RE = /(\d+)/g;
+
+function show(card) {
+  ui.card = card;
+  ui.locked = false;
+  ui.picked = [];
+  ui.gaps = [];
+
+  var tags = clear($('q-tags'));
+  tags.appendChild(el('span', 'tag', card.cat));
+  tags.appendChild(el('span', 'tag hi', 'Fach ' + boxOf(card)));
+  if (card.kind === 'choice' && card.correct.length > 1 && cfg.showCount) {
+    tags.appendChild(el('span', 'tag', card.correct.length + ' richtige Antworten'));
+  } else if (card.kind === 'choice' && card.correct.length > 1) {
+    tags.appendChild(el('span', 'tag', 'Mehrfachauswahl'));
+  } else if (card.kind === 'text') {
+    tags.appendChild(el('span', 'tag', 'Eingabe'));
+  } else if (card.kind === 'gaps') {
+    tags.appendChild(el('span', 'tag', card.blanks.length === 1 ? '1 Lücke' : card.blanks.length + ' Lücken'));
+  }
+
+  drawQuestionText();
+  clear($('q-verdict'));
+
+  var body = clear($('q-body'));
+  if (card.kind === 'choice') body.appendChild(buildChoice(card));
+  else if (card.kind === 'gaps') body.appendChild(buildGaps(card));
+  else body.appendChild(buildText(card));
+
+  var single = card.kind === 'choice' && card.correct.length === 1;
+  var btn = $('btn-check');
+  btn.textContent = 'Prüfen';
+  // Einfachauswahl wertet direkt beim Antippen, der Knopf entfällt.
+  // Mehrfachauswahl und Lücken brauchen erst eine Auswahl.
+  // Beim Freitext heißt „leer abschicken“ bewusst „weiß ich nicht“.
+  btn.classList.toggle('hide', single);
+  btn.disabled = single || card.kind === 'gaps' ||
+                 (card.kind === 'choice' && card.correct.length > 1);
+
+  tally();
+  window.scrollTo(0, 0);
+}
+
+function tally() {
+  $('crumb').textContent = ui.done ? ui.right + '/' + ui.done + ' richtig' : '';
+}
+
+/* Fragetext mit Lücken-Platzhaltern rendern. */
+function drawQuestionText() {
+  var host = clear($('q-text'));
+  var card = ui.card;
+  var text = card.text;
+  GAP_RE.lastIndex = 0;
+  if (card.kind !== 'gaps' || !GAP_RE.test(text)) { host.textContent = text; return; }
+  GAP_RE.lastIndex = 0;
+  var at = 0, m;
+  while ((m = GAP_RE.exec(text)) !== null) {
+    if (m.index > at) host.appendChild(document.createTextNode(text.slice(at, m.index)));
+    var i = parseInt(m[1], 10) - 1;
+    var pick = ui.gaps[i];
+    var chip = el('span', 'gap' + (pick ? ' set' : ''), pick || (' ' + (i + 1) + ' '));
+    chip.dataset.gap = String(i);
+    if (ui.locked) {
+      chip.classList.remove('set');
+      chip.classList.add(pick === card.blanks[i].answer ? 'ok' : 'no');
+      if (!pick) chip.textContent = ' ' + (i + 1) + ' ';
+    }
+    host.appendChild(chip);
+    at = m.index + m[0].length;
+  }
+  if (at < text.length) host.appendChild(document.createTextNode(text.slice(at)));
+}
+
+function optionButton(letter, label) {
+  var b = el('button', 'opt');
+  b.type = 'button';
+  b.setAttribute('aria-pressed', 'false');
+  b.appendChild(el('span', 'k', letter));
+  b.appendChild(el('span', 't', label));
+  return b;
+}
+
+/* ---------- Einfach- und Mehrfachauswahl ---------- */
+/* Kurze Antworten dürfen sich eine Zeile teilen — sonst wird eine Frage
+   mit fünf Lücken zu einer endlosen Kolonne. */
+function compact(options) {
+  return options.every(function (o) { return o.length <= 24; });
+}
+
+function buildChoice(card) {
+  var multi = card.correct.length > 1;
+  ui.order = shuffled(card.options.length);
+
+  var host = el('div', 'opts' + (compact(card.options) ? ' inline' : ''));
+  ui.order.forEach(function (src, pos) {
+    var b = optionButton(LETTERS[pos] || String(pos + 1), card.options[src]);
+    b.dataset.src = String(src);
+    b.onclick = function () {
+      if (ui.locked) return;
+      if (multi) {
+        var at = ui.picked.indexOf(src);
+        if (at >= 0) ui.picked.splice(at, 1); else ui.picked.push(src);
+        b.setAttribute('aria-pressed', at >= 0 ? 'false' : 'true');
+        $('btn-check').disabled = !ui.picked.length;
+      } else {
+        ui.picked = [src];
+        b.setAttribute('aria-pressed', 'true');
+        grade();
+      }
+    };
+    host.appendChild(b);
+  });
+  return host;
+}
+
+/* ---------- Lücken ---------- */
+function buildGaps(card) {
+  var host = el('div');
+  card.blanks.forEach(function (blank, i) {
+    var wrap = el('div', 'blank');
+    var lbl = el('div', 'lbl');
+    lbl.appendChild(el('span', 'idx', blank.label ? '' : 'Lücke ' + (i + 1)));
+    if (blank.label) lbl.appendChild(document.createTextNode(blank.label));
+    wrap.appendChild(lbl);
+
+    var opts = el('div', 'opts' + (compact(blank.options) ? ' inline' : ''));
+    shuffled(blank.options.length).forEach(function (src, pos) {
+      var b = optionButton(LETTERS[pos] || String(pos + 1), blank.options[src]);
+      b.dataset.blank = String(i);
+      b.onclick = function () {
+        if (ui.locked) return;
+        ui.gaps[i] = blank.options[src];
+        Array.prototype.forEach.call(opts.children, function (o) {
+          o.setAttribute('aria-pressed', o === b ? 'true' : 'false');
+        });
+        drawQuestionText();
+        $('btn-check').disabled = ui.gaps.filter(Boolean).length !== card.blanks.length;
+      };
+      opts.appendChild(b);
+    });
+    wrap.appendChild(opts);
+    host.appendChild(wrap);
+  });
+  return host;
+}
+
+/* ---------- Freie Eingabe ---------- */
+function buildText(card) {
+  var host = el('div');
+  var input = el('input', 'txtin');
+  input.type = 'text';
+  input.id = 'answer-in';
+  input.placeholder = 'Antwort eingeben …';
+  input.autocomplete = 'off';
+  input.autocapitalize = 'sentences';
+  input.onkeydown = function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); if (!ui.locked) grade(); else next(); }
+  };
+  host.appendChild(input);
+
+  var hint = el('div', 'small muted');
+  hint.style.marginTop = '10px';
+  hint.textContent = 'Weißt du es nicht, lass das Feld leer und tippe auf „Prüfen“.';
+  host.appendChild(hint);
+
+  setTimeout(function () { if (!('ontouchstart' in window)) input.focus(); }, 30);
+  return host;
+}
+
+/* =====================================================================
+   Auswerten
+   ===================================================================== */
+
+function normalize(s) {
+  return (s || '')
+    .replace(/ /g, ' ')
+    .replace(/[‐-―−]/g, '-')
+    .replace(/[‘’]/g, "'")
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase()
+    .replace(/[.,;:!?"'()\[\]]+$/, '');
+}
+
+function grade() {
+  if (ui.locked) return;
+  var card = ui.card;
+  var ok, solution;
+
+  if (card.kind === 'choice') {
+    var want = card.correct.slice().sort();
+    var got = ui.picked.slice().sort();
+    ok = want.length === got.length && want.every(function (v, i) { return v === got[i]; });
+    // Mehrere Musterantworten untereinander sind ohne Aufzählungszeichen
+    // nicht als getrennte Punkte zu erkennen.
+    solution = card.correct.map(function (i) {
+      return (want.length > 1 ? '• ' : '') + card.options[i];
+    }).join('\n');
+
+    Array.prototype.forEach.call($('q-body').querySelectorAll('.opt'), function (b) {
+      var src = parseInt(b.dataset.src, 10);
+      var isRight = card.correct.indexOf(src) >= 0;
+      var chosen = ui.picked.indexOf(src) >= 0;
+      b.classList.add('locked');
+      if (isRight) { b.classList.add('ok'); b.appendChild(el('span', 'mark ok', '✓')); }
+      else if (chosen) { b.classList.add('no'); b.appendChild(el('span', 'mark no', '✕')); }
+    });
+
+  } else if (card.kind === 'gaps') {
+    ok = card.blanks.every(function (b, i) { return ui.gaps[i] === b.answer; });
+    solution = card.blanks.map(function (b, i) {
+      return (b.label ? b.label : 'Lücke ' + (i + 1)) + ' → ' + b.answer;
+    }).join('\n');
+
+    Array.prototype.forEach.call($('q-body').querySelectorAll('.opt'), function (b) {
+      var i = parseInt(b.dataset.blank, 10);
+      var label = b.querySelector('.t').textContent;
+      b.classList.add('locked');
+      if (label === card.blanks[i].answer) { b.classList.add('ok'); b.appendChild(el('span', 'mark ok', '✓')); }
+      else if (ui.gaps[i] === label) { b.classList.add('no'); b.appendChild(el('span', 'mark no', '✕')); }
+    });
+
+  } else {
+    var typed = $('answer-in').value;
+    ok = !!normalize(typed) && card.accepted.some(function (a) { return normalize(a) === normalize(typed); });
+    solution = card.solution;
+    var input = $('answer-in');
+    input.readOnly = true;
+    input.classList.add(ok ? 'ok' : 'no');
+  }
+
+  ui.locked = true;
+  if (card.kind === 'gaps') drawQuestionText();
+  record(card, ok);
+  drawStrip();
+  verdict(ok, solution, card);
+}
+
+function record(card, ok) {
+  var p = progress[card.id] || { b: 1, r: 0, w: 0, t: 0 };
+  var from = p.b;
+  p.b = ok ? Math.min(BOXES, from + 1) : 1;
+  if (ok) p.r++; else p.w++;
+  p.t = Date.now();
+  progress[card.id] = p;
+  store.write(LS.prog, progress);
+
+  ui.done++;
+  if (ok) ui.right++; else ui.wrong++;
+  ui.lastId = card.id;
+  ui.moved = [from, p.b];
+}
+
+function verdict(ok, solution, card) {
+  var host = clear($('q-verdict'));
+  var box = el('div', 'verdict ' + (ok ? 'ok' : 'no'));
+
+  var head = el('div', 'head');
+  head.appendChild(el('span', null, ok ? '✓' : '✕'));
+  head.appendChild(el('span', null, ok ? 'Richtig' : 'Falsch'));
+  box.appendChild(head);
+
+  // Bei richtigen Lücken steht die Lösung schon im Text — dann nur beim
+  // Freitext nachreichen, wo auch andere Schreibweisen zählen.
+  if (!ok || card.kind === 'text') {
+    var sol = el('div', 'sol');
+    sol.appendChild(el('strong', null, ok ? 'Musterlösung: ' : 'Richtig wäre: '));
+    sol.appendChild(document.createTextNode(solution));
+    box.appendChild(sol);
+  }
+
+  var from = ui.moved[0], to = ui.moved[1];
+  box.appendChild(el('div', 'move',
+    from === to ? 'Bleibt in Fach ' + to + (to === BOXES ? ' — sitzt.' : '')
+                : 'Fach ' + from + ' → Fach ' + to));
+
+  // Bei falscher Freitextantwort darf man selbst korrigieren.
+  if (!ok && card.kind === 'text') {
+    var fix = el('button', 'btn ghost');
+    fix.type = 'button';
+    fix.style.marginTop = '12px';
+    fix.textContent = 'Doch richtig — Fach anheben';
+    fix.onclick = function () {
+      var p = progress[card.id];
+      p.b = Math.min(BOXES, ui.moved[0] + 1); p.w--; p.r++;
+      progress[card.id] = p;
+      store.write(LS.prog, progress);
+      ui.right++; ui.wrong--;
+      ui.moved = [ui.moved[0], p.b];
+      drawStrip();
+      verdict(true, solution, card);
+    };
+    box.appendChild(fix);
+  }
+
+  host.appendChild(box);
+
+  var btn = $('btn-check');
+  btn.classList.remove('hide');
+  btn.disabled = false;
+  btn.textContent = 'Weiter';
+  tally();
+
+  // Nach dem Werten steht die Auflösung oft unter dem Rand.
+  if (box.getBoundingClientRect().bottom > window.innerHeight - 90) {
+    box.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
+}
+
+function next() {
+  var card = nextCard();
+  if (!card) { home(); return; }
+  show(card);
+}
+
+/* =====================================================================
+   Navigation
+   ===================================================================== */
+
+function screen(name) {
+  ui.screen = name;
+  ['home', 'learn', 'manage'].forEach(function (s) {
+    $('s-' + s).classList.toggle('hide', s !== name);
+  });
+  $('btn-home').classList.toggle('hide', name === 'home');
+  $('btn-manage').classList.toggle('hide', name !== 'home');
+  if (name === 'learn') drawStrip(); else $('pct').classList.add('hide');
+  window.scrollTo(0, 0);
+}
+
+function home() {
+  screen('home');
+  $('crumb').textContent = '';
+  drawHome();
+}
+
+function startLearning() {
+  ui.right = ui.wrong = ui.done = 0;
+  ui.lastId = null;
+  screen('learn');
+  next();
+}
+
+/* =====================================================================
+   Verwaltung
+   ===================================================================== */
+
+function drawSets() {
+  var host = clear($('sets'));
+  var any = false;
+
+  CATS.forEach(function (cat) {
+    var list = cardsOf(cat);
+    if (!list.length) return;
+    any = true;
+    var src = imported[cat];
+    var item = el('div', 'item');
+    var grow = el('div', 'grow');
+    grow.appendChild(el('div', 't', cat + ' — ' + CAT_NAME[cat]));
+    grow.appendChild(el('div', 's', list.length + ' Fragen · ' +
+      (src ? 'importiert am ' + new Date(src.at).toLocaleDateString('de-AT') : 'mitgeliefert')));
+    item.appendChild(grow);
+
+    if (src) {
+      var del = el('button', 'iconbtn', 'Entfernen');
+      del.type = 'button';
+      del.onclick = function () {
+        if (!confirm('Fragensatz ' + cat + ' entfernen? Der Lernfortschritt bleibt erhalten.')) return;
+        delete imported[cat];
+        store.write(LS.sets, imported);
+        rebuild();
+        if (ui.cat === cat) ui.cat = 'ALLE';
+        drawSets(); drawManageStat();
+      };
+      item.appendChild(del);
+    }
+    host.appendChild(item);
+  });
+
+  if (!any) {
+    var e = el('div', 'empty');
+    e.appendChild(el('div', 'big', '📥'));
+    e.appendChild(el('div', null, 'Noch keine Fragen vorhanden.'));
+    host.appendChild(e);
+  }
+}
+
+function drawManageStat() {
+  var seen = 0, learned = 0;
+  deck.forEach(function (c) {
+    if (progress[c.id]) seen++;
+    if (boxOf(c) === BOXES) learned++;
+  });
+  var host = clear($('manage-stat'));
+  [[deck.length, 'Fragen gesamt'], [seen, 'begonnen'], [learned, 'in Fach ' + BOXES]]
+    .forEach(function (p) {
+      var d = el('div');
+      d.appendChild(el('div', 'v', String(p[0])));
+      d.appendChild(el('div', 'k', p[1]));
+      host.appendChild(d);
+    });
+}
+
+function importFiles(files) {
+  var out = clear($('import-out'));
+  var pending = files.length;
+  if (!pending) return;
+
+  Array.prototype.forEach.call(files, function (file) {
+    var reader = new FileReader();
+    reader.onload = function () {
+      var line = el('div', 'note small');
+      try {
+        var doc = new DOMParser().parseFromString(String(reader.result), 'text/html');
+        var guess = window.MoodleParser.guessCategory(doc);
+        var cat = askCategory(file.name, guess);
+        if (!cat) {
+          line.className = 'note warn small';
+          line.textContent = file.name + ': abgebrochen.';
+        } else {
+          var res = window.MoodleParser.parse(doc, cat);
+          if (!res.cards.length) {
+            line.className = 'note warn small';
+            line.textContent = file.name + ': keine Fragen gefunden. Ist das die Seite ' +
+              '„Überprüfung des Testversuchs“, komplett gespeichert?';
+          } else {
+            imported[cat] = { cards: res.cards, at: Date.now(), file: file.name };
+            if (store.write(LS.sets, imported)) {
+              rebuild();
+              line.textContent = file.name + ': ' + res.cards.length + ' Fragen als ' + cat +
+                ' gespeichert' + (res.failed.length ? ' (' + res.failed.length + ' übersprungen)' : '') + '.';
+            } else {
+              delete imported[cat];
+              line.className = 'note warn small';
+              line.textContent = file.name + ': konnte nicht gespeichert werden.';
+            }
+          }
+        }
+      } catch (e) {
+        line.className = 'note warn small';
+        line.textContent = file.name + ': Datei konnte nicht gelesen werden (' + e.message + ').';
+      }
+      out.appendChild(line);
+      if (--pending === 0) { drawSets(); drawManageStat(); }
+    };
+    reader.onerror = function () {
+      out.appendChild(el('div', 'note warn small', file.name + ': Datei konnte nicht gelesen werden.'));
+      if (--pending === 0) { drawSets(); drawManageStat(); }
+    };
+    reader.readAsText(file, 'utf-8');
+  });
+}
+
+function askCategory(name, guess) {
+  var answer = prompt(
+    'Themenbereich für „' + name + '“?\n\nMöglich: ' + CATS.join(', ') +
+    '\nEin vorhandener Satz wird ersetzt.',
+    guess || ''
+  );
+  if (answer === null) return null;
+  answer = answer.trim().toUpperCase();
+  return CATS.indexOf(answer) >= 0 ? answer : null;
+}
+
+function download(name, text) {
+  var url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+  var a = document.createElement('a');
+  a.href = url; a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+}
+
+/* =====================================================================
+   Einstellungen
+   ===================================================================== */
+
+function applyTheme() {
+  if (cfg.theme === 'auto') document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme', cfg.theme);
+  Array.prototype.forEach.call($('seg-theme').children, function (b) {
+    b.setAttribute('aria-pressed', b.dataset.theme === cfg.theme ? 'true' : 'false');
+  });
+}
+
+function applySwitches() {
+  $('sw-shuffle').setAttribute('aria-pressed', cfg.shuffle ? 'true' : 'false');
+  $('sw-count').setAttribute('aria-pressed', cfg.showCount ? 'true' : 'false');
+}
+
+function bindSwitch(id, field) {
+  $(id).onclick = function () {
+    cfg[field] = !cfg[field];
+    store.write(LS.cfg, cfg);
+    applySwitches();
+  };
+}
+
+/* =====================================================================
+   Verdrahtung
+   ===================================================================== */
+
+$('btn-start').onclick = startLearning;
+$('btn-home').onclick = home;
+$('btn-manage').onclick = function () {
+  screen('manage');
+  $('crumb').textContent = '';
+  clear($('import-out'));
+  drawSets(); drawManageStat();
+};
+$('btn-check').onclick = function () { if (ui.locked) next(); else grade(); };
+
+$('btn-pick').onclick = function () { $('file').click(); };
+$('file').onchange = function (e) { importFiles(e.target.files); e.target.value = ''; };
+
+$('btn-export').onclick = function () {
+  download('lernkartei-sicherung-' + new Date().toISOString().slice(0, 10) + '.json',
+    JSON.stringify({ v: 1, at: Date.now(), progress: progress, sets: imported, settings: cfg }));
+};
+$('btn-import').onclick = function () { $('file-backup').click(); };
+$('file-backup').onchange = function (e) {
+  var file = e.target.files[0];
+  e.target.value = '';
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function () {
+    try {
+      var data = JSON.parse(String(reader.result));
+      if (!data || typeof data !== 'object' || !data.progress) throw new Error('unbekanntes Format');
+      if (!confirm('Sicherung laden? Fortschritt und Fragensätze werden überschrieben.')) return;
+      progress = data.progress || {};
+      imported = data.sets || {};
+      cfg = Object.assign({ shuffle: true, showCount: true, theme: 'auto' }, data.settings || {});
+      store.write(LS.prog, progress); store.write(LS.sets, imported); store.write(LS.cfg, cfg);
+      rebuild(); applyTheme(); applySwitches(); drawSets(); drawManageStat();
+      alert('Sicherung geladen.');
+    } catch (err) {
+      alert('Die Datei ist keine gültige Sicherung (' + err.message + ').');
+    }
+  };
+  reader.readAsText(file, 'utf-8');
+};
+
+$('btn-reset').onclick = function () {
+  if (!confirm('Wirklich den gesamten Lernfortschritt löschen? Alle Fragen landen wieder in Fach 1.')) return;
+  progress = {};
+  store.write(LS.prog, progress);
+  drawManageStat();
+  alert('Fortschritt zurückgesetzt.');
+};
+
+bindSwitch('sw-shuffle', 'shuffle');
+bindSwitch('sw-count', 'showCount');
+Array.prototype.forEach.call($('seg-theme').children, function (b) {
+  b.onclick = function () { cfg.theme = b.dataset.theme; store.write(LS.cfg, cfg); applyTheme(); };
+});
+
+/* Tastatur: Ziffern wählen, Enter prüft bzw. blättert weiter. */
+document.addEventListener('keydown', function (e) {
+  if (ui.screen !== 'learn') return;
+  if (e.target.tagName === 'INPUT') return;
+  if (e.key === 'Enter' || e.key === ' ') {
+    var btn = $('btn-check');
+    if (!btn.classList.contains('hide') && !btn.disabled) { e.preventDefault(); btn.click(); }
+    return;
+  }
+  if (ui.locked) return;
+  // Die Knöpfe sind mit A, B, C ... beschriftet; Ziffern gehen auch.
+  var at = /^[a-zA-Z]$/.test(e.key) ? LETTERS.indexOf(e.key.toUpperCase())
+         : /^[1-9]$/.test(e.key) ? parseInt(e.key, 10) - 1 : -1;
+  if (at < 0) return;
+  var groups = $('q-body').querySelectorAll('.opts');
+  if (groups.length !== 1) return;              // bei mehreren Lücken nicht eindeutig
+  var opt = groups[0].children[at];
+  if (opt) { e.preventDefault(); opt.click(); }
+});
+
+applyTheme();
+applySwitches();
+home();
+
+})();
+</script>
+</body>
+</html>
