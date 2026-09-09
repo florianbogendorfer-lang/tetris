@@ -71,6 +71,15 @@ const SOLVE = (right) => {
     return { ok: cls.includes('ok'), move, kind: plan.kind, multi: plan.multi, armed: armed };
   }
 
+  /* Eine Frage irgendwie beantworten und weiterblättern. Liefert false,
+     wenn die Karte nicht in den Daten steht - dann bringt Weitersuchen nichts. */
+  async function weiter() {
+    const r = await answer(false);
+    if (!r) return false;
+    await p.click('#btn-check');
+    return true;
+  }
+
   console.log('\n== Übersicht ==');
   ok(await p.locator('#tiles .tile').count() === 5, 'fünf Kacheln (Alle + 4 Bereiche)');
   ok((await p.locator('#tiles .tile').nth(1).innerText()).includes('344'), 'KV zeigt 344 Fragen');
@@ -177,20 +186,20 @@ const SOLVE = (right) => {
   console.log('\n== Tastatur ==');
   await p.click('#btn-start');
   // zu einer Auswahlfrage mit einer einzigen Optionsgruppe blättern
-  for (let i = 0; i < 60; i++) {
-    const plain = await p.evaluate(() =>
-      !document.getElementById('answer-in') &&
-      document.querySelectorAll('#q-body .opts').length === 1);
-    if (plain) break;
-    const r = await answer(false);
-    if (!r) { await p.click('#btn-check'); continue; }
-    await p.click('#btn-check');
+  let einfach = false;
+  for (let i = 0; i < 120; i++) {
+    if (await p.evaluate(() => !document.getElementById('answer-in') &&
+        document.querySelectorAll('#q-body .opts').length === 1)) { einfach = true; break; }
+    if (!(await weiter())) break;
   }
+  ok(einfach, 'eine Auswahlfrage mit einer Optionsgruppe gefunden');
   const before = await p.locator('#q-body .opt').first().innerText();
   const labels = await p.locator('#q-body .opt .k').allInnerTexts();
   ok(labels.join('') === '123456789QWERTZUIOP'.slice(0, labels.length),
      'Knöpfe sind mit 1,2,3 … beschriftet: ' + labels.join(''));
 
+  // alles an derselben Frage prüfen - die nächste wäre zufällig ein
+  // Freitext ohne Antwortknöpfe.
   await p.keyboard.press('1');
   await p.waitForTimeout(150);
   ok(!(await p.locator('#q-verdict .verdict').count()),
@@ -198,6 +207,14 @@ const SOLVE = (right) => {
   const picked = await p.locator('#q-body .opt[aria-pressed="true"] .t').innerText();
   ok(before.includes(picked), 'Taste 1 wählt die erste Antwort');
 
+  await p.keyboard.press('1');
+  await p.waitForTimeout(100);
+  ok(await p.locator('#q-body .opt[aria-pressed="true"]').count() === 0,
+     'nochmal antippen nimmt die Auswahl zurück');
+  ok(await p.locator('#btn-check').isDisabled(), 'ohne Auswahl ist Prüfen gesperrt');
+
+  await p.keyboard.press('1');
+  await p.waitForTimeout(100);
   await p.keyboard.press('Enter');
   await p.waitForSelector('#q-verdict .verdict', { timeout: 3000 });
   ok(true, 'Enter bestätigt die Auswahl');
@@ -205,26 +222,15 @@ const SOLVE = (right) => {
   await p.waitForTimeout(200);
   ok(!(await p.locator('#q-verdict .verdict').count()), 'Enter blättert weiter');
 
-  // erneut antippen hebt die Auswahl wieder auf
-  await p.keyboard.press('1');
-  await p.waitForTimeout(100);
-  const an = await p.locator('#q-body .opt[aria-pressed="true"]').count();
-  await p.keyboard.press('1');
-  await p.waitForTimeout(100);
-  const aus = await p.locator('#q-body .opt[aria-pressed="true"]').count();
-  ok(an === 1 && aus === 0, 'nochmal antippen nimmt die Auswahl zurück');
-  ok(await p.locator('#btn-check').isDisabled(), 'ohne Auswahl ist Prüfen wieder gesperrt');
-
   console.log('\n== Tastatur über mehrere Lücken ==');
   await p.click('#btn-home');
   await p.click('#btn-start');
-  for (let i = 0; i < 200; i++) {
-    const n = await p.locator('#q-body .blank').count();
-    if (n >= 3) break;
-    const r = await answer(false);
-    if (!r) { await p.click('#btn-check'); continue; }
-    await p.click('#btn-check');
+  let mehrfach = false;
+  for (let i = 0; i < 250; i++) {
+    if (await p.locator('#q-body .blank').count() >= 3) { mehrfach = true; break; }
+    if (!(await weiter())) break;
   }
+  ok(mehrfach, 'eine Frage mit mindestens drei Lücken gefunden');
   const keys = await p.locator('#q-body .opt .k').allInnerTexts();
   ok(new Set(keys).size === keys.length,
      'jede Taste kommt nur einmal vor: ' + keys.join(' '));
@@ -252,24 +258,38 @@ const SOLVE = (right) => {
     return { laenge: h.length, treffer: h.reduce((a, b) => a + b, 0),
              angezeigt: v && v.textContent };
   });
-  ok(fc.laenge > 0 && fc.laenge <= 50, 'Verlauf umfasst ' + fc.laenge + ' Antworten (höchstens 50)');
+  ok(fc.laenge > 0 && fc.laenge <= 30, 'Verlauf umfasst ' + fc.laenge + ' Antworten (höchstens 30)');
   ok(fc.angezeigt === Math.round(fc.treffer / fc.laenge * 100) + ' %',
      'Prognose = ' + fc.treffer + '/' + fc.laenge + ' = ' + fc.angezeigt);
   ok(await p.locator('#crumb .fc .k').innerText() === 'PROGNOSE', 'Beschriftung „Prognose" steht daneben');
 
-  // Nach über 50 Antworten darf das Fenster nicht mitwachsen.
+  // Nach über 30 Antworten darf das Fenster nicht mitwachsen.
   for (let i = 0; i < 14; i++) { const r = await answer(true); if (r) await p.click('#btn-check'); }
   const gross = await p.evaluate(() =>
     JSON.parse(localStorage.getItem('lk.history.v1')).length);
-  ok(gross === 50, 'Fenster bleibt bei 50 Antworten stehen (ist ' + gross + ')');
+  ok(gross === 30, 'Fenster bleibt bei 30 Antworten stehen (ist ' + gross + ')');
+
+  // Der gemeldete Fehler: nach dem Neustart landet man auf der Übersicht,
+  // und dort war die Prognose vorher nirgends zu sehen.
+  const imKopf = await p.locator('#crumb .fc .v').innerText();
+  await p.click('#btn-home');
+  await p.reload();
+  const nachReload = await p.locator('#home-total').innerText();
+  ok(/PROGNOSE/.test(nachReload) && nachReload.includes(imKopf),
+     'Prognose steht nach dem Neustart auf der Übersicht: ' + nachReload.replace(/\n/g, ' | '));
+  ok(!(await p.evaluate(() => {
+    const t = document.getElementById('home-total');
+    return t.scrollWidth > t.clientWidth + 1;
+  })), 'die beiden Kennzahlen passen nebeneinander');
+  await p.click('#btn-start');          // Reload hat auf die Übersicht geführt
 
   console.log('\n== Selbstkorrektur beim Freitext ==');
-  for (let i = 0; i < 120; i++) {
-    if (await p.locator('#answer-in').count()) break;
-    const r = await answer(false);
-    if (!r) { await p.click('#btn-check'); continue; }
-    await p.click('#btn-check');
+  let freitext = false;
+  for (let i = 0; i < 250; i++) {
+    if (await p.locator('#answer-in').count()) { freitext = true; break; }
+    if (!(await weiter())) break;
   }
+  ok(freitext, 'eine Freitextfrage gefunden');
   await p.fill('#answer-in', 'sicher daneben');
   await p.click('#btn-check');
   await p.waitForSelector('#q-verdict .verdict.no');

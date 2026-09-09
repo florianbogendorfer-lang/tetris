@@ -141,13 +141,23 @@ h1,h2,h3{margin:0;line-height:1.25;font-weight:650}
 .gauge > .fill{border-radius:99px;transition:width .45s cubic-bezier(.4,0,.2,1)}
 
 /* ---------- Gesamtfortschritt ---------- */
+/* Zwei Kennzahlen nebeneinander. Drei feste Zeilen und spaltenweiser
+   Fluss halten Beschriftung, Zahl und Zusatz auf gleicher Höhe, auch wenn
+   eine Beschriftung auf schmalen Geräten umbricht. */
 .total{
-  display:flex;align-items:baseline;justify-content:space-between;gap:12px;
-  padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--line);
+  display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto auto;
+  grid-auto-flow:column;gap:1px 14px;
+  padding-bottom:14px;margin-bottom:16px;border-bottom:1px solid var(--line);
 }
-.total .k{font-size:14px;font-weight:600;color:var(--ink-2)}
-.total .v{font-size:34px;font-weight:750;letter-spacing:-.025em;font-variant-numeric:tabular-nums}
-.total .s{font-size:12.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.total .k{
+  font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--ink-2);align-self:end;
+}
+.total .v{
+  font-size:32px;font-weight:750;letter-spacing:-.03em;line-height:1.15;
+  font-variant-numeric:tabular-nums;
+}
+.total .s{font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}
 
 /* ---------- Fächer in der Übersicht ---------- */
 .boxes{display:flex;flex-direction:column;gap:9px}
@@ -436,7 +446,7 @@ var CAT_NAME = {
 var BOXES = 5;
 var LS = { prog: 'lk.progress.v1', sets: 'lk.sets.v1', cfg: 'lk.settings.v1',
            hist: 'lk.history.v1' };
-var WINDOW = 50;                                 // Fragen im Prognosefenster
+var WINDOW = 30;                                 // Fragen im Prognosefenster
 
 var store = {
   read: function (k, fallback) {
@@ -453,7 +463,7 @@ var store = {
 };
 
 var progress = store.read(LS.prog, {});          // id -> {b, r, w, t}
-var history = store.read(LS.hist, []);           // letzte Antworten, 1 = richtig
+var history = store.read(LS.hist, []).slice(-WINDOW);   // letzte Antworten, 1 = richtig
 var imported = store.read(LS.sets, {});          // cat -> {cards, at, file}
 var cfg = Object.assign(
   { shuffle: true, showCount: false, theme: 'auto' },
@@ -631,15 +641,24 @@ function drawTotal() {
   var s = spread(cardsOf(ui.cat));
   var host = clear($('home-total'));
 
-  var left = el('div');
-  left.appendChild(el('div', 'k', 'Gesamtfortschritt'));
-  left.appendChild(el('div', 's',
-    s.counts[BOXES - 1] + ' von ' + s.total + ' Fragen sitzen in Fach ' + BOXES));
-  host.appendChild(left);
+  function stat(label, wert, farbe, zusatz) {
+    host.appendChild(el('div', 'k', label));
+    var v = el('div', 'v', wert);
+    v.style.color = farbe;
+    host.appendChild(v);
+    host.appendChild(el('div', 's', zusatz));
+  }
 
-  var v = el('div', 'v', Math.round(s.score) + ' %');
-  v.style.color = 'var(--f' + scoreFach(s.score) + 't)';
-  host.appendChild(v);
+  stat('Gesamtfortschritt', Math.round(s.score) + ' %',
+       'var(--f' + scoreFach(s.score) + 't)',
+       s.counts[BOXES - 1] + ' von ' + s.total + ' in Fach ' + BOXES);
+
+  var f = forecast();
+  stat('Prognose',
+       f === null ? '–' : Math.round(f) + ' %',
+       f === null ? 'var(--ink-2)' : 'var(--f' + pctFach(f) + 't)',
+       f === null ? 'noch keine Antworten'
+                  : 'letzte ' + history.length + (history.length === 1 ? ' Frage' : ' Fragen'));
 }
 
 function drawHome() {

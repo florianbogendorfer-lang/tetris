@@ -50,11 +50,15 @@ zurück ins Gemischte.
 
 ## Prognose
 
-Neben dem Sitzungszähler steht eine **Prognose**: die Trefferquote der letzten
-50 beantworteten Fragen. Sind es weniger, wird aus den vorhandenen gerechnet.
-Das Fenster läuft über Sitzungen hinweg mit und ist die Schätzung dafür, wie
-eine Prüfung gerade ausginge — anders als der Gesamtfortschritt, der den
-Bestand in den Fächern misst.
+Die **Prognose** ist die Trefferquote der letzten 30 beantworteten Fragen —
+sind es weniger, wird aus den vorhandenen gerechnet. Das Fenster läuft über
+Sitzungen hinweg mit und ist die Schätzung dafür, wie eine Prüfung gerade
+ausginge. Sie steht in der Übersicht neben dem Gesamtfortschritt und beim
+Lernen in der Kopfzeile.
+
+Die beiden Zahlen messen Verschiedenes: der Gesamtfortschritt den Bestand in
+den Fächern (träge, wächst über Wochen), die Prognose die letzten 30 Antworten
+(reagiert sofort).
 
 ## Bedienung
 
