@@ -90,9 +90,9 @@ const SOLVE = (right) => {
     if (!kinds[k]) { kinds[k] = 0; await p.screenshot({ path: SHOT + 'type-' + k + '.png', fullPage: true }); }
     kinds[k]++;
     if (r.ok) good++; else console.log('       ! als falsch gewertet trotz Musterlösung: ' + r.move);
-    if (r.kind === 'gaps' && !r.armed.off) armedBad.push('Lücken: Prüfen war offen');
-    if (r.kind === 'choice' && r.multi && !r.armed.off) armedBad.push('Mehrfachauswahl: Prüfen war offen');
-    if (r.kind === 'choice' && !r.multi && !r.armed.hidden) armedBad.push('Einfachauswahl: Prüfen sichtbar');
+    if (r.armed.hidden) armedBad.push(r.kind + ': Prüfen war ausgeblendet');
+    if (r.kind !== 'text' && !r.armed.off) armedBad.push(r.kind + ': Prüfen war ohne Auswahl offen');
+    if (r.kind === 'text' && r.armed.off) armedBad.push('Freitext: Prüfen war gesperrt');
     await p.click('#btn-check');
   }
   ok(misses === 0, 'jede Karte in den Daten wiedergefunden (' + misses + ' Ausreißer)');
@@ -100,7 +100,7 @@ const SOLVE = (right) => {
   console.log('       Typen: ' + Object.entries(kinds).map(([k,v]) => k+'×'+v).join(', '));
   ok(!(await p.locator('#q-tags .tag', { hasText: 'RICHTIGE ANTWORTEN' }).count()),
      'Anzahl der richtigen Antworten wird nicht verraten');
-  ok(armedBad.length === 0, 'Prüfen-Knopf erst nach Auswahl aktiv' +
+  ok(armedBad.length === 0, 'Prüfen sichtbar, aber erst nach Auswahl aktiv' +
      (armedBad.length ? ': ' + [...new Set(armedBad)].join(' / ') : ''));
 
   const up = await p.evaluate(() => {
@@ -176,25 +176,44 @@ const SOLVE = (right) => {
 
   console.log('\n== Tastatur ==');
   await p.click('#btn-start');
-  // zu einer Einfachauswahl blättern (dort wertet ein Tastendruck sofort)
+  // zu einer Auswahlfrage mit einer einzigen Optionsgruppe blättern
   for (let i = 0; i < 60; i++) {
-    const single = await p.evaluate(() =>
-      document.getElementById('btn-check').classList.contains('hide'));
-    if (single) break;
+    const plain = await p.evaluate(() =>
+      !document.getElementById('answer-in') &&
+      document.querySelectorAll('#q-body .opts').length === 1);
+    if (plain) break;
     const r = await answer(false);
     if (!r) { await p.click('#btn-check'); continue; }
     await p.click('#btn-check');
   }
   const before = await p.locator('#q-body .opt').first().innerText();
-  ok((await p.locator('#q-body .opt .k').allInnerTexts()).slice(0, 10).join('') === '123456789Q'.slice(0, await p.locator('#q-body .opt').count()),
-     'Knöpfe sind mit 1,2,3 … beschriftet: ' + (await p.locator('#q-body .opt .k').allInnerTexts()).join(''));
+  const labels = await p.locator('#q-body .opt .k').allInnerTexts();
+  ok(labels.join('') === '123456789QWERTZUIOP'.slice(0, labels.length),
+     'Knöpfe sind mit 1,2,3 … beschriftet: ' + labels.join(''));
+
   await p.keyboard.press('1');
-  await p.waitForSelector('#q-verdict .verdict', { timeout: 3000 });
+  await p.waitForTimeout(150);
+  ok(!(await p.locator('#q-verdict .verdict').count()),
+     'Antippen wertet nicht von selbst — auch bei nur einer richtigen Antwort');
   const picked = await p.locator('#q-body .opt[aria-pressed="true"] .t').innerText();
   ok(before.includes(picked), 'Taste 1 wählt die erste Antwort');
+
+  await p.keyboard.press('Enter');
+  await p.waitForSelector('#q-verdict .verdict', { timeout: 3000 });
+  ok(true, 'Enter bestätigt die Auswahl');
   await p.keyboard.press('Enter');
   await p.waitForTimeout(200);
   ok(!(await p.locator('#q-verdict .verdict').count()), 'Enter blättert weiter');
+
+  // erneut antippen hebt die Auswahl wieder auf
+  await p.keyboard.press('1');
+  await p.waitForTimeout(100);
+  const an = await p.locator('#q-body .opt[aria-pressed="true"]').count();
+  await p.keyboard.press('1');
+  await p.waitForTimeout(100);
+  const aus = await p.locator('#q-body .opt[aria-pressed="true"]').count();
+  ok(an === 1 && aus === 0, 'nochmal antippen nimmt die Auswahl zurück');
+  ok(await p.locator('#btn-check').isDisabled(), 'ohne Auswahl ist Prüfen wieder gesperrt');
 
   console.log('\n== Tastatur über mehrere Lücken ==');
   await p.click('#btn-home');
@@ -223,6 +242,42 @@ const SOLVE = (right) => {
   const marks = await p.locator('#q-text .gap').allInnerTexts();
   ok(marks.some(m => /[\u2460-\u2473]/.test(m)),
      'Lücken im Text sind eingekreist nummeriert: ' + marks.join(' '));
+
+  console.log('\n== Prognose ==');
+  await p.click('#btn-home');
+  await p.click('#btn-start');
+  const fc = await p.evaluate(() => {
+    const h = JSON.parse(localStorage.getItem('lk.history.v1'));
+    const v = document.querySelector('#crumb .fc .v');
+    return { laenge: h.length, treffer: h.reduce((a, b) => a + b, 0),
+             angezeigt: v && v.textContent };
+  });
+  ok(fc.laenge > 0 && fc.laenge <= 50, 'Verlauf umfasst ' + fc.laenge + ' Antworten (höchstens 50)');
+  ok(fc.angezeigt === Math.round(fc.treffer / fc.laenge * 100) + ' %',
+     'Prognose = ' + fc.treffer + '/' + fc.laenge + ' = ' + fc.angezeigt);
+  ok(await p.locator('#crumb .fc .k').innerText() === 'PROGNOSE', 'Beschriftung „Prognose" steht daneben');
+
+  // Nach über 50 Antworten darf das Fenster nicht mitwachsen.
+  for (let i = 0; i < 14; i++) { const r = await answer(true); if (r) await p.click('#btn-check'); }
+  const gross = await p.evaluate(() =>
+    JSON.parse(localStorage.getItem('lk.history.v1')).length);
+  ok(gross === 50, 'Fenster bleibt bei 50 Antworten stehen (ist ' + gross + ')');
+
+  console.log('\n== Selbstkorrektur beim Freitext ==');
+  for (let i = 0; i < 120; i++) {
+    if (await p.locator('#answer-in').count()) break;
+    const r = await answer(false);
+    if (!r) { await p.click('#btn-check'); continue; }
+    await p.click('#btn-check');
+  }
+  await p.fill('#answer-in', 'sicher daneben');
+  await p.click('#btn-check');
+  await p.waitForSelector('#q-verdict .verdict.no');
+  const vorher = await p.evaluate(() => JSON.parse(localStorage.getItem('lk.history.v1')).slice(-1)[0]);
+  await p.locator('#q-verdict button', { hasText: 'Doch richtig' }).click();
+  const nachher = await p.evaluate(() => JSON.parse(localStorage.getItem('lk.history.v1')).slice(-1)[0]);
+  ok(vorher === 0 && nachher === 1, 'Selbstkorrektur berichtigt auch die Prognose');
+  await p.click('#btn-check');
 
   console.log('\n== Verwaltung ==');
   await p.click('#btn-home');           // "Verwalten" ist beim Lernen ausgeblendet

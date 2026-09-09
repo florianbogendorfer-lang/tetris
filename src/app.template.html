@@ -73,7 +73,16 @@ h1,h2,h3{margin:0;line-height:1.25;font-weight:650}
 .crumb{
   color:var(--ink-2);font-size:13px;font-variant-numeric:tabular-nums;
   flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  display:flex;align-items:baseline;gap:12px;
 }
+.crumb .run{flex:none}
+/* Auf sehr schmalen Geräten fliegt das Wort raus, damit die Prognose
+   nicht abgeschnitten wird. */
+@media (max-width:380px){ .crumb .run .word{display:none} }
+/* Prognose: Trefferquote der letzten Fragen als Prüfungsschätzung. */
+.crumb .fc{display:inline-flex;align-items:baseline;gap:5px;flex:none}
+.crumb .fc .k{font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.crumb .fc .v{font-size:16px;font-weight:750;letter-spacing:-.02em}
 .spacer{flex:none}
 
 .iconbtn{
@@ -425,7 +434,9 @@ var CAT_NAME = {
   PV: 'Pensionsversicherung', RECHT: 'Recht'
 };
 var BOXES = 5;
-var LS = { prog: 'lk.progress.v1', sets: 'lk.sets.v1', cfg: 'lk.settings.v1' };
+var LS = { prog: 'lk.progress.v1', sets: 'lk.sets.v1', cfg: 'lk.settings.v1',
+           hist: 'lk.history.v1' };
+var WINDOW = 50;                                 // Fragen im Prognosefenster
 
 var store = {
   read: function (k, fallback) {
@@ -442,6 +453,7 @@ var store = {
 };
 
 var progress = store.read(LS.prog, {});          // id -> {b, r, w, t}
+var history = store.read(LS.hist, []);           // letzte Antworten, 1 = richtig
 var imported = store.read(LS.sets, {});          // cat -> {cards, at, file}
 var cfg = Object.assign(
   { shuffle: true, showCount: false, theme: 'auto' },
@@ -728,8 +740,6 @@ function show(card) {
   tags.appendChild(fach);
   if (card.kind === 'choice' && card.correct.length > 1 && cfg.showCount) {
     tags.appendChild(el('span', 'tag', card.correct.length + ' richtige Antworten'));
-  } else if (card.kind === 'choice' && card.correct.length > 1) {
-    tags.appendChild(el('span', 'tag', 'Mehrfachauswahl'));
   } else if (card.kind === 'text') {
     tags.appendChild(el('span', 'tag', 'Eingabe'));
   } else if (card.kind === 'gaps') {
@@ -744,22 +754,36 @@ function show(card) {
   else if (card.kind === 'gaps') body.appendChild(buildGaps(card));
   else body.appendChild(buildText(card));
 
-  var single = card.kind === 'choice' && card.correct.length === 1;
   var btn = $('btn-check');
   btn.textContent = 'Prüfen';
-  // Einfachauswahl wertet direkt beim Antippen, der Knopf entfällt.
-  // Mehrfachauswahl und Lücken brauchen erst eine Auswahl.
-  // Beim Freitext heißt „leer abschicken“ bewusst „weiß ich nicht“.
-  btn.classList.toggle('hide', single);
-  btn.disabled = single || card.kind === 'gaps' ||
-                 (card.kind === 'choice' && card.correct.length > 1);
+  btn.classList.remove('hide');
+  // Ausgewählt wird angetippt, gewertet erst auf Knopfdruck - auch wenn nur
+  // eine Antwort stimmt. Beim Freitext heißt „leer abschicken“ bewusst
+  // „weiß ich nicht“, deshalb ist der Knopf dort von Anfang an offen.
+  btn.disabled = card.kind !== 'text';
 
   tally();
   window.scrollTo(0, 0);
 }
 
 function tally() {
-  $('crumb').textContent = ui.done ? ui.right + '/' + ui.done + ' richtig' : '';
+  var host = clear($('crumb'));
+  if (ui.done) {
+    var run = el('span', 'run', ui.right + '/' + ui.done);
+    run.appendChild(el('span', 'word', ' richtig'));
+    host.appendChild(run);
+  }
+
+  var f = forecast();
+  if (f === null) return;
+  var box = el('span', 'fc');
+  box.appendChild(el('span', 'k', 'Prognose'));
+  var v = el('span', 'v', Math.round(f) + ' %');
+  v.style.color = 'var(--f' + pctFach(f) + 't)';
+  box.appendChild(v);
+  box.title = 'Trefferquote der letzten ' + history.length +
+              (history.length === 1 ? ' Frage' : ' Fragen');
+  host.appendChild(box);
 }
 
 /* Fragetext mit Lücken-Platzhaltern rendern. */
@@ -805,8 +829,10 @@ function compact(options) {
   return options.every(function (o) { return o.length <= 24; });
 }
 
+/* Alle Auswahlfragen verhalten sich gleich: antippen schaltet um, gewertet
+   wird erst mit „Prüfen“. Ob eine oder mehrere Antworten stimmen, verrät die
+   Bedienung damit nicht - genau wie in der Prüfung. */
 function buildChoice(card) {
-  var multi = card.correct.length > 1;
   ui.order = shuffled(card.options.length);
 
   var host = el('div', 'opts' + (compact(card.options) ? ' inline' : ''));
@@ -815,16 +841,10 @@ function buildChoice(card) {
     b.dataset.src = String(src);
     b.onclick = function () {
       if (ui.locked) return;
-      if (multi) {
-        var at = ui.picked.indexOf(src);
-        if (at >= 0) ui.picked.splice(at, 1); else ui.picked.push(src);
-        b.setAttribute('aria-pressed', at >= 0 ? 'false' : 'true');
-        $('btn-check').disabled = !ui.picked.length;
-      } else {
-        ui.picked = [src];
-        b.setAttribute('aria-pressed', 'true');
-        grade();
-      }
+      var at = ui.picked.indexOf(src);
+      if (at >= 0) ui.picked.splice(at, 1); else ui.picked.push(src);
+      b.setAttribute('aria-pressed', at >= 0 ? 'false' : 'true');
+      $('btn-check').disabled = !ui.picked.length;
     };
     host.appendChild(b);
   });
@@ -965,10 +985,27 @@ function record(card, ok) {
   progress[card.id] = p;
   store.write(LS.prog, progress);
 
+  history.push(ok ? 1 : 0);
+  if (history.length > WINDOW) history = history.slice(-WINDOW);
+  store.write(LS.hist, history);
+
   ui.done++;
   if (ok) ui.right++; else ui.wrong++;
   ui.lastId = card.id;
   ui.moved = [from, p.b];
+}
+
+/* Prognose: Trefferquote der letzten (maximal 50) beantworteten Fragen -
+   die Schätzung dafür, wie eine Prüfung gerade ausginge. */
+function forecast() {
+  if (!history.length) return null;
+  var hits = history.reduce(function (a, b) { return a + b; }, 0);
+  return hits / history.length * 100;
+}
+
+// Farbstufe für eine Prozentzahl, an den üblichen Prüfungsgrenzen orientiert.
+function pctFach(p) {
+  return p >= 85 ? 5 : p >= 70 ? 4 : p >= 55 ? 3 : p >= 40 ? 2 : 1;
 }
 
 function verdict(ok, solution, card) {
@@ -1005,6 +1042,9 @@ function verdict(ok, solution, card) {
       p.b = Math.min(BOXES, ui.moved[0] + 1); p.w--; p.r++;
       progress[card.id] = p;
       store.write(LS.prog, progress);
+      // Auch die Prognose darf die Korrektur nicht übergehen.
+      history[history.length - 1] = 1;
+      store.write(LS.hist, history);
       ui.right++; ui.wrong--;
       ui.moved = [ui.moved[0], p.b];
       drawStrip();
@@ -1044,6 +1084,7 @@ function screen(name) {
   });
   $('btn-home').classList.toggle('hide', name === 'home');
   $('btn-manage').classList.toggle('hide', name !== 'home');
+  document.querySelector('.brand').classList.toggle('hide', name === 'learn');
   if (name === 'learn') drawStrip(); else $('pct').classList.add('hide');
   window.scrollTo(0, 0);
 }
@@ -1234,7 +1275,8 @@ $('file').onchange = function (e) { importFiles(e.target.files); e.target.value 
 
 $('btn-export').onclick = function () {
   download('lernkartei-sicherung-' + new Date().toISOString().slice(0, 10) + '.json',
-    JSON.stringify({ v: 1, at: Date.now(), progress: progress, sets: imported, settings: cfg }));
+    JSON.stringify({ v: 1, at: Date.now(), progress: progress, sets: imported,
+                     settings: cfg, history: history }));
 };
 $('btn-import').onclick = function () { $('file-backup').click(); };
 $('file-backup').onchange = function (e) {
@@ -1248,9 +1290,11 @@ $('file-backup').onchange = function (e) {
       if (!data || typeof data !== 'object' || !data.progress) throw new Error('unbekanntes Format');
       if (!confirm('Sicherung laden? Fortschritt und Fragensätze werden überschrieben.')) return;
       progress = data.progress || {};
+      history = Array.isArray(data.history) ? data.history.slice(-WINDOW) : [];
       imported = data.sets || {};
       cfg = Object.assign({ shuffle: true, showCount: false, theme: 'auto' }, data.settings || {});
-      store.write(LS.prog, progress); store.write(LS.sets, imported); store.write(LS.cfg, cfg);
+      store.write(LS.prog, progress); store.write(LS.sets, imported);
+      store.write(LS.cfg, cfg); store.write(LS.hist, history);
       rebuild(); applyTheme(); applySwitches(); drawSets(); drawManageStat();
       alert('Sicherung geladen.');
     } catch (err) {
@@ -1263,7 +1307,9 @@ $('file-backup').onchange = function (e) {
 $('btn-reset').onclick = function () {
   if (!confirm('Wirklich den gesamten Lernfortschritt löschen? Alle Fragen landen wieder in Fach 1.')) return;
   progress = {};
+  history = [];
   store.write(LS.prog, progress);
+  store.write(LS.hist, history);
   drawManageStat();
   alert('Fortschritt zurückgesetzt.');
 };

@@ -48,7 +48,19 @@ Kartei, steht er von Anfang an da.
 Blockweise lohnt sich trotzdem für frischen Stoff: einmal allein durch, dann
 zurück ins Gemischte.
 
+## Prognose
+
+Neben dem Sitzungszähler steht eine **Prognose**: die Trefferquote der letzten
+50 beantworteten Fragen. Sind es weniger, wird aus den vorhandenen gerechnet.
+Das Fenster läuft über Sitzungen hinweg mit und ist die Schätzung dafür, wie
+eine Prüfung gerade ausginge — anders als der Gesamtfortschritt, der den
+Bestand in den Fächern misst.
+
 ## Bedienung
+
+Antippen wählt aus, nochmal antippen nimmt zurück, **Prüfen** wertet. Das gilt
+für jede Auswahlfrage, auch wenn nur eine Antwort stimmt: sonst würde die
+Bedienung verraten, wie viele Antworten gesucht sind.
 
 Die Antwortknöpfe sind mit `1`–`9`, danach `Q W E R T Z U I O P` beschriftet;
 dieselbe Taste wählt die Antwort aus. Bei Lückentexten läuft die Nummerierung
@@ -88,8 +100,8 @@ Karten.
 
 ## Sicherung
 
-**Verwalten → Sicherung speichern** legt Fortschritt, importierte Fragensätze
-und Einstellungen als JSON ab. Das ist der Weg auf ein anderes Gerät oder
+**Verwalten → Sicherung speichern** legt Fortschritt, Prognose-Verlauf,
+importierte Fragensätze und Einstellungen als JSON ab. Das ist der Weg auf ein anderes Gerät oder
 zurück nach dem Leeren der Browserdaten.
 
 ## Entwicklung
