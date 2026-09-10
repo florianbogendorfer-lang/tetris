@@ -50,18 +50,20 @@ zurück ins Gemischte.
 
 ## Prognose
 
-Die **Prognose** ist die Trefferquote über rund die letzten 30 beantworteten
-Fragen — die Schätzung dafür, wie eine Prüfung gerade ausginge. Sie steht in
-der Übersicht neben dem Gesamtfortschritt und beim Lernen in der Kopfzeile und
-läuft über Sitzungen hinweg mit.
+Die **Prognose** ist die Trefferquote der letzten 30 beantworteten Fragen —
+sind es weniger, wird aus den vorhandenen gerechnet. Der schlichte Quotient,
+damit die Zahl von Hand nachzurechnen ist. Sie steht in der Übersicht neben dem
+Gesamtfortschritt und beim Lernen in der Kopfzeile.
 
-Die Antworten werden nach Alter gewichtet, die jüngste am stärksten. Ein hartes
-Fenster („die letzten 30, alle gleich schwer") wäre naheliegender, hat aber
-einen Haken: fällt hinten dieselbe Antwort heraus, die vorne hereinkommt,
-ändert sich der Wert überhaupt nicht. Bei 85 % Trefferquote ist das in drei von
-vier Fällen so — die Anzeige steht dann scheinbar fest. Gewichtet bewegt sie
-sich bei fast jeder Antwort und streut dabei sogar *weniger* um die wahre
-Quote. Die Gewichte sind normiert, damit auch die ersten Antworten stimmen.
+**Sie ist nicht der Sitzungszähler daneben.** „Sitzung 11/17" zählt nur die
+laufende Sitzung, die Prognose rechnet über die letzten 30 Antworten hinweg,
+also auch über frühere Sitzungen. Die beiden Zahlen dürfen darum abweichen:
+11/17 sind 65 %, aber wenn von den 30 gespeicherten Antworten 19 richtig waren,
+steht daneben 63 %.
+
+Dass die Prognose oft mehrere Antworten lang auf demselben Wert steht, liegt am
+Fenster: fällt hinten dieselbe Antwort heraus, die vorne hereinkommt, ändert
+sich nichts.
 
 Die beiden Zahlen messen Verschiedenes: der Gesamtfortschritt den Bestand in
 den Fächern (träge, wächst über Wochen), die Prognose die letzten 30 Antworten

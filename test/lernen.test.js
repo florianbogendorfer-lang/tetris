@@ -264,39 +264,41 @@ const SOLVE = (right) => {
   console.log('\n== Prognose ==');
   await p.click('#btn-home');
   await p.click('#btn-start');
-  // Die Prognose ist ein nach Alter gewichteter Mittelwert über rund 30
-  // Antworten; hier gegen dieselbe Formel gerechnet.
+  // Die Prognose ist der schlichte Quotient über die letzten 30 Antworten.
   const fc = await p.evaluate(() => {
     const h = JSON.parse(localStorage.getItem('lk.history.v1'));
-    const zerfall = 1 - 2 / 31;
-    let za = 0, ne = 0, w = 1;
-    for (let i = h.length - 1; i >= 0; i--) { za += w * h[i]; ne += w; w *= zerfall; }
     const v = document.querySelector('#crumb .fc .v');
-    return { laenge: h.length, erwartet: Math.round(za / ne * 100) + ' %',
+    return { laenge: h.length, treffer: h.reduce((a, b) => a + b, 0),
              angezeigt: v && v.textContent };
   });
-  ok(fc.laenge > 0 && fc.laenge <= 100, 'Verlauf umfasst ' + fc.laenge + ' Antworten (höchstens 100)');
-  ok(fc.angezeigt === fc.erwartet, 'Prognose entspricht der Formel: ' + fc.angezeigt);
+  ok(fc.laenge > 0 && fc.laenge <= 30, 'Verlauf umfasst ' + fc.laenge + ' Antworten (höchstens 30)');
+  ok(fc.angezeigt === Math.round(fc.treffer / fc.laenge * 100) + ' %',
+     'Prognose = ' + fc.treffer + '/' + fc.laenge + ' = ' + fc.angezeigt);
   ok(await p.locator('#crumb .fc .k').innerText() === 'PROGNOSE', 'Beschriftung „Prognose" steht daneben');
 
-  // Der gemeldete Fehler: die Anzeige stand fest. Mit abwechselnd richtig
-  // und falsch muss sie sich nach JEDER Antwort bewegen.
-  const werte = [];
-  for (let i = 0; i < 10; i++) {
-    const r = await answer(i % 2 === 0);
-    if (!r) { await p.click('#btn-check'); continue; }
-    werte.push(await p.locator('#crumb .fc .v').innerText());
-    await p.click('#btn-check');
-  }
-  let starr = 0;
-  for (let i = 1; i < werte.length; i++) if (werte[i] === werte[i - 1]) starr++;
-  ok(starr === 0, 'Prognose bewegt sich bei jeder Antwort: ' + werte.join(' → '));
-
-  // Der Speicher darf nicht unbegrenzt mitwachsen.
-  for (let i = 0; i < 40; i++) { const r = await answer(true); if (r) await p.click('#btn-check'); }
+  // Das Fenster darf nicht mitwachsen.
+  for (let i = 0; i < 14; i++) { const r = await answer(true); if (r) await p.click('#btn-check'); }
   const gross = await p.evaluate(() =>
     JSON.parse(localStorage.getItem('lk.history.v1')).length);
-  ok(gross <= 100, 'Verlauf bleibt bei höchstens 100 Antworten (ist ' + gross + ')');
+  ok(gross === 30, 'Fenster bleibt bei 30 Antworten stehen (ist ' + gross + ')');
+
+  // Der Sitzungszähler zählt nur die laufende Sitzung - genau deshalb darf
+  // er von der Prognose abweichen, und deshalb steht "Sitzung" davor.
+  // (Er erscheint erst, sobald in dieser Sitzung etwas beantwortet wurde.)
+  const run = await p.evaluate(() => {
+    const r = document.querySelector('#crumb .run');
+    const c = document.getElementById('crumb');
+    return { text: r.innerText.replace(/\s+/g, ' ').trim(), titel: r.title,
+             ueberlauf: c.scrollWidth > c.clientWidth + 1 };
+  });
+  ok(/^(Sitzung )?\d+\/\d+$/.test(run.text),
+     'Sitzungszähler: "' + run.text + '" (das Wort weicht, wenn der Platz knapp wird)');
+  ok(/Sitzung/.test(run.titel) && /Prognose/.test(run.titel),
+     'sein Tooltip erklärt den Unterschied zur Prognose');
+  ok(!run.ueberlauf, 'die Kopfzeile läuft nicht über');
+  const sitzung = run.text.match(/(\d+)\/(\d+)/);
+  ok(Number(sitzung[2]) <= 15,
+     'er zählt nur diese Sitzung (' + sitzung[0] + '), nicht die 30 gespeicherten Antworten');
 
   // Der gemeldete Fehler: nach dem Neustart landet man auf der Übersicht,
   // und dort war die Prognose vorher nirgends zu sehen.

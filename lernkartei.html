@@ -76,11 +76,9 @@ h1,h2,h3{margin:0;line-height:1.25;font-weight:650}
   display:flex;align-items:baseline;gap:12px;
 }
 .crumb .run{flex:none}
-/* Auf schmalen Geräten wird der Platz knapp. Dann fliegt erst das Wort,
-   dann der Sitzungszähler ganz — die Prognose samt Verlauf ist die
-   wichtigere Zahl und steht auf der Übersicht ohnehin vollständig. */
-@media (max-width:440px){ .crumb .run .word{display:none} }
-@media (max-width:380px){ .crumb .run{display:none} }
+/* Wird der Platz knapp, blendet fitCrumb() erst das Wort und dann den
+   ganzen Sitzungszähler aus — die Prognose samt Verlauf ist die wichtigere
+   Zahl und steht auf der Übersicht ohnehin vollständig. */
 /* Prognose: Trefferquote der letzten Fragen als Prüfungsschätzung. */
 .crumb .fc{display:inline-flex;align-items:baseline;gap:5px;flex:none}
 .crumb .fc .k{font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
@@ -879,8 +877,7 @@ var CAT_NAME = {
 var BOXES = 5;
 var LS = { prog: 'lk.progress.v1', sets: 'lk.sets.v1', cfg: 'lk.settings.v1',
            hist: 'lk.history.v1', trend: 'lk.trend.v1' };
-var WINDOW = 30;                                 // Reichweite der Prognose
-var HIST = 100;                                  // so viele Antworten bleiben gespeichert
+var WINDOW = 30;                                 // Fragen im Prognosefenster
 var TREND = 101;                                 // Punkte im Verlaufsdiagramm
 var BENCH = 80;                                  // Ziellinie im Diagramm
 
@@ -899,7 +896,7 @@ var store = {
 };
 
 var progress = store.read(LS.prog, {});          // id -> {b, r, w, t}
-var history = store.read(LS.hist, []).slice(-HIST);     // letzte Antworten, 1 = richtig
+var history = store.read(LS.hist, []).slice(-WINDOW);   // letzte Antworten, 1 = richtig
 // Verlauf der Prognose: n zählt alle je beantworteten Fragen, p hält die
 // letzten 101 Prognosewerte - genau das Fenster, das das Diagramm zeigt.
 var trend = store.read(LS.trend, { n: 0, p: [] });
@@ -1252,6 +1249,28 @@ function tally() {
 
   var chart = sparkline(30);
   if (chart) host.appendChild(chart);
+  fitCrumb();
+}
+
+/* Der Sitzungszähler wächst im Lauf einer Sitzung ("Sitzung 128/193"), und
+   wie viel Platz bleibt, hängt am Gerät. Ein fester Umbruchpunkt trifft das
+   nicht, also wird gemessen: passt es nicht, fliegt erst das Wort "Sitzung",
+   dann der Zähler ganz. */
+function fitCrumb() {
+  var host = $('crumb');
+  var run = host.querySelector('.run');
+  if (!run) return;
+  var word = run.querySelector('.word');
+
+  run.classList.remove('hide');
+  if (word) word.classList.remove('hide');
+  if (host.scrollWidth <= host.clientWidth) return;
+
+  if (word) {
+    word.classList.add('hide');
+    if (host.scrollWidth <= host.clientWidth) return;
+  }
+  run.classList.add('hide');
 }
 
 /* Fragetext mit Lücken-Platzhaltern rendern. */
@@ -1454,7 +1473,7 @@ function record(card, ok) {
   store.write(LS.prog, progress);
 
   history.push(ok ? 1 : 0);
-  if (history.length > HIST) history = history.slice(-HIST);
+  if (history.length > WINDOW) history = history.slice(-WINDOW);
   store.write(LS.hist, history);
   noteTrend(true);
 
@@ -1464,28 +1483,17 @@ function record(card, ok) {
   ui.moved = [from, p.b];
 }
 
-/* Prognose: Trefferquote über rund die letzten 30 Antworten - die Schätzung
-   dafür, wie eine Prüfung gerade ausginge.
+/* Prognose: Trefferquote der letzten (höchstens 30) beantworteten Fragen -
+   die Schätzung dafür, wie eine Prüfung gerade ausginge. Bewusst der schlichte
+   Quotient, damit die Zahl von Hand nachzurechnen ist.
 
-   Die Antworten werden nach Alter gewichtet, die jüngste am stärksten. Ein
-   hartes Fenster wäre naheliegender, hat aber einen unangenehmen Haken: fällt
-   hinten dieselbe Antwort heraus, die vorne hereinkommt, ändert sich der Wert
-   überhaupt nicht. Bei 85 % Trefferquote passiert das in drei von vier Fällen
-   - die Anzeige steht dann scheinbar fest. Gewichtet bewegt sie sich bei fast
-   jeder Antwort und streut dabei sogar weniger um die wahre Quote.
-
-   Die Gewichte sind normiert, damit auch die ersten Antworten stimmen: bei
-   einer richtigen von zwei stehen 48 % da, nicht 94 %. */
+   Dass sie dabei oft mehrere Antworten lang auf demselben Wert stehen bleibt,
+   liegt in der Natur des Fensters: fällt hinten dieselbe Antwort heraus, die
+   vorne hereinkommt, ändert sich nichts. */
 function forecast() {
   if (!history.length) return null;
-  var zerfall = 1 - 2 / (WINDOW + 1);
-  var zaehler = 0, nenner = 0, w = 1;
-  for (var i = history.length - 1; i >= 0; i--) {
-    zaehler += w * history[i];
-    nenner += w;
-    w *= zerfall;
-  }
-  return zaehler / nenner * 100;
+  var hits = history.reduce(function (a, b) { return a + b; }, 0);
+  return hits / history.length * 100;
 }
 
 /* Hängt den aktuellen Prognosewert an den Verlauf an (`weiter`) oder
@@ -1570,12 +1578,12 @@ function sparkline(hoehe) {
 /* Erklärt, worauf die Prognose beruht - lang für den Tooltip, kurz für
    die Zeile unter der Zahl. */
 function forecastNote(lang) {
-  if (history.length < WINDOW) {
-    return 'letzte ' + history.length + (history.length === 1 ? ' Antwort' : ' Antworten');
-  }
-  return lang ? 'Trefferquote über rund die letzten ' + WINDOW +
-                ' Antworten, jüngere zählen stärker'
-              : 'rund ' + WINDOW + ' Antworten';
+  var wieviele = history.length + (history.length === 1 ? ' Antwort' : ' Antworten');
+  return lang
+    ? 'Richtig beantwortet: ' + history.reduce(function (a, b) { return a + b; }, 0) +
+      ' der letzten ' + wieviele + '. Zählt über Sitzungen hinweg, anders als ' +
+      'der Sitzungszähler daneben.'
+    : 'letzte ' + wieviele;
 }
 
 // Farbstufe für eine Prozentzahl, an den üblichen Prüfungsgrenzen orientiert.
@@ -1866,7 +1874,7 @@ $('file-backup').onchange = function (e) {
       if (!data || typeof data !== 'object' || !data.progress) throw new Error('unbekanntes Format');
       if (!confirm('Sicherung laden? Fortschritt und Fragensätze werden überschrieben.')) return;
       progress = data.progress || {};
-      history = Array.isArray(data.history) ? data.history.slice(-HIST) : [];
+      history = Array.isArray(data.history) ? data.history.slice(-WINDOW) : [];
       trend = data.trend && Array.isArray(data.trend.p)
         ? { n: data.trend.n || 0, p: data.trend.p.slice(-TREND) } : { n: 0, p: [] };
       imported = data.sets || {};
@@ -1916,6 +1924,10 @@ document.addEventListener('keydown', function (e) {
   if (KEYS.indexOf(hotkey) < 0) return;
   var opt = $('q-body').querySelector('.opt[data-key="' + hotkey + '"]');
   if (opt) { e.preventDefault(); opt.click(); }
+});
+
+window.addEventListener('resize', function () {
+  if (ui.screen === 'learn') fitCrumb();
 });
 
 applyTheme();
