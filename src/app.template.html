@@ -88,7 +88,7 @@ h1,h2,h3{margin:0;line-height:1.25;font-weight:650}
 .spark{display:block;position:relative;padding-right:5px}
 .spark svg{display:block;width:100%;height:100%;overflow:visible}
 .spark .grid{stroke:var(--line-2);stroke-width:1;stroke-dasharray:3 3}
-.spark .bench{stroke-width:1.25;stroke-dasharray:4 3;opacity:.9}
+.spark .bench{stroke:var(--ink-2);stroke-width:1.25;stroke-dasharray:4 3;opacity:.75}
 .spark .line{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
 .spark .dot{
   position:absolute;right:5px;width:7px;height:7px;border-radius:99px;
@@ -1100,6 +1100,8 @@ function trendBlock(hoehe, kaestchen) {
   return box;
 }
 
+sparkline.lauf = 0;                  // für eindeutige clipPath-Kennungen
+
 function sparkline(hoehe) {
   var pts = trend.p;
   if (pts.length < 2) return null;
@@ -1108,7 +1110,8 @@ function sparkline(hoehe) {
   box.style.height = hoehe + 'px';
   var von = trend.n - pts.length + 1;
   box.title = 'Prognose über die Fragen ' + von + ' bis ' + trend.n +
-              ' · Ziellinie ' + BENCH + ' % · Kästchen: grün richtig, rot falsch';
+              ' · Ziellinie ' + BENCH + ' %, darunter rot, darüber grün' +
+              ' · Kästchen: grün richtig, rot falsch';
 
   // Ein festes Koordinatennetz 0-100 in beide Richtungen; die Linien
   // behalten über vector-effect trotz Verzerrung ihre Stärke.
@@ -1123,29 +1126,44 @@ function sparkline(hoehe) {
     }));
   });
 
-  var bench = svgEl('line', {
+  // Die Ziellinie bleibt neutral - die Farbe gehört den Daten.
+  svg.appendChild(svgEl('line', {
     x1: 0, x2: 100, y1: y(BENCH), y2: y(BENCH), class: 'bench',
     'vector-effect': 'non-scaling-stroke'
-  });
-  bench.style.stroke = 'var(--f5)';
-  svg.appendChild(bench);
+  }));
 
-  var farbe = 'var(--f' + pctFach(pts[pts.length - 1]) + 't)';
-  var linie = svgEl('polyline', {
-    class: 'line', 'vector-effect': 'non-scaling-stroke',
-    points: pts.map(function (v, i) { return x(i) + ',' + y(v); }).join(' ')
+  /* Die Linie wird zweimal gezeichnet, grün und rot, und jeweils an der
+     Ziellinie beschnitten. So wechselt die Farbe genau im Schnittpunkt und
+     nicht erst am nächsten Datenpunkt - ein Farbverlauf oder eine
+     Aufteilung nach Punkten träfe die Kreuzung nicht. */
+  var kennung = 'lk-' + (++sparkline.lauf);
+  var defs = svgEl('defs');
+  [['ueber', -10, 30], ['unter', y(BENCH), 200]].forEach(function (teil) {
+    var clip = svgEl('clipPath', { id: kennung + '-' + teil[0] });
+    clip.appendChild(svgEl('rect', { x: -10, y: teil[1], width: 120, height: teil[2] }));
+    defs.appendChild(clip);
   });
-  linie.style.stroke = farbe;
-  svg.appendChild(linie);
+  svg.appendChild(defs);
+
+  var punkte = pts.map(function (v, i) { return x(i) + ',' + y(v); }).join(' ');
+  [['ueber', 'var(--f5t)'], ['unter', 'var(--f1t)']].forEach(function (teil) {
+    var linie = svgEl('polyline', {
+      class: 'line', points: punkte, 'vector-effect': 'non-scaling-stroke',
+      'clip-path': 'url(#' + kennung + '-' + teil[0] + ')'
+    });
+    linie.style.stroke = teil[1];
+    svg.appendChild(linie);
+  });
 
   box.appendChild(svg);
 
   // Der letzte Wert bekommt einen Punkt. Im verzerrten Koordinatennetz
   // würde ein Kreis zur Ellipse, deshalb liegt er als eigenes Element
   // darüber.
+  var letzter = pts[pts.length - 1];
   var dot = el('span', 'dot');
-  dot.style.background = farbe;
-  dot.style.top = y(pts[pts.length - 1]) + '%';
+  dot.style.background = letzter >= BENCH ? 'var(--f5t)' : 'var(--f1t)';
+  dot.style.top = y(letzter) + '%';
   box.appendChild(dot);
 
   return box;

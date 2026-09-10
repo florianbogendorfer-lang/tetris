@@ -69,8 +69,12 @@ den Fächern (träge, wächst über Wochen), die Prognose die letzten 30 Antwort
 Daneben zeichnet ein Liniendiagramm den Verlauf: auf der x-Achse die laufende
 Nummer der beantworteten Frage, auf der y-Achse die Prognose von 0 bis 100 %.
 Gezeigt werden die letzten 30 Werte, dieselben 30 Antworten, aus denen die
-Prognose gerechnet wird. Die gestrichelte Waagrechte ist die Ziellinie bei
-80 %. Ab zwei beantworteten Fragen ist eine Linie da.
+Prognose gerechnet wird. Ab zwei beantworteten Fragen ist eine Linie da.
+
+Die gestrichelte Waagrechte ist die Ziellinie bei 80 %. Die Linie ist
+**grün, wo sie darüber liegt, und rot darunter** — der Wechsel sitzt genau im
+Schnittpunkt, nicht erst am nächsten Datenpunkt. Dafür wird sie zweimal
+gezeichnet und jeweils an der Ziellinie beschnitten.
 
 Darunter steht ein **Kästchen je Antwort** — grün richtig, rot falsch, in
 derselben Breite und Reihenfolge wie das Diagramm. Ein Ausschlag der Linie

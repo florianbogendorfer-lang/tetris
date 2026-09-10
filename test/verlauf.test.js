@@ -85,6 +85,30 @@ async function mit(p, n, werte) {
      '0 % ganz unten, 100 % ganz oben: ' + rand.punkte.join('  '));
   ok(rand.dotTop === '20%', 'Endpunkt sitzt auf seinem Wert (80 % → top 20 %): ' + rand.dotTop);
 
+  console.log('\n== Farbe an der Ziellinie ==');
+  const farben = await mit(p, 5, [50, 90, 60, 95, 40]);
+  const linien = await p.evaluate(() => [...document.querySelectorAll('#home-total polyline')]
+    .map(l => ({ farbe: l.style.stroke, clip: l.getAttribute('clip-path'),
+                 punkte: l.getAttribute('points') })));
+  ok(linien.length === 2, 'die Linie wird zweimal gezeichnet (' + linien.length + ')');
+  ok(linien[0].farbe.includes('f5') && linien[1].farbe.includes('f1'),
+     'grün über, rot unter der Ziellinie: ' + linien.map(l => l.farbe).join(' / '));
+  ok(linien[0].punkte === linien[1].punkte, 'beide zeigen denselben Verlauf');
+  const clips = await p.evaluate(() => [...document.querySelectorAll('#home-total clipPath rect')]
+    .map(r => [Number(r.getAttribute('y')), Number(r.getAttribute('height'))]));
+  ok(clips[0][0] + clips[0][1] === 20 && clips[1][0] === 20,
+     'beschnitten genau bei y 20, also bei 80 %: ' + JSON.stringify(clips));
+  ok(farben.dotTop === '60%', 'der Endpunkt (40 %) sitzt auf seinem Wert: ' + farben.dotTop);
+
+  // Zwei Diagramme gleichzeitig im Dokument dürfen sich die Kennungen
+  // der clipPaths nicht teilen.
+  await p.click('#btn-start');
+  await p.waitForTimeout(150);
+  const ids = await p.evaluate(() => [...document.querySelectorAll('clipPath')].map(c => c.id));
+  ok(ids.length >= 4 && new Set(ids).size === ids.length,
+     ids.length + ' clipPath-Kennungen, alle verschieden');
+  await p.click('#btn-home');
+
   console.log('\n== Streak-Kästchen ==');
   const mitStreak = await p.evaluate(() => {
     const h = JSON.parse(localStorage.getItem('lk.history.v1'));
@@ -98,9 +122,9 @@ async function mit(p, n, werte) {
      'grün steht für richtig, rot für falsch');
 
   console.log('\n== Überlebt den Reload ==');
-  const vor = await p.locator('#home-total .spark polyline').getAttribute('points');
+  const vor = await p.locator('#home-total .spark polyline').first().getAttribute('points');
   await p.reload();
-  const nachReload = await p.locator('#home-total .spark polyline').getAttribute('points');
+  const nachReload = await p.locator('#home-total .spark polyline').first().getAttribute('points');
   ok(vor === nachReload, 'Diagramm ist nach dem Neustart unverändert da');
 
   await b.close();
