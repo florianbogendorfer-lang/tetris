@@ -75,17 +75,13 @@ h1,h2,h3{margin:0;line-height:1.25;font-weight:650}
   flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   display:flex;align-items:baseline;gap:12px;
 }
-.crumb .run{flex:none}
-/* Wird der Platz knapp, blendet fitCrumb() erst das Wort und dann den
-   ganzen Sitzungszähler aus — die Prognose samt Verlauf ist die wichtigere
-   Zahl und steht auf der Übersicht ohnehin vollständig. */
 /* Prognose: Trefferquote der letzten Fragen als Prüfungsschätzung. */
 .crumb .fc{display:inline-flex;align-items:baseline;gap:5px;flex:none}
 .crumb .fc .k{font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
 .crumb .fc .v{font-size:16px;font-weight:750;letter-spacing:-.02em}
 /* Verlaufsdiagramm: nimmt den Rest der Zeile bis zum Knopf. */
-.crumb .spark{flex:1 1 0;min-width:48px;align-self:center}
-@media (max-width:300px){ .crumb .spark{display:none} }
+.crumb .trend{flex:1 1 0;min-width:48px;align-self:center}
+@media (max-width:300px){ .crumb .trend{display:none} }
 .spacer{flex:none}
 
 /* ---------- Verlauf der Prognose ---------- */
@@ -98,6 +94,11 @@ h1,h2,h3{margin:0;line-height:1.25;font-weight:650}
   position:absolute;right:5px;width:7px;height:7px;border-radius:99px;
   margin:-3.5px -3.5px 0 0;box-shadow:0 0 0 1.5px var(--bg);
 }
+
+/* Ein Kästchen je Antwort, in derselben Breite und Reihenfolge wie das
+   Diagramm darüber: grün richtig, rot falsch. */
+.streak{display:flex;gap:1px;margin-top:4px;padding-right:5px}
+.streak > i{flex:1 1 0;min-width:0;border-radius:1px}
 
 .iconbtn{
   border:1px solid var(--line); background:var(--panel); border-radius:10px;
@@ -172,7 +173,7 @@ h1,h2,h3{margin:0;line-height:1.25;font-weight:650}
   font-variant-numeric:tabular-nums;
 }
 .total .s{font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}
-.total .spark{margin-top:8px;align-self:end}
+.total .trend{margin-top:8px;align-self:end}
 
 /* ---------- Fächer in der Übersicht ---------- */
 .boxes{display:flex;flex-direction:column;gap:9px}
@@ -878,7 +879,7 @@ var BOXES = 5;
 var LS = { prog: 'lk.progress.v1', sets: 'lk.sets.v1', cfg: 'lk.settings.v1',
            hist: 'lk.history.v1', trend: 'lk.trend.v1' };
 var WINDOW = 30;                                 // Fragen im Prognosefenster
-var TREND = 101;                                 // Punkte im Verlaufsdiagramm
+var TREND = 30;                                  // Antworten im Verlaufsdiagramm
 var BENCH = 80;                                  // Ziellinie im Diagramm
 
 var store = {
@@ -942,7 +943,6 @@ var ui = {
   picked: [],        // Auswahl bei choice
   gaps: [],          // Auswahl je Lücke
   locked: false,
-  right: 0, wrong: 0, done: 0,
   lastId: null
 };
 
@@ -1099,7 +1099,7 @@ function drawTotal() {
        f === null ? '–' : Math.round(f) + ' %',
        f === null ? 'var(--ink-2)' : 'var(--f' + pctFach(f) + 't)',
        f === null ? 'noch keine Antworten' : forecastNote(false),
-       sparkline(42));
+       trendBlock(38, 8));
 }
 
 function drawHome() {
@@ -1228,14 +1228,6 @@ function show(card) {
 
 function tally() {
   var host = clear($('crumb'));
-  if (ui.done) {
-    var run = el('span', 'run');
-    run.appendChild(el('span', 'word', 'Sitzung '));
-    run.appendChild(document.createTextNode(ui.right + '/' + ui.done));
-    run.title = 'In dieser Sitzung richtig beantwortet. Die Prognose daneben ' +
-                'rechnet über die letzten Antworten hinweg, auch aus früheren Sitzungen.';
-    host.appendChild(run);
-  }
 
   var f = forecast();
   if (f === null) return;
@@ -1247,30 +1239,8 @@ function tally() {
   box.title = forecastNote(true);
   host.appendChild(box);
 
-  var chart = sparkline(30);
+  var chart = trendBlock(26, 5);
   if (chart) host.appendChild(chart);
-  fitCrumb();
-}
-
-/* Der Sitzungszähler wächst im Lauf einer Sitzung ("Sitzung 128/193"), und
-   wie viel Platz bleibt, hängt am Gerät. Ein fester Umbruchpunkt trifft das
-   nicht, also wird gemessen: passt es nicht, fliegt erst das Wort "Sitzung",
-   dann der Zähler ganz. */
-function fitCrumb() {
-  var host = $('crumb');
-  var run = host.querySelector('.run');
-  if (!run) return;
-  var word = run.querySelector('.word');
-
-  run.classList.remove('hide');
-  if (word) word.classList.remove('hide');
-  if (host.scrollWidth <= host.clientWidth) return;
-
-  if (word) {
-    word.classList.add('hide');
-    if (host.scrollWidth <= host.clientWidth) return;
-  }
-  run.classList.add('hide');
 }
 
 /* Fragetext mit Lücken-Platzhaltern rendern. */
@@ -1477,8 +1447,6 @@ function record(card, ok) {
   store.write(LS.hist, history);
   noteTrend(true);
 
-  ui.done++;
-  if (ok) ui.right++; else ui.wrong++;
   ui.lastId = card.id;
   ui.moved = [from, p.b];
 }
@@ -1524,6 +1492,30 @@ function svgEl(tag, attrs) {
    Gezeigt werden die letzten 101 Werte; ab dem 102. wandert das Fenster mit.
    Unter zwei Werten gibt es noch keine Linie und damit kein Diagramm.
    Die gestrichelte Waagrechte ist die Ziellinie bei 80 %. */
+/* Diagramm plus Kästchenreihe. Beide zeigen dieselben Antworten in
+   derselben Reihenfolge, sind gleich breit und stehen untereinander -
+   so gehört ein Ausschlag der Linie sichtbar zu einem roten Kästchen. */
+function trendBlock(hoehe, kaestchen) {
+  var chart = sparkline(hoehe);
+  if (!chart) return null;
+
+  var box = el('div', 'trend');
+  box.appendChild(chart);
+
+  var reihe = el('div', 'streak');
+  reihe.style.height = kaestchen + 'px';
+  var von = history.length - trend.p.length;          // gleiche Fenster
+  for (var i = Math.max(0, von); i < history.length; i++) {
+    var k = el('i');
+    k.style.background = history[i] ? 'var(--f5)' : 'var(--f1)';
+    reihe.appendChild(k);
+  }
+  if (reihe.children.length) box.appendChild(reihe);
+  box.title = chart.title;
+  chart.removeAttribute('title');
+  return box;
+}
+
 function sparkline(hoehe) {
   var pts = trend.p;
   if (pts.length < 2) return null;
@@ -1532,7 +1524,7 @@ function sparkline(hoehe) {
   box.style.height = hoehe + 'px';
   var von = trend.n - pts.length + 1;
   box.title = 'Prognose über die Fragen ' + von + ' bis ' + trend.n +
-              ' · Ziellinie ' + BENCH + ' %';
+              ' · Ziellinie ' + BENCH + ' % · Kästchen: grün richtig, rot falsch';
 
   // Ein festes Koordinatennetz 0-100 in beide Richtungen; die Linien
   // behalten über vector-effect trotz Verzerrung ihre Stärke.
@@ -1629,7 +1621,6 @@ function verdict(ok, solution, card) {
       history[history.length - 1] = 1;
       store.write(LS.hist, history);
       noteTrend(false);
-      ui.right++; ui.wrong--;
       ui.moved = [ui.moved[0], p.b];
       drawStrip();
       verdict(true, solution, card);
@@ -1680,7 +1671,6 @@ function home() {
 }
 
 function startLearning() {
-  ui.right = ui.wrong = ui.done = 0;
   ui.lastId = null;
   screen('learn');
   next();
@@ -1924,10 +1914,6 @@ document.addEventListener('keydown', function (e) {
   if (KEYS.indexOf(hotkey) < 0) return;
   var opt = $('q-body').querySelector('.opt[data-key="' + hotkey + '"]');
   if (opt) { e.preventDefault(); opt.click(); }
-});
-
-window.addEventListener('resize', function () {
-  if (ui.screen === 'learn') fitCrumb();
 });
 
 applyTheme();

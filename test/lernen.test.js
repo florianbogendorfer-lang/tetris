@@ -282,23 +282,18 @@ const SOLVE = (right) => {
     JSON.parse(localStorage.getItem('lk.history.v1')).length);
   ok(gross === 30, 'Fenster bleibt bei 30 Antworten stehen (ist ' + gross + ')');
 
-  // Der Sitzungszähler zählt nur die laufende Sitzung - genau deshalb darf
-  // er von der Prognose abweichen, und deshalb steht "Sitzung" davor.
-  // (Er erscheint erst, sobald in dieser Sitzung etwas beantwortet wurde.)
-  const run = await p.evaluate(() => {
-    const r = document.querySelector('#crumb .run');
+  // Der Sitzungszähler ist entfernt; in der Kopfzeile steht nur noch die
+  // Prognose samt Verlauf.
+  const kopf = await p.evaluate(() => {
     const c = document.getElementById('crumb');
-    return { text: r.innerText.replace(/\s+/g, ' ').trim(), titel: r.title,
+    return { run: !!c.querySelector('.run'), trend: !!c.querySelector('.trend'),
+             text: c.innerText.replace(/\s+/g, ' ').trim(),
              ueberlauf: c.scrollWidth > c.clientWidth + 1 };
   });
-  ok(/^(Sitzung )?\d+\/\d+$/.test(run.text),
-     'Sitzungszähler: "' + run.text + '" (das Wort weicht, wenn der Platz knapp wird)');
-  ok(/Sitzung/.test(run.titel) && /Prognose/.test(run.titel),
-     'sein Tooltip erklärt den Unterschied zur Prognose');
-  ok(!run.ueberlauf, 'die Kopfzeile läuft nicht über');
-  const sitzung = run.text.match(/(\d+)\/(\d+)/);
-  ok(Number(sitzung[2]) <= 15,
-     'er zählt nur diese Sitzung (' + sitzung[0] + '), nicht die 30 gespeicherten Antworten');
+  ok(!kopf.run, 'kein Sitzungszähler mehr in der Kopfzeile');
+  ok(kopf.text.startsWith('PROGNOSE'), 'Kopfzeile zeigt nur: "' + kopf.text + '"');
+  ok(kopf.trend, 'Verlauf steht daneben');
+  ok(!kopf.ueberlauf, 'die Kopfzeile läuft nicht über');
 
   // Der gemeldete Fehler: nach dem Neustart landet man auf der Übersicht,
   // und dort war die Prognose vorher nirgends zu sehen.

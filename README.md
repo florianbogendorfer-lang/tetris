@@ -55,11 +55,8 @@ sind es weniger, wird aus den vorhandenen gerechnet. Der schlichte Quotient,
 damit die Zahl von Hand nachzurechnen ist. Sie steht in der Übersicht neben dem
 Gesamtfortschritt und beim Lernen in der Kopfzeile.
 
-**Sie ist nicht der Sitzungszähler daneben.** „Sitzung 11/17" zählt nur die
-laufende Sitzung, die Prognose rechnet über die letzten 30 Antworten hinweg,
-also auch über frühere Sitzungen. Die beiden Zahlen dürfen darum abweichen:
-11/17 sind 65 %, aber wenn von den 30 gespeicherten Antworten 19 richtig waren,
-steht daneben 63 %.
+Sie rechnet über Sitzungen hinweg — die 30 Antworten sind nicht die dieser
+Sitzung, sondern die letzten 30 überhaupt.
 
 Dass die Prognose oft mehrere Antworten lang auf demselben Wert steht, liegt am
 Fenster: fällt hinten dieselbe Antwort heraus, die vorne hereinkommt, ändert
@@ -71,10 +68,15 @@ den Fächern (träge, wächst über Wochen), die Prognose die letzten 30 Antwort
 
 Daneben zeichnet ein Liniendiagramm den Verlauf: auf der x-Achse die laufende
 Nummer der beantworteten Frage, auf der y-Achse die Prognose von 0 bis 100 %.
-Gezeigt werden die letzten 101 Werte — ab dem 102. wandert das Fenster mit.
-Die gestrichelte Waagrechte ist die Ziellinie bei 80 %. Ab zwei beantworteten
-Fragen ist eine Linie da; der Verlauf liegt im `localStorage` und übersteht
-den Neustart.
+Gezeigt werden die letzten 30 Werte, dieselben 30 Antworten, aus denen die
+Prognose gerechnet wird. Die gestrichelte Waagrechte ist die Ziellinie bei
+80 %. Ab zwei beantworteten Fragen ist eine Linie da.
+
+Darunter steht ein **Kästchen je Antwort** — grün richtig, rot falsch, in
+derselben Breite und Reihenfolge wie das Diagramm. Ein Ausschlag der Linie
+gehört so sichtbar zu einem roten Kästchen.
+
+Verlauf und Kästchen liegen im `localStorage` und überstehen den Neustart.
 
 ## Bedienung
 

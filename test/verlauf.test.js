@@ -21,7 +21,8 @@ async function mit(p, n, werte) {
       punkte: poly.getAttribute('points').trim().split(/\s+/),
       ziellinie: bench.getAttribute('y1'),
       titel: box.getAttribute('title'),
-      dotTop: box.querySelector('.dot').style.top
+      dotTop: box.querySelector('.dot').style.top,
+      kaesten: [...box.parentNode.querySelectorAll('.streak > i')].length
     };
   });
 }
@@ -46,17 +47,17 @@ async function mit(p, n, werte) {
 
   console.log('\n== Fenster ==');
   const g = i => 50 + Math.round(30 * Math.sin(i / 7));
-  const hundert = Array.from({ length: 100 }, (_, i) => g(i));
-  const k100 = await mit(p, 100, hundert);
-  ok(k100.punkte.length === 100, 'n = 100: alle 100 Werte (' + k100.punkte.length + ')');
+  const neunundzwanzig = Array.from({ length: 29 }, (_, i) => g(i));
+  const k29 = await mit(p, 29, neunundzwanzig);
+  ok(k29.punkte.length === 29, 'n = 29: alle 29 Werte (' + k29.punkte.length + ')');
 
-  const k101 = await mit(p, 101, hundert.concat([g(100)]));
-  ok(k101.punkte.length === 101, 'n = 101: alle 101 Werte (' + k101.punkte.length + ')');
+  const k30 = await mit(p, 30, neunundzwanzig.concat([g(29)]));
+  ok(k30.punkte.length === 30, 'n = 30: alle 30 Werte (' + k30.punkte.length + ')');
 
-  // Über 101 hinaus muss die App selbst kappen - also echt weiterspielen.
+  // Über 30 hinaus muss die App selbst kappen - also echt weiterspielen.
   await p.evaluate(() => {
-    const werte = Array.from({ length: 101 }, (_, i) => 50 + Math.round(30 * Math.sin(i / 7)));
-    localStorage.setItem('lk.trend.v1', JSON.stringify({ n: 101, p: werte }));
+    const werte = Array.from({ length: 30 }, (_, i) => 50 + Math.round(30 * Math.sin(i / 7)));
+    localStorage.setItem('lk.trend.v1', JSON.stringify({ n: 30, p: werte }));
   });
   await p.reload();
   await p.click('#btn-start');
@@ -71,18 +72,30 @@ async function mit(p, n, werte) {
     await p.click('#btn-check');
   }
   const nach = await p.evaluate(() => JSON.parse(localStorage.getItem('lk.trend.v1')));
-  ok(nach.n === 106, 'n zählt weiter: ' + nach.n);
-  ok(nach.p.length === 101, 'Fenster bleibt bei 101 Werten (' + nach.p.length + ')');
+  ok(nach.n === 35, 'n zählt weiter: ' + nach.n);
+  ok(nach.p.length === 30, 'Fenster bleibt bei 30 Werten (' + nach.p.length + ')');
   await p.click('#btn-home');
-  const titel = await p.locator('#home-total .spark').getAttribute('title');
-  ok(/Fragen 6 bis 106/.test(titel), 'Fenster zeigt n-100 bis n: "' + titel + '"');
+  const titel = await p.locator('#home-total .trend').getAttribute('title');
+  ok(/Fragen 6 bis 35/.test(titel), 'Fenster zeigt n-29 bis n: "' + titel + '"');
 
   console.log('\n== Ziellinie und Skala ==');
-  ok(k101.ziellinie === '20', 'Ziellinie bei 80 % (y = 20 von oben): ' + k101.ziellinie);
+  ok(k30.ziellinie === '20', 'Ziellinie bei 80 % (y = 20 von oben): ' + k30.ziellinie);
   const rand = await mit(p, 3, [0, 100, 80]);
   ok(rand.punkte[0] === '0,100' && rand.punkte[1] === '50,0',
      '0 % ganz unten, 100 % ganz oben: ' + rand.punkte.join('  '));
   ok(rand.dotTop === '20%', 'Endpunkt sitzt auf seinem Wert (80 % → top 20 %): ' + rand.dotTop);
+
+  console.log('\n== Streak-Kästchen ==');
+  const mitStreak = await p.evaluate(() => {
+    const h = JSON.parse(localStorage.getItem('lk.history.v1'));
+    const k = [...document.querySelectorAll('#home-total .streak > i')]
+      .map(x => x.style.background.includes('f5') ? 1 : 0);
+    return { hist: h, kaesten: k };
+  });
+  ok(mitStreak.kaesten.length === mitStreak.hist.length,
+     'ein Kästchen je Antwort (' + mitStreak.kaesten.length + ')');
+  ok(JSON.stringify(mitStreak.kaesten) === JSON.stringify(mitStreak.hist),
+     'grün steht für richtig, rot für falsch');
 
   console.log('\n== Überlebt den Reload ==');
   const vor = await p.locator('#home-total .spark polyline').getAttribute('points');
