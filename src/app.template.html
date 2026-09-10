@@ -463,7 +463,8 @@ var CAT_NAME = {
 var BOXES = 5;
 var LS = { prog: 'lk.progress.v1', sets: 'lk.sets.v1', cfg: 'lk.settings.v1',
            hist: 'lk.history.v1', trend: 'lk.trend.v1' };
-var WINDOW = 30;                                 // Fragen im Prognosefenster
+var WINDOW = 30;                                 // Reichweite der Prognose
+var HIST = 100;                                  // so viele Antworten bleiben gespeichert
 var TREND = 101;                                 // Punkte im Verlaufsdiagramm
 var BENCH = 80;                                  // Ziellinie im Diagramm
 
@@ -482,7 +483,7 @@ var store = {
 };
 
 var progress = store.read(LS.prog, {});          // id -> {b, r, w, t}
-var history = store.read(LS.hist, []).slice(-WINDOW);   // letzte Antworten, 1 = richtig
+var history = store.read(LS.hist, []).slice(-HIST);     // letzte Antworten, 1 = richtig
 // Verlauf der Prognose: n zählt alle je beantworteten Fragen, p hält die
 // letzten 101 Prognosewerte - genau das Fenster, das das Diagramm zeigt.
 var trend = store.read(LS.trend, { n: 0, p: [] });
@@ -684,8 +685,7 @@ function drawTotal() {
   stat('Prognose',
        f === null ? '–' : Math.round(f) + ' %',
        f === null ? 'var(--ink-2)' : 'var(--f' + pctFach(f) + 't)',
-       f === null ? 'noch keine Antworten'
-                  : 'letzte ' + history.length + (history.length === 1 ? ' Frage' : ' Fragen'),
+       f === null ? 'noch keine Antworten' : forecastNote(false),
        sparkline(42));
 }
 
@@ -816,8 +816,11 @@ function show(card) {
 function tally() {
   var host = clear($('crumb'));
   if (ui.done) {
-    var run = el('span', 'run', ui.right + '/' + ui.done);
-    run.appendChild(el('span', 'word', ' richtig'));
+    var run = el('span', 'run');
+    run.appendChild(el('span', 'word', 'Sitzung '));
+    run.appendChild(document.createTextNode(ui.right + '/' + ui.done));
+    run.title = 'In dieser Sitzung richtig beantwortet. Die Prognose daneben ' +
+                'rechnet über die letzten Antworten hinweg, auch aus früheren Sitzungen.';
     host.appendChild(run);
   }
 
@@ -828,8 +831,7 @@ function tally() {
   var v = el('span', 'v', Math.round(f) + ' %');
   v.style.color = 'var(--f' + pctFach(f) + 't)';
   box.appendChild(v);
-  box.title = 'Trefferquote der letzten ' + history.length +
-              (history.length === 1 ? ' Frage' : ' Fragen');
+  box.title = forecastNote(true);
   host.appendChild(box);
 
   var chart = sparkline(30);
@@ -1036,7 +1038,7 @@ function record(card, ok) {
   store.write(LS.prog, progress);
 
   history.push(ok ? 1 : 0);
-  if (history.length > WINDOW) history = history.slice(-WINDOW);
+  if (history.length > HIST) history = history.slice(-HIST);
   store.write(LS.hist, history);
   noteTrend(true);
 
@@ -1046,12 +1048,28 @@ function record(card, ok) {
   ui.moved = [from, p.b];
 }
 
-/* Prognose: Trefferquote der letzten (maximal 50) beantworteten Fragen -
-   die Schätzung dafür, wie eine Prüfung gerade ausginge. */
+/* Prognose: Trefferquote über rund die letzten 30 Antworten - die Schätzung
+   dafür, wie eine Prüfung gerade ausginge.
+
+   Die Antworten werden nach Alter gewichtet, die jüngste am stärksten. Ein
+   hartes Fenster wäre naheliegender, hat aber einen unangenehmen Haken: fällt
+   hinten dieselbe Antwort heraus, die vorne hereinkommt, ändert sich der Wert
+   überhaupt nicht. Bei 85 % Trefferquote passiert das in drei von vier Fällen
+   - die Anzeige steht dann scheinbar fest. Gewichtet bewegt sie sich bei fast
+   jeder Antwort und streut dabei sogar weniger um die wahre Quote.
+
+   Die Gewichte sind normiert, damit auch die ersten Antworten stimmen: bei
+   einer richtigen von zwei stehen 48 % da, nicht 94 %. */
 function forecast() {
   if (!history.length) return null;
-  var hits = history.reduce(function (a, b) { return a + b; }, 0);
-  return hits / history.length * 100;
+  var zerfall = 1 - 2 / (WINDOW + 1);
+  var zaehler = 0, nenner = 0, w = 1;
+  for (var i = history.length - 1; i >= 0; i--) {
+    zaehler += w * history[i];
+    nenner += w;
+    w *= zerfall;
+  }
+  return zaehler / nenner * 100;
 }
 
 /* Hängt den aktuellen Prognosewert an den Verlauf an (`weiter`) oder
@@ -1131,6 +1149,17 @@ function sparkline(hoehe) {
   box.appendChild(dot);
 
   return box;
+}
+
+/* Erklärt, worauf die Prognose beruht - lang für den Tooltip, kurz für
+   die Zeile unter der Zahl. */
+function forecastNote(lang) {
+  if (history.length < WINDOW) {
+    return 'letzte ' + history.length + (history.length === 1 ? ' Antwort' : ' Antworten');
+  }
+  return lang ? 'Trefferquote über rund die letzten ' + WINDOW +
+                ' Antworten, jüngere zählen stärker'
+              : 'rund ' + WINDOW + ' Antworten';
 }
 
 // Farbstufe für eine Prozentzahl, an den üblichen Prüfungsgrenzen orientiert.
@@ -1421,7 +1450,7 @@ $('file-backup').onchange = function (e) {
       if (!data || typeof data !== 'object' || !data.progress) throw new Error('unbekanntes Format');
       if (!confirm('Sicherung laden? Fortschritt und Fragensätze werden überschrieben.')) return;
       progress = data.progress || {};
-      history = Array.isArray(data.history) ? data.history.slice(-WINDOW) : [];
+      history = Array.isArray(data.history) ? data.history.slice(-HIST) : [];
       trend = data.trend && Array.isArray(data.trend.p)
         ? { n: data.trend.n || 0, p: data.trend.p.slice(-TREND) } : { n: 0, p: [] };
       imported = data.sets || {};

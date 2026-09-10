@@ -21,8 +21,15 @@ const SOLVE = (right) => {
   }
   if (document.querySelectorAll('#q-body .blank').length) {
     const shown = groups.map(labels);
-    const c = cards.find(c => c.kind === 'gaps' && c.blanks.length === shown.length &&
-      c.blanks.every((b, i) => same(b.options, shown[i])));
+    // Beschriftung der Lücke, sofern vorhanden (Zuordnungsfragen haben eine)
+    const marken = [...document.querySelectorAll('#q-body .blank > .lbl')]
+      .map(l => l.textContent.replace(/^Lücke\s*\S+\s*/, '').trim());
+    const c = cards.find(c => c.kind === 'gaps' &&
+      c.text === document.getElementById('q-text').textContent.replace(/[\u2460-\u2473]/g, m =>
+        '\uE000' + (m.charCodeAt(0) - 0x245F) + '\uE001') &&
+      c.blanks.length === shown.length &&
+      c.blanks.every((b, i) => same(b.options, shown[i]) &&
+                               (b.label || '') === (marken[i] || '')));
     if (!c) return null;
     return { kind: 'gaps', picks: c.blanks.map((b, i) =>
       right ? b.answer : (shown[i].find(o => o !== b.answer) || b.answer)) };
@@ -186,13 +193,17 @@ const SOLVE = (right) => {
   console.log('\n== Tastatur ==');
   await p.click('#btn-start');
   // zu einer Auswahlfrage mit einer einzigen Optionsgruppe blättern
+  // Wirklich eine Auswahlfrage: ein Lückentext mit nur einer Lücke hätte
+  // ebenfalls genau eine Optionsgruppe, dort nimmt Antippen aber nichts
+  // zurück - eine Lücke braucht einen Wert.
   let einfach = false;
   for (let i = 0; i < 120; i++) {
     if (await p.evaluate(() => !document.getElementById('answer-in') &&
+        !document.querySelectorAll('#q-body .blank').length &&
         document.querySelectorAll('#q-body .opts').length === 1)) { einfach = true; break; }
     if (!(await weiter())) break;
   }
-  ok(einfach, 'eine Auswahlfrage mit einer Optionsgruppe gefunden');
+  ok(einfach, 'eine Auswahlfrage (ohne Lücken) gefunden');
   const before = await p.locator('#q-body .opt').first().innerText();
   const labels = await p.locator('#q-body .opt .k').allInnerTexts();
   ok(labels.join('') === '123456789QWERTZUIOP'.slice(0, labels.length),
@@ -227,10 +238,11 @@ const SOLVE = (right) => {
   await p.click('#btn-start');
   let mehrfach = false;
   for (let i = 0; i < 250; i++) {
-    if (await p.locator('#q-body .blank').count() >= 3) { mehrfach = true; break; }
+    if (await p.locator('#q-body .blank').count() >= 3 &&
+        await p.locator('#q-text .gap').count() >= 3) { mehrfach = true; break; }
     if (!(await weiter())) break;
   }
-  ok(mehrfach, 'eine Frage mit mindestens drei Lücken gefunden');
+  ok(mehrfach, 'eine Frage mit mindestens drei Lücken im Text gefunden');
   const keys = await p.locator('#q-body .opt .k').allInnerTexts();
   ok(new Set(keys).size === keys.length,
      'jede Taste kommt nur einmal vor: ' + keys.join(' '));
@@ -252,22 +264,39 @@ const SOLVE = (right) => {
   console.log('\n== Prognose ==');
   await p.click('#btn-home');
   await p.click('#btn-start');
+  // Die Prognose ist ein nach Alter gewichteter Mittelwert über rund 30
+  // Antworten; hier gegen dieselbe Formel gerechnet.
   const fc = await p.evaluate(() => {
     const h = JSON.parse(localStorage.getItem('lk.history.v1'));
+    const zerfall = 1 - 2 / 31;
+    let za = 0, ne = 0, w = 1;
+    for (let i = h.length - 1; i >= 0; i--) { za += w * h[i]; ne += w; w *= zerfall; }
     const v = document.querySelector('#crumb .fc .v');
-    return { laenge: h.length, treffer: h.reduce((a, b) => a + b, 0),
+    return { laenge: h.length, erwartet: Math.round(za / ne * 100) + ' %',
              angezeigt: v && v.textContent };
   });
-  ok(fc.laenge > 0 && fc.laenge <= 30, 'Verlauf umfasst ' + fc.laenge + ' Antworten (höchstens 30)');
-  ok(fc.angezeigt === Math.round(fc.treffer / fc.laenge * 100) + ' %',
-     'Prognose = ' + fc.treffer + '/' + fc.laenge + ' = ' + fc.angezeigt);
+  ok(fc.laenge > 0 && fc.laenge <= 100, 'Verlauf umfasst ' + fc.laenge + ' Antworten (höchstens 100)');
+  ok(fc.angezeigt === fc.erwartet, 'Prognose entspricht der Formel: ' + fc.angezeigt);
   ok(await p.locator('#crumb .fc .k').innerText() === 'PROGNOSE', 'Beschriftung „Prognose" steht daneben');
 
-  // Nach über 30 Antworten darf das Fenster nicht mitwachsen.
-  for (let i = 0; i < 14; i++) { const r = await answer(true); if (r) await p.click('#btn-check'); }
+  // Der gemeldete Fehler: die Anzeige stand fest. Mit abwechselnd richtig
+  // und falsch muss sie sich nach JEDER Antwort bewegen.
+  const werte = [];
+  for (let i = 0; i < 10; i++) {
+    const r = await answer(i % 2 === 0);
+    if (!r) { await p.click('#btn-check'); continue; }
+    werte.push(await p.locator('#crumb .fc .v').innerText());
+    await p.click('#btn-check');
+  }
+  let starr = 0;
+  for (let i = 1; i < werte.length; i++) if (werte[i] === werte[i - 1]) starr++;
+  ok(starr === 0, 'Prognose bewegt sich bei jeder Antwort: ' + werte.join(' → '));
+
+  // Der Speicher darf nicht unbegrenzt mitwachsen.
+  for (let i = 0; i < 40; i++) { const r = await answer(true); if (r) await p.click('#btn-check'); }
   const gross = await p.evaluate(() =>
     JSON.parse(localStorage.getItem('lk.history.v1')).length);
-  ok(gross === 30, 'Fenster bleibt bei 30 Antworten stehen (ist ' + gross + ')');
+  ok(gross <= 100, 'Verlauf bleibt bei höchstens 100 Antworten (ist ' + gross + ')');
 
   // Der gemeldete Fehler: nach dem Neustart landet man auf der Übersicht,
   // und dort war die Prognose vorher nirgends zu sehen.
