@@ -76,14 +76,30 @@ h1,h2,h3{margin:0;line-height:1.25;font-weight:650}
   display:flex;align-items:baseline;gap:12px;
 }
 .crumb .run{flex:none}
-/* Auf sehr schmalen Geräten fliegt das Wort raus, damit die Prognose
-   nicht abgeschnitten wird. */
-@media (max-width:380px){ .crumb .run .word{display:none} }
+/* Auf schmalen Geräten wird der Platz knapp. Dann fliegt erst das Wort,
+   dann der Sitzungszähler ganz — die Prognose samt Verlauf ist die
+   wichtigere Zahl und steht auf der Übersicht ohnehin vollständig. */
+@media (max-width:440px){ .crumb .run .word{display:none} }
+@media (max-width:380px){ .crumb .run{display:none} }
 /* Prognose: Trefferquote der letzten Fragen als Prüfungsschätzung. */
 .crumb .fc{display:inline-flex;align-items:baseline;gap:5px;flex:none}
 .crumb .fc .k{font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
 .crumb .fc .v{font-size:16px;font-weight:750;letter-spacing:-.02em}
+/* Verlaufsdiagramm: nimmt den Rest der Zeile bis zum Knopf. */
+.crumb .spark{flex:1 1 0;min-width:48px;align-self:center}
+@media (max-width:300px){ .crumb .spark{display:none} }
 .spacer{flex:none}
+
+/* ---------- Verlauf der Prognose ---------- */
+.spark{display:block;position:relative;padding-right:5px}
+.spark svg{display:block;width:100%;height:100%;overflow:visible}
+.spark .grid{stroke:var(--line-2);stroke-width:1;stroke-dasharray:3 3}
+.spark .bench{stroke-width:1.25;stroke-dasharray:4 3;opacity:.9}
+.spark .line{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.spark .dot{
+  position:absolute;right:5px;width:7px;height:7px;border-radius:99px;
+  margin:-3.5px -3.5px 0 0;box-shadow:0 0 0 1.5px var(--bg);
+}
 
 .iconbtn{
   border:1px solid var(--line); background:var(--panel); border-radius:10px;
@@ -145,7 +161,7 @@ h1,h2,h3{margin:0;line-height:1.25;font-weight:650}
    Fluss halten Beschriftung, Zahl und Zusatz auf gleicher Höhe, auch wenn
    eine Beschriftung auf schmalen Geräten umbricht. */
 .total{
-  display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto auto;
+  display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto auto auto;
   grid-auto-flow:column;gap:1px 14px;
   padding-bottom:14px;margin-bottom:16px;border-bottom:1px solid var(--line);
 }
@@ -158,6 +174,7 @@ h1,h2,h3{margin:0;line-height:1.25;font-weight:650}
   font-variant-numeric:tabular-nums;
 }
 .total .s{font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.total .spark{margin-top:8px;align-self:end}
 
 /* ---------- Fächer in der Übersicht ---------- */
 .boxes{display:flex;flex-direction:column;gap:9px}
@@ -861,8 +878,10 @@ var CAT_NAME = {
 };
 var BOXES = 5;
 var LS = { prog: 'lk.progress.v1', sets: 'lk.sets.v1', cfg: 'lk.settings.v1',
-           hist: 'lk.history.v1' };
+           hist: 'lk.history.v1', trend: 'lk.trend.v1' };
 var WINDOW = 30;                                 // Fragen im Prognosefenster
+var TREND = 101;                                 // Punkte im Verlaufsdiagramm
+var BENCH = 80;                                  // Ziellinie im Diagramm
 
 var store = {
   read: function (k, fallback) {
@@ -880,6 +899,11 @@ var store = {
 
 var progress = store.read(LS.prog, {});          // id -> {b, r, w, t}
 var history = store.read(LS.hist, []).slice(-WINDOW);   // letzte Antworten, 1 = richtig
+// Verlauf der Prognose: n zählt alle je beantworteten Fragen, p hält die
+// letzten 101 Prognosewerte - genau das Fenster, das das Diagramm zeigt.
+var trend = store.read(LS.trend, { n: 0, p: [] });
+if (!Array.isArray(trend.p)) trend = { n: 0, p: [] };
+trend.p = trend.p.slice(-TREND);
 var imported = store.read(LS.sets, {});          // cat -> {cards, at, file}
 var cfg = Object.assign(
   { shuffle: true, showCount: false, theme: 'auto' },
@@ -1057,12 +1081,15 @@ function drawTotal() {
   var s = spread(cardsOf(ui.cat));
   var host = clear($('home-total'));
 
-  function stat(label, wert, farbe, zusatz) {
+  // Vier Zeilen je Spalte; die vierte trägt das Verlaufsdiagramm und
+  // bleibt links leer, damit beide Spalten gleich hoch sind.
+  function stat(label, wert, farbe, zusatz, extra) {
     host.appendChild(el('div', 'k', label));
     var v = el('div', 'v', wert);
     v.style.color = farbe;
     host.appendChild(v);
     host.appendChild(el('div', 's', zusatz));
+    host.appendChild(extra || el('div'));
   }
 
   stat('Gesamtfortschritt', Math.round(s.score) + ' %',
@@ -1074,7 +1101,8 @@ function drawTotal() {
        f === null ? '–' : Math.round(f) + ' %',
        f === null ? 'var(--ink-2)' : 'var(--f' + pctFach(f) + 't)',
        f === null ? 'noch keine Antworten'
-                  : 'letzte ' + history.length + (history.length === 1 ? ' Frage' : ' Fragen'));
+                  : 'letzte ' + history.length + (history.length === 1 ? ' Frage' : ' Fragen'),
+       sparkline(42));
 }
 
 function drawHome() {
@@ -1219,6 +1247,9 @@ function tally() {
   box.title = 'Trefferquote der letzten ' + history.length +
               (history.length === 1 ? ' Frage' : ' Fragen');
   host.appendChild(box);
+
+  var chart = sparkline(30);
+  if (chart) host.appendChild(chart);
 }
 
 /* Fragetext mit Lücken-Platzhaltern rendern. */
@@ -1423,6 +1454,7 @@ function record(card, ok) {
   history.push(ok ? 1 : 0);
   if (history.length > WINDOW) history = history.slice(-WINDOW);
   store.write(LS.hist, history);
+  noteTrend(true);
 
   ui.done++;
   if (ok) ui.right++; else ui.wrong++;
@@ -1436,6 +1468,85 @@ function forecast() {
   if (!history.length) return null;
   var hits = history.reduce(function (a, b) { return a + b; }, 0);
   return hits / history.length * 100;
+}
+
+/* Hängt den aktuellen Prognosewert an den Verlauf an (`weiter`) oder
+   überschreibt den letzten - für die Selbstkorrektur beim Freitext. */
+function noteTrend(weiter) {
+  var v = Math.round(forecast());
+  if (weiter) {
+    trend.n++;
+    trend.p.push(v);
+    if (trend.p.length > TREND) trend.p = trend.p.slice(-TREND);
+  } else if (trend.p.length) {
+    trend.p[trend.p.length - 1] = v;
+  }
+  store.write(LS.trend, trend);
+}
+
+var SVGNS = 'http://www.w3.org/2000/svg';
+
+function svgEl(tag, attrs) {
+  var n = document.createElementNS(SVGNS, tag);
+  for (var k in attrs) if (attrs.hasOwnProperty(k)) n.setAttribute(k, attrs[k]);
+  return n;
+}
+
+/* Verlauf der Prognose als Liniendiagramm.
+
+   x = laufende Nummer der beantworteten Frage, y = Prognosewert 0-100 %.
+   Gezeigt werden die letzten 101 Werte; ab dem 102. wandert das Fenster mit.
+   Unter zwei Werten gibt es noch keine Linie und damit kein Diagramm.
+   Die gestrichelte Waagrechte ist die Ziellinie bei 80 %. */
+function sparkline(hoehe) {
+  var pts = trend.p;
+  if (pts.length < 2) return null;
+
+  var box = el('div', 'spark');
+  box.style.height = hoehe + 'px';
+  var von = trend.n - pts.length + 1;
+  box.title = 'Prognose über die Fragen ' + von + ' bis ' + trend.n +
+              ' · Ziellinie ' + BENCH + ' %';
+
+  // Ein festes Koordinatennetz 0-100 in beide Richtungen; die Linien
+  // behalten über vector-effect trotz Verzerrung ihre Stärke.
+  var svg = svgEl('svg', { viewBox: '0 0 100 100', preserveAspectRatio: 'none' });
+  var x = function (i) { return i / (pts.length - 1) * 100; };
+  var y = function (v) { return 100 - v; };
+
+  [0, 100].forEach(function (v) {
+    svg.appendChild(svgEl('line', {
+      x1: 0, x2: 100, y1: y(v), y2: y(v), class: 'grid',
+      'vector-effect': 'non-scaling-stroke'
+    }));
+  });
+
+  var bench = svgEl('line', {
+    x1: 0, x2: 100, y1: y(BENCH), y2: y(BENCH), class: 'bench',
+    'vector-effect': 'non-scaling-stroke'
+  });
+  bench.style.stroke = 'var(--f5)';
+  svg.appendChild(bench);
+
+  var farbe = 'var(--f' + pctFach(pts[pts.length - 1]) + 't)';
+  var linie = svgEl('polyline', {
+    class: 'line', 'vector-effect': 'non-scaling-stroke',
+    points: pts.map(function (v, i) { return x(i) + ',' + y(v); }).join(' ')
+  });
+  linie.style.stroke = farbe;
+  svg.appendChild(linie);
+
+  box.appendChild(svg);
+
+  // Der letzte Wert bekommt einen Punkt. Im verzerrten Koordinatennetz
+  // würde ein Kreis zur Ellipse, deshalb liegt er als eigenes Element
+  // darüber.
+  var dot = el('span', 'dot');
+  dot.style.background = farbe;
+  dot.style.top = y(pts[pts.length - 1]) + '%';
+  box.appendChild(dot);
+
+  return box;
 }
 
 // Farbstufe für eine Prozentzahl, an den üblichen Prüfungsgrenzen orientiert.
@@ -1480,6 +1591,7 @@ function verdict(ok, solution, card) {
       // Auch die Prognose darf die Korrektur nicht übergehen.
       history[history.length - 1] = 1;
       store.write(LS.hist, history);
+      noteTrend(false);
       ui.right++; ui.wrong--;
       ui.moved = [ui.moved[0], p.b];
       drawStrip();
@@ -1711,7 +1823,7 @@ $('file').onchange = function (e) { importFiles(e.target.files); e.target.value 
 $('btn-export').onclick = function () {
   download('lernkartei-sicherung-' + new Date().toISOString().slice(0, 10) + '.json',
     JSON.stringify({ v: 1, at: Date.now(), progress: progress, sets: imported,
-                     settings: cfg, history: history }));
+                     settings: cfg, history: history, trend: trend }));
 };
 $('btn-import').onclick = function () { $('file-backup').click(); };
 $('file-backup').onchange = function (e) {
@@ -1726,10 +1838,13 @@ $('file-backup').onchange = function (e) {
       if (!confirm('Sicherung laden? Fortschritt und Fragensätze werden überschrieben.')) return;
       progress = data.progress || {};
       history = Array.isArray(data.history) ? data.history.slice(-WINDOW) : [];
+      trend = data.trend && Array.isArray(data.trend.p)
+        ? { n: data.trend.n || 0, p: data.trend.p.slice(-TREND) } : { n: 0, p: [] };
       imported = data.sets || {};
       cfg = Object.assign({ shuffle: true, showCount: false, theme: 'auto' }, data.settings || {});
       store.write(LS.prog, progress); store.write(LS.sets, imported);
       store.write(LS.cfg, cfg); store.write(LS.hist, history);
+      store.write(LS.trend, trend);
       rebuild(); applyTheme(); applySwitches(); drawSets(); drawManageStat();
       alert('Sicherung geladen.');
     } catch (err) {
@@ -1743,8 +1858,10 @@ $('btn-reset').onclick = function () {
   if (!confirm('Wirklich den gesamten Lernfortschritt löschen? Alle Fragen landen wieder in Fach 1.')) return;
   progress = {};
   history = [];
+  trend = { n: 0, p: [] };
   store.write(LS.prog, progress);
   store.write(LS.hist, history);
+  store.write(LS.trend, trend);
   drawManageStat();
   alert('Fortschritt zurückgesetzt.');
 };

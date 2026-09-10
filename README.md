@@ -60,6 +60,13 @@ Die beiden Zahlen messen Verschiedenes: der Gesamtfortschritt den Bestand in
 den Fächern (träge, wächst über Wochen), die Prognose die letzten 30 Antworten
 (reagiert sofort).
 
+Daneben zeichnet ein Liniendiagramm den Verlauf: auf der x-Achse die laufende
+Nummer der beantworteten Frage, auf der y-Achse die Prognose von 0 bis 100 %.
+Gezeigt werden die letzten 101 Werte — ab dem 102. wandert das Fenster mit.
+Die gestrichelte Waagrechte ist die Ziellinie bei 80 %. Ab zwei beantworteten
+Fragen ist eine Linie da; der Verlauf liegt im `localStorage` und übersteht
+den Neustart.
+
 ## Bedienung
 
 Antippen wählt aus, nochmal antippen nimmt zurück, **Prüfen** wertet. Das gilt
@@ -123,7 +130,7 @@ npm test                                      # Browser-Tests
 | `src/app.template.html` | Oberfläche und Lernlogik |
 | `src/build-data.js` | führt den Parser in Chromium aus, schreibt `data/*.json` |
 | `src/build.js` | fügt Vorlage + Parser + Fragen zu `lernkartei.html` |
-| `test/*.test.js` | Playwright-Tests (Lernen, Import, Sicherung) |
+| `test/*.test.js` | Playwright-Tests (Lernen, Verlauf, Import, Sicherung) |
 
 Der Parser läuft bewusst im Browser statt in Node: die App muss ihn ohnehin
 mitbringen, damit der Import ohne Server funktioniert — so gibt es nur eine

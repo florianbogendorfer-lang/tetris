@@ -5,7 +5,7 @@
   "description": "Lernkartei nach dem Leitner-Prinzip für Moodle-Fragenboxen (KV, UV, PV, RECHT)",
   "scripts": {
     "build": "node src/build.js",
-    "test": "node test/lernen.test.js && node test/import.test.js"
+    "test": "node test/lernen.test.js && node test/verlauf.test.js && node test/import.test.js"
   },
   "devDependencies": {
     "playwright": "^1.56.1"
