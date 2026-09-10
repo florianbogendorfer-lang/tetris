@@ -76,6 +76,20 @@ Die gestrichelte Waagrechte ist die Ziellinie bei 80 %. Die Linie ist
 Schnittpunkt, nicht erst am nächsten Datenpunkt. Dafür wird sie zweimal
 gezeichnet und jeweils an der Ziellinie beschnitten.
 
+Die **y-Achse zoomt mit**: unteres und oberes Ende sind der niedrigste und
+höchste Wert der gezeigten 30 Antworten, sodass der Verlauf die Höhe ausfüllt.
+Die Ziellinie ist dabei immer eingeschlossen — läge sie außerhalb, verschwände
+die Bezugsgröße und mit ihr der Sinn der Farben. Liegen also alle Werte unter
+80 %, reicht die Achse bis 80 hinauf. Sehr flache Verläufe bekommen eine
+Mindestspanne von 8 Punkten, sonst würde ein Rauschen von einem Prozentpunkt
+bildfüllend ausschlagen.
+
+Beschriftet sind unteres Ende, oberes Ende und die Ziellinie. Fällt die
+Ziellinie mit einem Ende zusammen oder zu dicht daran, entfällt ihre Marke —
+zwei Zahlen übereinander wären unlesbar. In der schmalen Kopfzeile ist für die
+Beschriftung kein Platz; dort zoomt die Achse mit, aber die Aussage tragen die
+Farben.
+
 Darunter steht ein **Kästchen je Antwort** — grün richtig, rot falsch, in
 derselben Breite und Reihenfolge wie das Diagramm. Ein Ausschlag der Linie
 gehört so sichtbar zu einem roten Kästchen.

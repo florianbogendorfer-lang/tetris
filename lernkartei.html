@@ -85,7 +85,18 @@ h1,h2,h3{margin:0;line-height:1.25;font-weight:650}
 .spacer{flex:none}
 
 /* ---------- Verlauf der Prognose ---------- */
-.spark{display:block;position:relative;padding-right:5px}
+.spark{display:block;position:relative;padding:0 5px 0 0}
+.spark.mitachse{padding-left:20px}
+/* Beschriftung der Achse: unten, oben und an der Ziellinie. */
+.axis{
+  position:absolute;left:0;top:0;bottom:0;width:17px;pointer-events:none;
+  font-size:8px;font-weight:700;line-height:1;text-align:right;
+  font-variant-numeric:tabular-nums;color:var(--ink-2);
+}
+.axis > span{position:absolute;right:0;white-space:nowrap}
+.axis .oben{top:0}
+.axis .unten{bottom:0}
+.axis .ziel{transform:translateY(-50%);color:var(--ink)}
 .spark svg{display:block;width:100%;height:100%;overflow:visible}
 .spark .grid{stroke:var(--line-2);stroke-width:1;stroke-dasharray:3 3}
 .spark .bench{stroke:var(--ink-2);stroke-width:1.25;stroke-dasharray:4 3;opacity:.75}
@@ -97,7 +108,8 @@ h1,h2,h3{margin:0;line-height:1.25;font-weight:650}
 
 /* Ein Kästchen je Antwort, in derselben Breite und Reihenfolge wie das
    Diagramm darüber: grün richtig, rot falsch. */
-.streak{display:flex;gap:1px;margin-top:4px;padding-right:5px}
+.streak{display:flex;gap:1px;margin-top:4px;padding:0 5px 0 0}
+.streak.mitachse{padding-left:20px}
 .streak > i{flex:1 1 0;min-width:0;border-radius:1px}
 
 .iconbtn{
@@ -1099,7 +1111,7 @@ function drawTotal() {
        f === null ? '–' : Math.round(f) + ' %',
        f === null ? 'var(--ink-2)' : 'var(--f' + pctFach(f) + 't)',
        f === null ? 'noch keine Antworten' : forecastNote(false),
-       trendBlock(38, 8));
+       trendBlock(54, 8));
 }
 
 function drawHome() {
@@ -1502,7 +1514,8 @@ function trendBlock(hoehe, kaestchen) {
   var box = el('div', 'trend');
   box.appendChild(chart);
 
-  var reihe = el('div', 'streak');
+  var reihe = el('div', 'streak' +
+    (chart.classList.contains('mitachse') ? ' mitachse' : ''));
   reihe.style.height = kaestchen + 'px';
   var von = history.length - trend.p.length;          // gleiche Fenster
   for (var i = Math.max(0, von); i < history.length; i++) {
@@ -1518,24 +1531,46 @@ function trendBlock(hoehe, kaestchen) {
 
 sparkline.lauf = 0;                  // für eindeutige clipPath-Kennungen
 
+/* Der gezeigte Wertebereich: die Spanne der letzten Antworten, aber immer
+   einschließlich der Ziellinie - läge sie außerhalb, verschwände die
+   Bezugsgröße und mit ihr der Sinn der roten und grünen Abschnitte.
+   Sehr flache Verläufe bekommen eine Mindestspanne, sonst würde ein
+   Rauschen von einem Prozentpunkt bildfüllend ausschlagen. */
+function achsenBereich(pts) {
+  var lo = Math.min.apply(null, pts.concat([BENCH]));
+  var hi = Math.max.apply(null, pts.concat([BENCH]));
+  if (hi - lo < 8) {
+    hi = Math.min(100, lo + 8);
+    lo = Math.max(0, hi - 8);
+  }
+  return { lo: lo, hi: hi };
+}
+
 function sparkline(hoehe) {
   var pts = trend.p;
   if (pts.length < 2) return null;
 
-  var box = el('div', 'spark');
+  // Drei Beschriftungen brauchen Platz übereinander; in der schmalen
+  // Kopfzeile bliebe dafür keiner, dort trägt die Farbe die Aussage.
+  var achse = hoehe >= 34;
+
+  var box = el('div', 'spark' + (achse ? ' mitachse' : ''));
   box.style.height = hoehe + 'px';
+  var bereich = achsenBereich(pts);
   var von = trend.n - pts.length + 1;
   box.title = 'Prognose über die Fragen ' + von + ' bis ' + trend.n +
+              ' · Achse ' + Math.round(bereich.lo) + ' bis ' + Math.round(bereich.hi) + ' %' +
               ' · Ziellinie ' + BENCH + ' %, darunter rot, darüber grün' +
               ' · Kästchen: grün richtig, rot falsch';
 
-  // Ein festes Koordinatennetz 0-100 in beide Richtungen; die Linien
-  // behalten über vector-effect trotz Verzerrung ihre Stärke.
+  // Waagrecht 0-100 für die Punkte, senkrecht ebenso - die Umrechnung auf
+  // den Wertebereich steckt in y(). Die Linien behalten über vector-effect
+  // trotz Verzerrung ihre Stärke.
   var svg = svgEl('svg', { viewBox: '0 0 100 100', preserveAspectRatio: 'none' });
   var x = function (i) { return i / (pts.length - 1) * 100; };
-  var y = function (v) { return 100 - v; };
+  var y = function (v) { return (bereich.hi - v) / (bereich.hi - bereich.lo) * 100; };
 
-  [0, 100].forEach(function (v) {
+  [bereich.lo, bereich.hi].forEach(function (v) {
     svg.appendChild(svgEl('line', {
       x1: 0, x2: 100, y1: y(v), y2: y(v), class: 'grid',
       'vector-effect': 'non-scaling-stroke'
@@ -1553,8 +1588,9 @@ function sparkline(hoehe) {
      nicht erst am nächsten Datenpunkt - ein Farbverlauf oder eine
      Aufteilung nach Punkten träfe die Kreuzung nicht. */
   var kennung = 'lk-' + (++sparkline.lauf);
+  var schnitt = y(BENCH);
   var defs = svgEl('defs');
-  [['ueber', -10, 30], ['unter', y(BENCH), 200]].forEach(function (teil) {
+  [['ueber', schnitt - 200, 200], ['unter', schnitt, 200]].forEach(function (teil) {
     var clip = svgEl('clipPath', { id: kennung + '-' + teil[0] });
     clip.appendChild(svgEl('rect', { x: -10, y: teil[1], width: 120, height: teil[2] }));
     defs.appendChild(clip);
@@ -1582,7 +1618,27 @@ function sparkline(hoehe) {
   dot.style.top = y(letzter) + '%';
   box.appendChild(dot);
 
+  if (achse) box.appendChild(achsenText(bereich, y, hoehe));
   return box;
+}
+
+/* Beschriftet unteres Ende, oberes Ende und die Ziellinie. Liegt die
+   Ziellinie zu dicht an einem Ende, entfällt ihre Marke - zwei Zahlen
+   übereinander wären unlesbar. Wie dicht "zu dicht" ist, hängt an der
+   Höhe des Diagramms, nicht an einem festen Prozentsatz. */
+function achsenText(bereich, y, hoehe) {
+  var host = el('div', 'axis');
+  host.appendChild(el('span', 'oben', Math.round(bereich.hi)));
+  host.appendChild(el('span', 'unten', Math.round(bereich.lo)));
+
+  var pos = y(BENCH);
+  var grenze = 11 / hoehe * 100;            // eine Zeilenhöhe Abstand
+  if (pos > grenze && pos < 100 - grenze) {
+    var ziel = el('span', 'ziel', BENCH);
+    ziel.style.top = pos + '%';
+    host.appendChild(ziel);
+  }
+  return host;
 }
 
 /* Erklärt, worauf die Prognose beruht - lang für den Tooltip, kurz für

@@ -38,8 +38,10 @@ async function mit(p, n, werte) {
   ok(await mit(p, 1, [100]) === null, 'n = 1: kein Diagramm (eine Linie braucht zwei Punkte)');
   const zwei = await mit(p, 2, [100, 50]);
   ok(zwei !== null && zwei.punkte.length === 2, 'n = 2: Linie zwischen p(1) und p(2)');
-  ok(zwei.punkte[0] === '0,0' && zwei.punkte[1] === '100,50',
-     '  Punkte sitzen richtig: ' + zwei.punkte.join('  '));
+  ok(zwei.punkte[0].startsWith('0,') && zwei.punkte[1].startsWith('100,'),
+     '  erster Punkt ganz links, letzter ganz rechts: ' + zwei.punkte.join('  '));
+  ok(Number(zwei.punkte[0].split(',')[1]) < Number(zwei.punkte[1].split(',')[1]),
+     '  der höhere Wert (100) liegt über dem niedrigeren (50)');
 
   const drei = await mit(p, 3, [100, 50, 67]);
   ok(drei.punkte.length === 3 && drei.punkte[1].startsWith('50,'),
@@ -79,8 +81,10 @@ async function mit(p, n, werte) {
   ok(/Fragen 6 bis 35/.test(titel), 'Fenster zeigt n-29 bis n: "' + titel + '"');
 
   console.log('\n== Ziellinie und Skala ==');
-  ok(k30.ziellinie === '20', 'Ziellinie bei 80 % (y = 20 von oben): ' + k30.ziellinie);
+  // Spannt der Verlauf 0 bis 100, entspricht die Achse dem vollen Bereich
+  // und die Ziellinie sitzt bei y 20. (Adaptive Fälle: zoom.test.js)
   const rand = await mit(p, 3, [0, 100, 80]);
+  ok(rand.ziellinie === '20', 'Achse 0..100: Ziellinie bei y 20 — ' + rand.ziellinie);
   ok(rand.punkte[0] === '0,100' && rand.punkte[1] === '50,0',
      '0 % ganz unten, 100 % ganz oben: ' + rand.punkte.join('  '));
   ok(rand.dotTop === '20%', 'Endpunkt sitzt auf seinem Wert (80 % → top 20 %): ' + rand.dotTop);
@@ -94,11 +98,18 @@ async function mit(p, n, werte) {
   ok(linien[0].farbe.includes('f5') && linien[1].farbe.includes('f1'),
      'grün über, rot unter der Ziellinie: ' + linien.map(l => l.farbe).join(' / '));
   ok(linien[0].punkte === linien[1].punkte, 'beide zeigen denselben Verlauf');
-  const clips = await p.evaluate(() => [...document.querySelectorAll('#home-total clipPath rect')]
-    .map(r => [Number(r.getAttribute('y')), Number(r.getAttribute('height'))]));
-  ok(clips[0][0] + clips[0][1] === 20 && clips[1][0] === 20,
-     'beschnitten genau bei y 20, also bei 80 %: ' + JSON.stringify(clips));
-  ok(farben.dotTop === '60%', 'der Endpunkt (40 %) sitzt auf seinem Wert: ' + farben.dotTop);
+  // Der Schnitt folgt der Ziellinie, wo immer die adaptive Achse sie hinlegt.
+  const schnitt = await p.evaluate(() => {
+    const box = document.querySelector('#home-total .spark');
+    return { ziel: Number(box.querySelector('.bench').getAttribute('y1')),
+             clips: [...box.querySelectorAll('clipPath rect')]
+               .map(r => [Number(r.getAttribute('y')), Number(r.getAttribute('height'))]) };
+  });
+  ok(Math.abs(schnitt.clips[0][0] + schnitt.clips[0][1] - schnitt.ziel) < 0.01 &&
+     Math.abs(schnitt.clips[1][0] - schnitt.ziel) < 0.01,
+     'der Farbschnitt liegt genau auf der Ziellinie (y ' + schnitt.ziel.toFixed(1) + ')');
+  ok(farben.dotTop === '100%',
+     'der Endpunkt ist zugleich der niedrigste Wert und sitzt ganz unten: ' + farben.dotTop);
 
   // Zwei Diagramme gleichzeitig im Dokument dürfen sich die Kennungen
   // der clipPaths nicht teilen.
