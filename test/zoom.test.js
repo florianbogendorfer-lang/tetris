@@ -14,13 +14,17 @@ async function mit(p, werte) {
   return p.evaluate(() => {
     const box = document.querySelector('#home-total .spark');
     const g = [...box.querySelectorAll('.grid')].map(l => Number(l.getAttribute('y1')));
-    const a = {};
-    box.querySelectorAll('.axis > span').forEach(s =>
-      a[s.className] = { text: s.textContent, top: s.style.top });
-    const poly = box.querySelector('polyline');
+    const a = [...box.querySelectorAll('.axis > span')]
+      .map(s => ({ klasse: s.className, text: s.textContent, top: s.style.top }));
+    const poly = box.querySelector('path.line');
+    const d = poly.getAttribute('d');
+    const stuetz = [d.slice(1).split('C')[0].trim().split(',').map(Number)].concat(
+      d.split('C').slice(1).map(c => {
+        const z = c.trim().split(/[\s,]+/).map(Number);
+        return [z[4], z[5]];
+      }));
     return {
-      gitter: g, achse: a,
-      punkte: poly.getAttribute('points').trim().split(/\s+/).map(q => q.split(',').map(Number)),
+      gitter: g, achse: a, punkte: stuetz,
       ziel: Number(box.querySelector('.bench').getAttribute('y1')),
       clip: [...box.querySelectorAll('clipPath rect')].map(r =>
               [Number(r.getAttribute('y')), Number(r.getAttribute('height'))])
@@ -34,38 +38,48 @@ async function mit(p, werte) {
   p.on('pageerror', e => console.log('  JS-FEHLER:', String(e)));
   await p.goto(APP);
 
-  console.log('== Spanne umschließt die Daten ==');
+  // Bereich: unten Tiefstwert minus 2, oben immer 102. Beschriftet werden
+  // die gemeinten Werte, nicht die Ränder: unten der Tiefstwert, oben 100.
+  const y = (v, min) => (102 - v) / (104 - min) * 100;
+
+  console.log('== Bereich und Beschriftung ==');
   const a = await mit(p, [40, 95, 60, 88, 52]);
-  ok(a.achse.unten.text === '40' && a.achse.oben.text === '95',
-     'Achse läuft von ' + a.achse.unten.text + ' bis ' + a.achse.oben.text + ' (Daten 40..95)');
+  const marken = a.achse.map(m => m.text).sort((x, z) => z - x);
+  ok(marken[0] === '100', 'oben steht immer 100: ' + marken.join(' / '));
+  ok(marken[marken.length - 1] === '40', 'unten steht der Tiefstwert (40)');
+  ok(marken.indexOf('80') >= 0, 'die Ziellinie ist mit 80 beschriftet');
+
   const ys = a.punkte.map(q => q[1]);
-  ok(Math.min(...ys) === 0 && Math.max(...ys) === 100,
-     'höchster Wert sitzt ganz oben, niedrigster ganz unten');
-  ok(a.achse.ziel && a.achse.ziel.text === '80', 'Ziellinie ist mit "80" beschriftet');
-  const zielPos = (95 - 80) / (95 - 40) * 100;
-  ok(Math.abs(a.ziel - zielPos) < 0.01,
-     'Ziellinie sitzt maßstäblich bei y ' + a.ziel.toFixed(1) + ' (erwartet ' + zielPos.toFixed(1) + ')');
+  ok(Math.abs(Math.min(...ys) - y(95, 40)) < 0.01 && Math.abs(Math.max(...ys) - y(40, 40)) < 0.01,
+     'Höchst- und Tiefstwert sitzen maßstäblich, mit Luft zum Rand: ' +
+     Math.min(...ys).toFixed(1) + '..' + Math.max(...ys).toFixed(1));
+  ok(Math.max(...ys) < 100 && Math.min(...ys) > 0,
+     'die Linie berührt keinen Rand und wird darum nicht abgeschnitten');
+  ok(Math.abs(a.ziel - y(80, 40)) < 0.01,
+     'Ziellinie maßstäblich bei y ' + a.ziel.toFixed(1));
   ok(Math.abs(a.clip[0][0] + a.clip[0][1] - a.ziel) < 0.01 && Math.abs(a.clip[1][0] - a.ziel) < 0.01,
      'der Farbschnitt folgt der Ziellinie mit');
+  ok(a.gitter.length === 2 &&
+     Math.abs(a.gitter[0] - y(40, 40)) < 0.01 && Math.abs(a.gitter[1] - y(100, 40)) < 0.01,
+     'die Rahmenlinien liegen auf den beschrifteten Werten');
 
-  console.log('\n== Ziellinie außerhalb der Daten ==');
+  console.log('\n== Ränder ==');
   const b1 = await mit(p, [30, 45, 38, 52, 41]);
-  ok(b1.achse.oben.text === '80', 'alles unter 80: Achse reicht bis zur Ziellinie hinauf ('
-     + b1.achse.unten.text + '..' + b1.achse.oben.text + ')');
+  ok(b1.achse.some(m => m.text === '30') && b1.achse.some(m => m.text === '100'),
+     'alles unter 80: Achse 30..100, die Ziellinie bleibt im Bild');
   const b2 = await mit(p, [88, 95, 91, 99, 93]);
-  ok(b2.achse.unten.text === '80', 'alles über 80: Achse reicht bis zur Ziellinie hinab ('
-     + b2.achse.unten.text + '..' + b2.achse.oben.text + ')');
-  ok(!b1.achse.ziel && !b2.achse.ziel,
-     'die Marke "80" entfällt, wo sie auf einem Achsenende läge');
+  ok(b2.achse.some(m => m.text === '88'),
+     'alles über 80: Achse beginnt beim Tiefstwert 88');
+  ok(!b2.achse.some(m => m.text === '80'),
+     'die Marke 80 entfällt, weil sie außerhalb liegt');
 
   console.log('\n== Flacher Verlauf ==');
   const c = await mit(p, [80, 80, 80, 80, 80]);
-  ok(Number(c.achse.oben.text) - Number(c.achse.unten.text) >= 8,
-     'keine Division durch null, Mindestspanne greift: ' +
-     c.achse.unten.text + '..' + c.achse.oben.text);
-  const d = await mit(p, [99, 100, 99, 100, 100]);
-  ok(Number(d.achse.oben.text) <= 100 && Number(d.achse.unten.text) >= 0,
-     'Spanne bleibt im gültigen Bereich: ' + d.achse.unten.text + '..' + d.achse.oben.text);
+  ok(c.punkte.every(q => isFinite(q[1])),
+     'konstanter Verlauf ergibt gültige Koordinaten (keine Division durch null)');
+  const d = await mit(p, [100, 100, 100, 100, 100]);
+  ok(d.punkte.every(q => isFinite(q[1]) && q[1] > 0 && q[1] < 100),
+     'auch bei durchgehend 100 % bleibt Luft zum Rand: y ' + d.punkte[0][1].toFixed(1));
 
   console.log('\n== Kopfzeile bleibt ohne Beschriftung ==');
   await mit(p, [40, 95, 60, 88, 52]);

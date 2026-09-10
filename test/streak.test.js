@@ -57,12 +57,12 @@ const SOLVE = (right) => {
     const h = JSON.parse(localStorage.getItem('lk.history.v1'));
     const k = [...document.querySelectorAll('#crumb .streak > i')]
       .map(x => x.style.background.includes('f5') ? 1 : 0);
-    const poly = document.querySelector('#crumb polyline');
-    return { punkte: poly.getAttribute('points').trim().split(/\s+/).length,
+    const poly = document.querySelector('#crumb path.line');
+    return { punkte: poly.getAttribute('d').split('C').length,
              trendLen: t.p.length, histLen: h.length, kaesten: k, hist: h };
   });
   ok(st.trendLen === 30, 'Diagramm hält 30 Werte (' + st.trendLen + ')');
-  ok(st.punkte === 30, 'Linie zeichnet 30 Punkte (' + st.punkte + ')');
+  ok(st.punkte === 30, 'Kurve verbindet 30 Punkte (' + st.punkte + ')');
   ok(st.kaesten.length === 30, '30 Kästchen (' + st.kaesten.length + ')');
   ok(JSON.stringify(st.kaesten) === JSON.stringify(st.hist),
      'Kästchen entsprechen den letzten 30 Antworten');

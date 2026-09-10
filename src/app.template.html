@@ -93,14 +93,12 @@ h1,h2,h3{margin:0;line-height:1.25;font-weight:650}
   font-size:8px;font-weight:700;line-height:1;text-align:right;
   font-variant-numeric:tabular-nums;color:var(--ink-2);
 }
-.axis > span{position:absolute;right:0;white-space:nowrap}
-.axis .oben{top:0}
-.axis .unten{bottom:0}
-.axis .ziel{transform:translateY(-50%);color:var(--ink)}
+.axis > span{position:absolute;right:0;white-space:nowrap;transform:translateY(-50%)}
+.axis .ziel{color:var(--ink)}
 .spark svg{display:block;width:100%;height:100%;overflow:visible}
 .spark .grid{stroke:var(--line-2);stroke-width:1;stroke-dasharray:3 3}
 .spark .bench{stroke:var(--ink-2);stroke-width:1.25;stroke-dasharray:4 3;opacity:.75}
-.spark .line{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.spark .line{fill:none;stroke-width:2.6;stroke-linejoin:round;stroke-linecap:round}
 .spark .dot{
   position:absolute;right:5px;width:7px;height:7px;border-radius:99px;
   margin:-3.5px -3.5px 0 0;box-shadow:0 0 0 1.5px var(--bg);
@@ -1113,21 +1111,64 @@ function trendBlock(hoehe, kaestchen) {
   return box;
 }
 
+/* Weiche Kurve durch alle Punkte, nach Fritsch-Carlson.
+
+   Eine gewöhnliche Spline (Catmull-Rom) würde an Spitzen über den höchsten
+   Wert hinausschießen - das Diagramm zeigte dann Prognosen, die es nie
+   gegeben hat. Die monotone Variante begrenzt die Steigungen so, dass die
+   Kurve zwischen zwei Punkten nie deren Werte verlässt: wo die Daten
+   steigen, steigt sie, wo sie fallen, fällt sie, und ein lokales Hoch
+   bleibt genau dort, wo der Messwert liegt. */
+function glatterPfad(p) {
+  var n = p.length;
+  if (n < 2) return '';
+
+  var d = [];                                   // Steigung je Abschnitt
+  for (var i = 0; i < n - 1; i++) {
+    var dx = p[i + 1][0] - p[i][0];
+    d.push(dx === 0 ? 0 : (p[i + 1][1] - p[i][1]) / dx);
+  }
+
+  var m = [d[0]];                               // Steigung je Punkt
+  for (var j = 1; j < n - 1; j++) m.push((d[j - 1] + d[j]) / 2);
+  m.push(d[n - 2]);
+
+  for (var k = 0; k < n - 1; k++) {
+    if (d[k] === 0) {                           // waagrechter Abschnitt
+      m[k] = 0; m[k + 1] = 0;
+      continue;
+    }
+    var a = m[k] / d[k], b = m[k + 1] / d[k];
+    if (a < 0) m[k] = 0;                        // Richtungswechsel: flach
+    if (b < 0) m[k + 1] = 0;
+    var s = a * a + b * b;
+    if (s > 9) {                                // Steigung begrenzen
+      var t = 3 / Math.sqrt(s);
+      m[k] = t * a * d[k];
+      m[k + 1] = t * b * d[k];
+    }
+  }
+
+  var pfad = 'M' + p[0][0] + ',' + p[0][1];
+  for (var q = 0; q < n - 1; q++) {
+    var w = (p[q + 1][0] - p[q][0]) / 3;
+    pfad += 'C' + (p[q][0] + w) + ',' + (p[q][1] + m[q] * w) +
+            ' ' + (p[q + 1][0] - w) + ',' + (p[q + 1][1] - m[q + 1] * w) +
+            ' ' + p[q + 1][0] + ',' + p[q + 1][1];
+  }
+  return pfad;
+}
+
 sparkline.lauf = 0;                  // für eindeutige clipPath-Kennungen
 
-/* Der gezeigte Wertebereich: die Spanne der letzten Antworten, aber immer
-   einschließlich der Ziellinie - läge sie außerhalb, verschwände die
-   Bezugsgröße und mit ihr der Sinn der roten und grünen Abschnitte.
-   Sehr flache Verläufe bekommen eine Mindestspanne, sonst würde ein
-   Rauschen von einem Prozentpunkt bildfüllend ausschlagen. */
+/* Der gezeigte Wertebereich. Oben immer 102 %, unten der niedrigste Wert
+   minus 2 - die zwei Punkte Luft an beiden Enden sind nötig, weil die
+   Linie eine Dicke hat und sonst am Rand abgeschnitten würde.
+   Beschriftet werden nicht die Ränder, sondern die gemeinten Werte:
+   unten der tatsächliche Tiefstwert, oben 100 %. */
 function achsenBereich(pts) {
-  var lo = Math.min.apply(null, pts.concat([BENCH]));
-  var hi = Math.max.apply(null, pts.concat([BENCH]));
-  if (hi - lo < 8) {
-    hi = Math.min(100, lo + 8);
-    lo = Math.max(0, hi - 8);
-  }
-  return { lo: lo, hi: hi };
+  var unten = Math.min.apply(null, pts);
+  return { lo: unten - 2, hi: 102, unten: unten, oben: 100 };
 }
 
 function sparkline(hoehe) {
@@ -1154,7 +1195,7 @@ function sparkline(hoehe) {
   var x = function (i) { return i / (pts.length - 1) * 100; };
   var y = function (v) { return (bereich.hi - v) / (bereich.hi - bereich.lo) * 100; };
 
-  [bereich.lo, bereich.hi].forEach(function (v) {
+  [bereich.unten, bereich.oben].forEach(function (v) {
     svg.appendChild(svgEl('line', {
       x1: 0, x2: 100, y1: y(v), y2: y(v), class: 'grid',
       'vector-effect': 'non-scaling-stroke'
@@ -1181,10 +1222,10 @@ function sparkline(hoehe) {
   });
   svg.appendChild(defs);
 
-  var punkte = pts.map(function (v, i) { return x(i) + ',' + y(v); }).join(' ');
+  var kurve = glatterPfad(pts.map(function (v, i) { return [x(i), y(v)]; }));
   [['ueber', 'var(--f5t)'], ['unter', 'var(--f1t)']].forEach(function (teil) {
-    var linie = svgEl('polyline', {
-      class: 'line', points: punkte, 'vector-effect': 'non-scaling-stroke',
+    var linie = svgEl('path', {
+      class: 'line', d: kurve, 'vector-effect': 'non-scaling-stroke',
       'clip-path': 'url(#' + kennung + '-' + teil[0] + ')'
     });
     linie.style.stroke = teil[1];
@@ -1206,18 +1247,26 @@ function sparkline(hoehe) {
   return box;
 }
 
-/* Beschriftet unteres Ende, oberes Ende und die Ziellinie. Liegt die
-   Ziellinie zu dicht an einem Ende, entfällt ihre Marke - zwei Zahlen
-   übereinander wären unlesbar. Wie dicht "zu dicht" ist, hängt an der
-   Höhe des Diagramms, nicht an einem festen Prozentsatz. */
+/* Beschriftet Tiefstwert, 100 % und die Ziellinie - jede Marke sitzt auf
+   ihrem Wert. Kommt die Ziellinie einer der beiden anderen zu nahe,
+   entfällt sie; zwei Zahlen übereinander wären unlesbar. Wie nah zu nah
+   ist, hängt an der Höhe des Diagramms, nicht an einem festen Prozentsatz. */
 function achsenText(bereich, y, hoehe) {
   var host = el('div', 'axis');
-  host.appendChild(el('span', 'oben', Math.round(bereich.hi)));
-  host.appendChild(el('span', 'unten', Math.round(bereich.lo)));
+  var marke = function (name, wert) {
+    var m = el('span', name, Math.round(wert));
+    m.style.top = y(wert) + '%';
+    host.appendChild(m);
+    return y(wert);
+  };
+
+  var oben = marke('oben', bereich.oben);
+  var unten = marke('unten', bereich.unten);
 
   var pos = y(BENCH);
-  var grenze = 11 / hoehe * 100;            // eine Zeilenhöhe Abstand
-  if (pos > grenze && pos < 100 - grenze) {
+  var abstand = 11 / hoehe * 100;                  // eine Zeilenhöhe
+  if (pos > 0 && pos < 100 &&
+      Math.abs(pos - oben) > abstand && Math.abs(pos - unten) > abstand) {
     var ziel = el('span', 'ziel', BENCH);
     ziel.style.top = pos + '%';
     host.appendChild(ziel);

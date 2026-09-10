@@ -15,10 +15,19 @@ async function mit(p, n, werte) {
   return p.evaluate(() => {
     const box = document.querySelector('#home-total .spark');
     if (!box) return null;
-    const poly = box.querySelector('polyline');
+    const poly = box.querySelector('path.line');
     const bench = box.querySelector('.bench');
     return {
-      punkte: poly.getAttribute('points').trim().split(/\s+/),
+      // Aus dem geglätteten Pfad nur die Stützpunkte ziehen: der erste aus
+      // dem M-Befehl, danach je der Endpunkt eines C-Abschnitts.
+      punkte: (function (d) {
+        const erster = d.slice(1).split('C')[0].trim();
+        const rest = d.split('C').slice(1).map(c => {
+          const z = c.trim().split(/[\s,]+/).map(Number);
+          return z[4] + ',' + z[5];
+        });
+        return [erster].concat(rest);
+      })(poly.getAttribute('d')),
       ziellinie: bench.getAttribute('y1'),
       titel: box.getAttribute('title'),
       dotTop: box.querySelector('.dot').style.top,
@@ -81,19 +90,23 @@ async function mit(p, n, werte) {
   ok(/Fragen 6 bis 35/.test(titel), 'Fenster zeigt n-29 bis n: "' + titel + '"');
 
   console.log('\n== Ziellinie und Skala ==');
-  // Spannt der Verlauf 0 bis 100, entspricht die Achse dem vollen Bereich
-  // und die Ziellinie sitzt bei y 20. (Adaptive Fälle: zoom.test.js)
+  // Achse: unten Tiefstwert minus 2, oben 102. Bei Daten 0..100 also
+  // -2..102, die Ziellinie 80 liegt damit bei (102-80)/104 = 21,2 %.
   const rand = await mit(p, 3, [0, 100, 80]);
-  ok(rand.ziellinie === '20', 'Achse 0..100: Ziellinie bei y 20 — ' + rand.ziellinie);
-  ok(rand.punkte[0] === '0,100' && rand.punkte[1] === '50,0',
-     '0 % ganz unten, 100 % ganz oben: ' + rand.punkte.join('  '));
-  ok(rand.dotTop === '20%', 'Endpunkt sitzt auf seinem Wert (80 % → top 20 %): ' + rand.dotTop);
+  ok(Math.abs(Number(rand.ziellinie) - 22 / 104 * 100) < 0.01,
+     'Ziellinie maßstäblich bei y ' + Number(rand.ziellinie).toFixed(1));
+  const yv = v => ((102 - v) / 104 * 100).toFixed(4);
+  ok(rand.punkte[0].startsWith('0,') &&
+     Math.abs(Number(rand.punkte[0].split(',')[1]) - Number(yv(0))) < 0.01,
+     '0 % sitzt knapp über dem unteren Rand: ' + rand.punkte[0]);
+  ok(Math.abs(Number(rand.dotTop.replace('%','')) - Number(yv(80))) < 0.01,
+     'Endpunkt sitzt auf seinem Wert (80 %): ' + rand.dotTop);
 
   console.log('\n== Farbe an der Ziellinie ==');
   const farben = await mit(p, 5, [50, 90, 60, 95, 40]);
-  const linien = await p.evaluate(() => [...document.querySelectorAll('#home-total polyline')]
+  const linien = await p.evaluate(() => [...document.querySelectorAll('#home-total path.line')]
     .map(l => ({ farbe: l.style.stroke, clip: l.getAttribute('clip-path'),
-                 punkte: l.getAttribute('points') })));
+                 punkte: l.getAttribute('d') })));
   ok(linien.length === 2, 'die Linie wird zweimal gezeichnet (' + linien.length + ')');
   ok(linien[0].farbe.includes('f5') && linien[1].farbe.includes('f1'),
      'grün über, rot unter der Ziellinie: ' + linien.map(l => l.farbe).join(' / '));
@@ -108,8 +121,8 @@ async function mit(p, n, werte) {
   ok(Math.abs(schnitt.clips[0][0] + schnitt.clips[0][1] - schnitt.ziel) < 0.01 &&
      Math.abs(schnitt.clips[1][0] - schnitt.ziel) < 0.01,
      'der Farbschnitt liegt genau auf der Ziellinie (y ' + schnitt.ziel.toFixed(1) + ')');
-  ok(farben.dotTop === '100%',
-     'der Endpunkt ist zugleich der niedrigste Wert und sitzt ganz unten: ' + farben.dotTop);
+  ok(Math.abs(Number(farben.dotTop.replace('%','')) - 100 * (102 - 40) / (102 - 38)) < 0.01,
+     'der Endpunkt (40 = Tiefstwert) sitzt knapp über dem unteren Rand: ' + farben.dotTop);
 
   // Zwei Diagramme gleichzeitig im Dokument dürfen sich die Kennungen
   // der clipPaths nicht teilen.
@@ -133,9 +146,9 @@ async function mit(p, n, werte) {
      'grün steht für richtig, rot für falsch');
 
   console.log('\n== Überlebt den Reload ==');
-  const vor = await p.locator('#home-total .spark polyline').first().getAttribute('points');
+  const vor = await p.locator('#home-total .spark path.line').first().getAttribute('points');
   await p.reload();
-  const nachReload = await p.locator('#home-total .spark polyline').first().getAttribute('points');
+  const nachReload = await p.locator('#home-total .spark path.line').first().getAttribute('points');
   ok(vor === nachReload, 'Diagramm ist nach dem Neustart unverändert da');
 
   await b.close();

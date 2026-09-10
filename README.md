@@ -76,19 +76,20 @@ Die gestrichelte Waagrechte ist die Ziellinie bei 80 %. Die Linie ist
 Schnittpunkt, nicht erst am nächsten Datenpunkt. Dafür wird sie zweimal
 gezeichnet und jeweils an der Ziellinie beschnitten.
 
-Die **y-Achse zoomt mit**: unteres und oberes Ende sind der niedrigste und
-höchste Wert der gezeigten 30 Antworten, sodass der Verlauf die Höhe ausfüllt.
-Die Ziellinie ist dabei immer eingeschlossen — läge sie außerhalb, verschwände
-die Bezugsgröße und mit ihr der Sinn der Farben. Liegen also alle Werte unter
-80 %, reicht die Achse bis 80 hinauf. Sehr flache Verläufe bekommen eine
-Mindestspanne von 8 Punkten, sonst würde ein Rauschen von einem Prozentpunkt
-bildfüllend ausschlagen.
+Die **y-Achse zoomt mit**: sie reicht vom niedrigsten Wert der gezeigten 30
+Antworten bis 102 %. Die zwei Punkte Luft an beiden Enden sind kein Zierrat —
+ohne sie läge die Linie am Rand und würde von der Kopfzeile abgeschnitten.
 
-Beschriftet sind unteres Ende, oberes Ende und die Ziellinie. Fällt die
-Ziellinie mit einem Ende zusammen oder zu dicht daran, entfällt ihre Marke —
-zwei Zahlen übereinander wären unlesbar. In der schmalen Kopfzeile ist für die
-Beschriftung kein Platz; dort zoomt die Achse mit, aber die Aussage tragen die
-Farben.
+Beschriftet werden nicht die Ränder, sondern die gemeinten Werte: unten der
+tatsächliche Tiefstwert, oben 100 %, dazu die Ziellinie. Kommt die Ziellinie
+einer der beiden anderen Marken zu nahe, entfällt sie — zwei Zahlen übereinander
+wären unlesbar. In der schmalen Kopfzeile ist für die Beschriftung kein Platz;
+dort zoomt die Achse mit, aber die Aussage tragen die Farben.
+
+Die Kurve ist **monoton interpoliert** (Fritsch-Carlson). Eine gewöhnliche
+Spline würde an Spitzen über den höchsten Wert hinausschießen und damit
+Prognosen zeigen, die es nie gegeben hat; die monotone Variante bleibt
+zwischen zwei Punkten immer in deren Werten.
 
 Darunter steht ein **Kästchen je Antwort** — grün richtig, rot falsch, in
 derselben Breite und Reihenfolge wie das Diagramm. Ein Ausschlag der Linie
