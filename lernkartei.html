@@ -298,6 +298,30 @@ h1,h2,h3{margin:0;line-height:1.25;font-weight:650}
   background:linear-gradient(to top,var(--bg),transparent);pointer-events:none;
 }
 
+/* ============================ Suche ============================ */
+#q{margin-top:0}
+.hit{padding:16px}
+.hit .tags{margin-bottom:10px}
+.hit .qtext{font-size:16.5px;font-weight:600;line-height:1.45}
+.answers{margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.ans{
+  display:flex;align-items:flex-start;gap:9px;font-size:15px;line-height:1.4;
+  border-radius:9px;padding:7px 10px;overflow-wrap:break-word;
+}
+.ans .zeichen{flex:none;font-weight:700;line-height:1.4}
+.ans .t{flex:1;min-width:0}
+.ans.ok{background:var(--ok-soft)}
+.ans.ok .zeichen{color:var(--ok)}
+.ans.no{background:var(--panel-2)}
+.ans.no .zeichen{color:var(--no)}
+.ans.no .t{color:var(--ink-2)}
+.blbl{
+  font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--ink-2);margin-top:8px;
+}
+.blbl:first-child{margin-top:0}
+mark{background:var(--pick-soft);color:inherit;border-radius:3px;padding:0 1px;font-weight:700}
+
 /* ============================ Verwaltung ============================ */
 .list{display:flex;flex-direction:column;gap:8px}
 .item{
@@ -371,9 +395,24 @@ input[type=file]{display:none}
       <div class="boxes" id="boxes"></div>
     </div>
 
+    <div class="card">
+      <div class="lbl">Nachschlagen <span class="muted" style="text-transform:none;letter-spacing:0;font-weight:500">— Volltext über Fragen und Antworten</span></div>
+      <button class="btn wide" id="btn-search" type="button">Fragen durchsuchen</button>
+    </div>
+
     <div class="actions">
       <button class="btn primary wide" id="btn-start" type="button">Lernen starten</button>
     </div>
+  </section>
+
+  <!-- ==================== Suche ==================== -->
+  <section id="s-search" class="hide">
+    <div class="card">
+      <input class="txtin" id="q" type="search" autocomplete="off"
+             placeholder="Suchbegriff — auch mehrere, dann muss jeder vorkommen">
+      <div class="small muted" id="search-info" style="margin-top:10px"></div>
+    </div>
+    <div id="results"></div>
   </section>
 
   <!-- ==================== Lernen ==================== -->
@@ -922,6 +961,7 @@ var cfg = Object.assign(
 /* Mitgelieferte und importierte Karten zu einem Stapel zusammenführen. */
 var deck = [];
 function rebuild() {
+  suchIndex = null;
   deck = [];
   var byCat = {};
   (SEED.cards || []).forEach(function (c) { (byCat[c.cat] = byCat[c.cat] || []).push(c); });
@@ -1772,12 +1812,172 @@ function next() {
 }
 
 /* =====================================================================
+   Suche
+   ===================================================================== */
+
+var TREFFER_MAX = 60;                            // so viele Karten werden gezeigt
+
+/* Vergleichsform. Umlaute werden gefaltet, damit "arzt" auch "Ärzte"
+   findet - und zwar zeichenweise, damit die Stellen im Text für das
+   Hervorheben weiterhin passen. */
+function suchform(t) {
+  return (t || '').toLowerCase()
+    .replace(/[äàáâ]/g, 'a').replace(/[öòóô]/g, 'o').replace(/[üùúû]/g, 'u')
+    .replace(/[éèêë]/g, 'e').replace(/ß/g, 's')
+    .replace(/[\u00A0\u2010-\u2015\u2212]/g, function (c) { return c === '\u00A0' ? ' ' : '-'; });
+}
+
+/* Alle durchsuchbaren Texte einer Karte: Frage, Antwortmöglichkeiten und
+   bei Lücken auch deren Beschriftungen. */
+function kartenTexte(card) {
+  var t = [card.text];
+  if (card.kind === 'choice') {
+    t = t.concat(card.options);
+  } else if (card.kind === 'gaps') {
+    card.blanks.forEach(function (b) {
+      if (b.label) t.push(b.label);
+      t = t.concat(b.options);
+    });
+  } else {
+    t = t.concat(card.accepted);
+  }
+  return t.join(' \n ');
+}
+
+var suchIndex = null;
+function indexBauen() {
+  suchIndex = deck.map(function (c) { return suchform(kartenTexte(c)); });
+}
+
+/* Mehrere Begriffe werden mit UND verknüpft - jeder muss irgendwo in der
+   Karte vorkommen, nicht unbedingt nebeneinander. */
+function suchen(frage) {
+  var teile = suchform(frage).split(/\s+/).filter(Boolean);
+  if (!teile.length) return { teile: teile, treffer: [] };
+  if (!suchIndex || suchIndex.length !== deck.length) indexBauen();
+
+  var treffer = [];
+  for (var i = 0; i < deck.length; i++) {
+    var heu = suchIndex[i];
+    var alle = true;
+    for (var j = 0; j < teile.length; j++) {
+      if (heu.indexOf(teile[j]) < 0) { alle = false; break; }
+    }
+    if (alle) treffer.push(deck[i]);
+  }
+  return { teile: teile, treffer: treffer };
+}
+
+/* Text mit hervorgehobenen Fundstellen. Gesucht wird in der gefalteten
+   Fassung, geschnitten im Original - beide sind zeichengleich lang. */
+function hervorheben(text, teile) {
+  var frag = document.createDocumentFragment();
+  if (!teile.length) { frag.appendChild(document.createTextNode(text)); return frag; }
+
+  var heu = suchform(text);
+  var stellen = [];
+  teile.forEach(function (t) {
+    var at = heu.indexOf(t);
+    while (at >= 0) { stellen.push([at, at + t.length]); at = heu.indexOf(t, at + 1); }
+  });
+  if (!stellen.length) { frag.appendChild(document.createTextNode(text)); return frag; }
+
+  stellen.sort(function (a, b) { return a[0] - b[0]; });
+  var zusammen = [stellen[0]];
+  stellen.slice(1).forEach(function (st) {
+    var letzt = zusammen[zusammen.length - 1];
+    if (st[0] <= letzt[1]) letzt[1] = Math.max(letzt[1], st[1]);
+    else zusammen.push(st);
+  });
+
+  var pos = 0;
+  zusammen.forEach(function (st) {
+    if (st[0] > pos) frag.appendChild(document.createTextNode(text.slice(pos, st[0])));
+    frag.appendChild(el('mark', null, text.slice(st[0], st[1])));
+    pos = st[1];
+  });
+  if (pos < text.length) frag.appendChild(document.createTextNode(text.slice(pos)));
+  return frag;
+}
+
+/* Eine Antwortzeile: Haken oder Kreuz, dann der Text. */
+function antwortZeile(text, richtig, teile) {
+  var z = el('div', 'ans ' + (richtig ? 'ok' : 'no'));
+  z.appendChild(el('span', 'zeichen', richtig ? '✓' : '✕'));
+  var t = el('span', 't');
+  t.appendChild(hervorheben(text, teile));
+  z.appendChild(t);
+  return z;
+}
+
+function trefferKarte(card, teile) {
+  var box = el('div', 'card hit');
+
+  var kopf = el('div', 'tags');
+  kopf.appendChild(el('span', 'tag', card.cat));
+  var fach = el('span', 'tag hi', 'Fach ' + boxOf(card));
+  fach.style.background = 'transparent';
+  fach.style.borderColor = 'var(--f' + boxOf(card) + ')';
+  fach.style.color = 'var(--f' + boxOf(card) + 't)';
+  kopf.appendChild(fach);
+  box.appendChild(kopf);
+
+  // Lückenmarken im Fragetext lesbar machen
+  var frage = el('div', 'qtext');
+  frage.appendChild(hervorheben(
+    card.text.replace(GAP_RE, function (_, nr) { return ' ' + gapLabel(Number(nr)) + ' '; }), teile));
+  box.appendChild(frage);
+
+  var liste = el('div', 'answers');
+  if (card.kind === 'choice') {
+    card.options.forEach(function (o, i) {
+      liste.appendChild(antwortZeile(o, card.correct.indexOf(i) >= 0, teile));
+    });
+  } else if (card.kind === 'gaps') {
+    card.blanks.forEach(function (b, i) {
+      liste.appendChild(el('div', 'blbl', b.label || ('Lücke ' + gapLabel(i + 1))));
+      liste.appendChild(antwortZeile(b.answer, true, teile));
+      b.options.forEach(function (o) {
+        if (o !== b.answer) liste.appendChild(antwortZeile(o, false, teile));
+      });
+    });
+  } else {
+    card.accepted.forEach(function (a) { liste.appendChild(antwortZeile(a, true, teile)); });
+  }
+  box.appendChild(liste);
+  return box;
+}
+
+function suchAusgabe() {
+  var frage = $('q').value;
+  var info = $('search-info');
+  var host = clear($('results'));
+
+  if (!deck.length) { info.textContent = 'Noch keine Fragen vorhanden.'; return; }
+  var res = suchen(frage);
+  if (!res.teile.length) {
+    info.textContent = 'Durchsucht werden Fragetext und alle Antwortmöglichkeiten von ' +
+                       deck.length + ' Karten.';
+    return;
+  }
+
+  var n = res.treffer.length;
+  info.textContent = n === 0 ? 'Kein Treffer.'
+    : n + (n === 1 ? ' Treffer' : ' Treffer') +
+      (n > TREFFER_MAX ? ' — gezeigt werden die ersten ' + TREFFER_MAX : '');
+
+  res.treffer.slice(0, TREFFER_MAX).forEach(function (c) {
+    host.appendChild(trefferKarte(c, res.teile));
+  });
+}
+
+/* =====================================================================
    Navigation
    ===================================================================== */
 
 function screen(name) {
   ui.screen = name;
-  ['home', 'learn', 'manage'].forEach(function (s) {
+  ['home', 'learn', 'manage', 'search'].forEach(function (s) {
     $('s-' + s).classList.toggle('hide', s !== name);
   });
   $('btn-home').classList.toggle('hide', name === 'home');
@@ -1966,6 +2166,16 @@ $('btn-manage').onclick = function () {
   drawSets(); drawManageStat();
 };
 $('btn-check').onclick = function () { if (ui.locked) next(); else grade(); };
+
+$('btn-search').onclick = function () {
+  screen('search');
+  $('crumb').textContent = '';
+  suchAusgabe();
+  // Am Handy nicht die Tastatur aufziehen, dort nervt das mehr als es hilft.
+  if (!('ontouchstart' in window)) $('q').focus();
+};
+$('q').oninput = suchAusgabe;
+$('q').onkeydown = function (e) { if (e.key === 'Escape') { $('q').value = ''; suchAusgabe(); } };
 
 $('btn-pick').onclick = function () { $('file').click(); };
 $('file').onchange = function (e) { importFiles(e.target.files); e.target.value = ''; };

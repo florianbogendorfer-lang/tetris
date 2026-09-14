@@ -34,6 +34,19 @@ läuft die Farbe nach rechts ins Grüne.
 In der Übersicht steht darüber der **Gesamtfortschritt** als eine Zahl: Fach 1
 zählt nichts, Fach 5 zählt voll, also 0 % am Anfang und 100 %, wenn alles sitzt.
 
+## Nachschlagen
+
+Über **Fragen durchsuchen** auf der Startseite öffnet sich eine Volltextsuche
+über alle geladenen Karten. Durchsucht werden Fragetext *und* sämtliche
+Antwortmöglichkeiten; jeder Treffer zeigt die Frage mit allen Antworten, die
+richtigen grün mit Haken, die falschen grau mit Kreuz, und die Fundstellen sind
+hervorgehoben.
+
+Mehrere Begriffe werden mit UND verknüpft — jeder muss irgendwo in der Karte
+vorkommen, nicht unbedingt nebeneinander. Umlaute sind egal: `arztliche` findet
+auch `Ärztliche`. Bei sehr vielen Treffern werden die ersten 60 gezeigt und die
+Gesamtzahl genannt.
+
 ## Gemischt oder einzeln üben
 
 Voreingestellt ist **Alle** — alle Themenbereiche durcheinander. Das ist der
@@ -160,7 +173,7 @@ npm test                                      # Browser-Tests
 | `src/app.template.html` | Oberfläche und Lernlogik |
 | `src/build-data.js` | führt den Parser in Chromium aus, schreibt `data/*.json` |
 | `src/build.js` | fügt Vorlage + Parser + Fragen zu `lernkartei.html` |
-| `test/*.test.js` | Playwright-Tests (Lernen, Verlauf, Import, Sicherung) |
+| `test/*.test.js` | Playwright-Tests (Lernen, Verlauf, Streak, Achse, Suche, Import) |
 
 Der Parser läuft bewusst im Browser statt in Node: die App muss ihn ohnehin
 mitbringen, damit der Import ohne Server funktioniert — so gibt es nur eine
