@@ -48,6 +48,14 @@ vorkommen, nicht unbedingt nebeneinander. Umlaute sind egal: `arztliche` findet
 auch `Ärztliche`. Bei sehr vielen Treffern werden die ersten 60 gezeigt und die
 Gesamtzahl genannt.
 
+Ein Klick in die Suchleiste fügt ein, was gerade in der Zwischenablage liegt:
+Begriff woanders markieren, kopieren, hierher klicken, Treffer da. Beim ersten
+Mal fragt der Browser um Erlaubnis, die Zwischenablage lesen zu dürfen — ohne
+dieses Ja bleibt es beim Einfügen von Hand mit Strg+V, die Suchleiste sagt das
+dann auch. Derselbe Inhalt kommt kein zweites Mal: wer die Schreibmarke bloss
+versetzt oder den Suchbegriff ergänzt, verliert ihn nicht. Erst neu Kopiertes
+fügt wieder ein, und ein ungewolltes Einfügen nimmt Strg+Z zurück.
+
 ## Gemischt oder einzeln üben
 
 Voreingestellt ist **Alle** — alle Themenbereiche durcheinander. Das ist der
@@ -180,7 +188,7 @@ npm test                                      # Browser-Tests
 | `src/app.template.html` | Oberfläche und Lernlogik |
 | `src/build-data.js` | führt den Parser in Chromium aus, schreibt `data/*.json` |
 | `src/build.js` | fügt Vorlage + Parser + Fragen zu `lernkartei.html` |
-| `test/*.test.js` | Playwright-Tests (Lernen, Verlauf, Streak, Achse, Suche, Import) |
+| `test/*.test.js` | Playwright-Tests (Lernen, Verlauf, Streak, Achse, Suche, Zwischenablage, Bestand, Import) |
 
 Der Parser läuft bewusst im Browser statt in Node: die App muss ihn ohnehin
 mitbringen, damit der Import ohne Server funktioniert — so gibt es nur eine
