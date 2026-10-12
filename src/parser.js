@@ -365,8 +365,10 @@
 
   /* ---------- Einstiegspunkt ---------- */
 
-  var TYPES = ['answersselect', 'multichoice', 'truefalse', 'shortanswer',
-               'gapselect', 'ddwtos', 'match'];
+  // multichoiceset ist Moodles Mehrfachauswahl mit Ankreuzfeldern und hat
+  // denselben Aufbau wie answersselect.
+  var TYPES = ['answersselect', 'multichoiceset', 'multichoice', 'truefalse',
+               'shortanswer', 'gapselect', 'ddwtos', 'match'];
 
   function parse(doc, category) {
     var cat = category || guessCategory(doc) || 'KV';
@@ -380,7 +382,8 @@
 
       var card = null;
       try {
-        if (type === 'answersselect' || type === 'multichoice' || type === 'truefalse') {
+        if (type === 'answersselect' || type === 'multichoiceset' ||
+            type === 'multichoice' || type === 'truefalse') {
           card = parseChoice(el, type);
         } else if (type === 'shortanswer') { card = parseShortAnswer(el); }
         else if (type === 'gapselect')     { card = parseGapSelect(el); }

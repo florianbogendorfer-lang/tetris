@@ -1,0 +1,1017 @@
+{
+ "cards": [
+  {
+   "kind": "choice",
+   "text": "Welche Versicherungsfälle gibt es in der gesetzlichen Unfallversicherung?",
+   "options": [
+    "Dienstunfall",
+    "Freizeitunfall",
+    "Tod",
+    "Unfall im Homeoffice",
+    "Berufskrankheit",
+    "Arbeitsunfall",
+    "Erkrankung der Haut"
+   ],
+   "correct": [
+    0,
+    4,
+    5
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "1mp5uo12lqx6"
+  },
+  {
+   "kind": "choice",
+   "text": "Welche Frist ist für die Erstattung der Meldung des Arbeitsunfalles/ einer Berufskrankheit vorgesehen?",
+   "options": [
+    "eine Frist von 7 Tagen",
+    "eine Frist von 4 Wochen",
+    "eine Frist von 30 Tagen",
+    "eine Frist von 3 Tagen",
+    "eine Frist von 2 Jahren",
+    "eine Frist von 5 Tagen",
+    "eine Frist von 14 Tagen"
+   ],
+   "correct": [
+    5
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "refi3lsjw9"
+  },
+  {
+   "kind": "choice",
+   "text": "Für welche der folgenden Leistungen wird in der UV ein Antrag benötigt?",
+   "options": [
+    "Weitergewährung der Waisenrente über das 18. Lebensjahr hinaus",
+    "Zuschuss zur Entgeltfortzahlung",
+    "Anfall der Betriebsrente",
+    "Abfertigung der Witwen-/Witwerrente",
+    "Erhöhung der Versehrtenrente wegen Verschlimmerung der Unfall-/Krankheitsfolgen",
+    "Zuerkennung der Versehrtenrente"
+   ],
+   "correct": [
+    0,
+    1,
+    4
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "kj6jp4cjsqr8"
+  },
+  {
+   "kind": "choice",
+   "text": "In welchen drei SV-Gesetzen ist die gesetzliche Unfallversicherung geregelt?",
+   "options": [
+    "ASVG",
+    "APG",
+    "StPO",
+    "ABGB",
+    "BSVG",
+    "StGB",
+    "GSVG",
+    "B-KUVG"
+   ],
+   "correct": [
+    0,
+    4,
+    7
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "1japz191dt09"
+  },
+  {
+   "kind": "choice",
+   "text": "Welche Versicherungsträger führen die Unfallversicherung durch?",
+   "options": [
+    "PVA",
+    "ÖGK",
+    "BVAEB",
+    "AUVA",
+    "SVS"
+   ],
+   "correct": [
+    2,
+    3,
+    4
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "epc2yyanhwcq"
+  },
+  {
+   "kind": "choice",
+   "text": "Welchem Versicherungsträger obliegt die Generalkompetenz in der Unfallversicherung?",
+   "options": [
+    "BVAEB",
+    "ÖGK",
+    "AUVA",
+    "PVA",
+    "SVS"
+   ],
+   "correct": [
+    2
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "1y5fxi7132ha"
+  },
+  {
+   "kind": "choice",
+   "text": "Nach welchem Gesetz (nur eine Antwort) vollziehen unter anderem sowohl AUVA als auch SVS und BVAEB die gesetzliche Unfallversicherung?",
+   "options": [
+    "GSVG",
+    "BSVG",
+    "APG",
+    "ASVG",
+    "B-KUVG"
+   ],
+   "correct": [
+    3
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "v82thmrn89sk"
+  },
+  {
+   "kind": "choice",
+   "text": "Für welche der nachgenannten Personengruppen ist die BVAEB zuständiger Unfallversicherungsträger?",
+   "options": [
+    "Selbstständig Erwerbstätige",
+    "Bedienstete in einem privatrechtlichen Dienstverhältnis",
+    "Knappen",
+    "Bedienstete der AUVA"
+   ],
+   "correct": [
+    2
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "r723x71tbrqr"
+  },
+  {
+   "kind": "choice",
+   "text": "Für welche der nachgenannten Personengruppen ist die SVS zuständiger Unfallversicherungsträger?",
+   "options": [
+    "Neue Selbstständige",
+    "unselbstständige Erwerbstätige",
+    "Politiker",
+    "Selbstständig Erwerbstätige Mitglieder der Wirtschaftskammer",
+    "im Betrieb mittätige Angehörige",
+    "Bedienstete von Seilbahnbetrieben",
+    "Knappen",
+    "Vertragsbedienstete des Bundes",
+    "Höher- und Selbstversicherte",
+    "Jagd- und Fischereipächter",
+    "Freiberuflich tätige Ärzte"
+   ],
+   "correct": [
+    0,
+    3,
+    4,
+    8,
+    9,
+    10
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "mcqpnl7vxvh"
+  },
+  {
+   "kind": "choice",
+   "text": "Nach welchen SV-Gesetzen sind Modelle einer freiwilligen Versicherung in der Unfallversicherung vorgesehen?",
+   "options": [
+    "GSVG",
+    "BSVG",
+    "APG",
+    "B-KUVG",
+    "ASVG"
+   ],
+   "correct": [
+    1,
+    4
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "12t9bpfkqrgr"
+  },
+  {
+   "kind": "choice",
+   "text": "Wer kann eine Höherversicherung abschließen?",
+   "options": [
+    "pflichtversicherte selbstständige Erwerbstätige",
+    "Freiwillige Hilfsorganisationen",
+    "Betriebesführer",
+    "Kindergartenkinder, Schüler und Studenten",
+    "Knappen"
+   ],
+   "correct": [
+    0
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "2aooqd1o41t0"
+  },
+  {
+   "kind": "choice",
+   "text": "Worin liegt der Vorteil für die selbstständig Erwerbstätigen, wenn sie eine Höherversicherung in der UV abschließen?",
+   "options": [
+    "höhere Bemessungsgrundlage",
+    "erweiterter Personenkreis",
+    "höhere Beitragsgrundlage",
+    "längere Bezugsdauer bei bestimmten Geldleistungen"
+   ],
+   "correct": [
+    0
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "a9bs7y1c27sz"
+  },
+  {
+   "kind": "choice",
+   "text": "Wer ist für die Zusatzversicherung in der Unfallversicherung zuständig?",
+   "options": [
+    "SVS",
+    "PVA",
+    "BVAEB",
+    "AUVA",
+    "ÖGK"
+   ],
+   "correct": [
+    3
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "1hfgckd14c6y"
+  },
+  {
+   "kind": "choice",
+   "text": "Die Einbeziehung der Mitglieder einer freiwilligen Hilfsorganisation in die garantierte Bemessungsgrundlage bei der Zusatzversicherung erfolgt durch",
+   "options": [
+    "den Bundespräsidenten",
+    "den Dachverband",
+    "den zuständigen Bundesminister",
+    "den zuständigen Versicherungsträger"
+   ],
+   "correct": [
+    2
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "6ineb2145hij"
+  },
+  {
+   "kind": "choice",
+   "text": "Bei wem wird der Antrag zur Einbeziehung in den erweiterten Versicherungsschutz bei der Zusatzversicherung gestellt?",
+   "options": [
+    "beim zuständiger Bundesminister",
+    "beim Bundespräsidenten",
+    "beim Dachverband",
+    "bei der AUVA"
+   ],
+   "correct": [
+    3
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "14ck5qlqdc5m"
+  },
+  {
+   "kind": "choice",
+   "text": "Welche Versicherungsfälle kennt die Unfallversicherung nach dem ASVG?",
+   "options": [
+    "Arbeitsunfall",
+    "Alter",
+    "Tod",
+    "Mutterschaft",
+    "Krankheit",
+    "Berufskrankheit",
+    "geminderte Arbeitsfähigkeit",
+    "Dienstunfall"
+   ],
+   "correct": [
+    0,
+    5
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "4f2w561wg6q0"
+  },
+  {
+   "kind": "choice",
+   "text": "Welche Versicherungsfälle kennt die Unfallversicherung nach dem B-KUVG?",
+   "options": [
+    "Tod",
+    "Erwerbsunfähigkeit",
+    "Alter",
+    "Dienstunfall",
+    "Berufskrankheit",
+    "Krankheit",
+    "Arbeitsunfall"
+   ],
+   "correct": [
+    3,
+    4
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "mdthc91ww05g"
+  },
+  {
+   "kind": "choice",
+   "text": "Wann tritt der Versicherungsfall beim Arbeitsunfall ein?",
+   "options": [
+    "mit Tag der Antragstellung",
+    "mit dem Tag nach dem Unfallereignis",
+    "mit Beginn der rentenbegründenden Minderung der Erwerbsfähigkeit (MdE)",
+    "mit dem Unfallereignis"
+   ],
+   "correct": [
+    3
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "1tp3ooa1sn95"
+  },
+  {
+   "kind": "choice",
+   "text": "Wann tritt der Versicherungsfall bei der Berufskrankheit ein",
+   "options": [
+    "ab dem dritten Tag des Krankenstandes",
+    "mit Beginn der Krankheit",
+    "mit Tag der Antragstellung",
+    "mit Beginn der rentenbegründenden Minderung der Erwerbsfähigkeit (MdE) - wenn es für den Versicherten günstiger ist"
+   ],
+   "correct": [
+    1,
+    3
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "15zyymuxmsmq"
+  },
+  {
+   "kind": "choice",
+   "text": "Damit man bei einem Unfall von einem Arbeitsunfall sprechen kann, müssen folgende drei Zusammenhänge mit der versicherten Tätigkeit gegeben sein:",
+   "options": [
+    "der ursächliche Zusammenhang",
+    "der gesetzliche Zusammenhang",
+    "der örtliche Zusammenhang",
+    "der arbeitsrechtliche Zusammenhang",
+    "der überwiegende Zusammenhang",
+    "der allgemeine Zusammenhang",
+    "der zeitliche Zusammenhang"
+   ],
+   "correct": [
+    0,
+    2,
+    6
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "b34sf91du2bb"
+  },
+  {
+   "kind": "choice",
+   "text": "Der Versicherungsschutz im Rahmen des örtlichen Zusammenhangs umfasst:",
+   "options": [
+    "die Zuständigkeit der Unfallversicherungsträger, je nachdem, wo sich der Unfall zugetragen hat",
+    "Orte, an denen die versicherte Tätigkeit ausgeübt wird",
+    "ausschließlich Orte, an denen die Arbeitnehmerschutzbestimmungen eingehalten werden können",
+    "Orte, an denen Unfälle passieren können"
+   ],
+   "correct": [
+    1
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "gszv79omtfaf"
+  },
+  {
+   "kind": "choice",
+   "text": "Der Versicherungsschutz im Rahmen des zeitlichen Zusammenhangs umfasst:",
+   "options": [
+    "Zeiten in denen der Versicherte ausschließlich im Betrieb aufhältig ist",
+    "bestimmte Kernarbeitszeiten einer Gleitzeitvereinbarung",
+    "Urlaubszeit",
+    "Zeiten, in denen die versicherte Tätigkeit ausgeübt wird"
+   ],
+   "correct": [
+    3
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "1cga9fm8y4xj"
+  },
+  {
+   "kind": "choice",
+   "text": "Der ursächliche Zusammenhang bei einem Arbeitsunfall ist gegeben, wenn:",
+   "options": [
+    "der Unfall fahrlässig verursacht wurde",
+    "der Unfall in der Arbeitszeit passiert",
+    "der Unfall durch eine allgemein wirkenden Gefahr eingetreten ist",
+    "der Unfall in einem inneren Zusammenhang mit der versicherten Tätigkeit steht"
+   ],
+   "correct": [
+    3
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "1kjwgbrrs80e"
+  },
+  {
+   "kind": "choice",
+   "text": "Welche der nachstehenden Beitragseinnahmen beziehen sich auf die Unfallversicherung?",
+   "options": [
+    "Beiträge der unselbstständigen Erwerbstätigen",
+    "Beiträge der Länder",
+    "Beiträge der Höherversicherten",
+    "Beiträge der Selbstversicherten",
+    "Beiträge der Dienstgeber für ihre pflichtversicherten Dienstnehmer",
+    "Beiträge der pflichtversicherten selbstständigen Erwerbstätigen/Betriebsführer",
+    "Beiträge des Bundes",
+    "Beiträge der Zusatzversicherung/Freiwillige Hilfsorganisation"
+   ],
+   "correct": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "ur33p81irkbv"
+  },
+  {
+   "kind": "choice",
+   "text": "Für welche Personengruppen werden die Beiträge der Unfallversicherung (teilweise) aus Bundesmitteln bezahlt?",
+   "options": [
+    "Für die in der UV teilversicherten Schüler, Studenten und Kindergartenkinder",
+    "Für die in der UV versicherten Mitglieder der freiwilligen Hilfsorganisationen bei Ausbildung, Übung und Einsatz.",
+    "Für die in der UV vollversicherten unselbstständigen Erwerbstätigen",
+    "Für die Angehörigen der Betriebsführer",
+    "Für die in der UV teilversicherten Fachkundige Laienrichter, Schöffen und Geschworene"
+   ],
+   "correct": [
+    0,
+    4
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "n8dera1mzo9k"
+  },
+  {
+   "kind": "gaps",
+   "text": "Der 1 haftet dem 2 gegenüber dann, wenn er den 3 4 herbeigeführt hat.",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "leicht fahrlässig",
+      "Arbeitsunfall",
+      "Dienstgeber",
+      "Unfallversicherungsträger",
+      "Arbeitnehmer",
+      "grob fahrlässig"
+     ],
+     "answer": "Dienstgeber"
+    },
+    {
+     "label": null,
+     "options": [
+      "leicht fahrlässig",
+      "Arbeitsunfall",
+      "Dienstgeber",
+      "Unfallversicherungsträger",
+      "Arbeitnehmer",
+      "grob fahrlässig"
+     ],
+     "answer": "Unfallversicherungsträger"
+    },
+    {
+     "label": null,
+     "options": [
+      "leicht fahrlässig",
+      "Arbeitsunfall",
+      "Dienstgeber",
+      "Unfallversicherungsträger",
+      "Arbeitnehmer",
+      "grob fahrlässig"
+     ],
+     "answer": "Arbeitsunfall"
+    },
+    {
+     "label": null,
+     "options": [
+      "leicht fahrlässig",
+      "Arbeitsunfall",
+      "Dienstgeber",
+      "Unfallversicherungsträger",
+      "Arbeitnehmer",
+      "grob fahrlässig"
+     ],
+     "answer": "grob fahrlässig"
+    }
+   ],
+   "cat": "UV",
+   "src": "ddwtos",
+   "id": "h3af8x8s08p3"
+  },
+  {
+   "kind": "gaps",
+   "text": "Als Unfall gilt in der Unfallversicherung ein 1 bzw. zumindest zeitlich 2 Ereignis, eine Einwirkung von 3 oder eine außergewöhnliche 4 , die zu einem 5 führt.",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "dauerndes",
+      "plötzliches",
+      "Gesundheitsschaden",
+      "eng begrenztes",
+      "Fahrlässigkeit",
+      "Versicherungsfall",
+      "außen",
+      "innen",
+      "Belastung",
+      "langwieriges"
+     ],
+     "answer": "plötzliches"
+    },
+    {
+     "label": null,
+     "options": [
+      "dauerndes",
+      "plötzliches",
+      "Gesundheitsschaden",
+      "eng begrenztes",
+      "Fahrlässigkeit",
+      "Versicherungsfall",
+      "außen",
+      "innen",
+      "Belastung",
+      "langwieriges"
+     ],
+     "answer": "eng begrenztes"
+    },
+    {
+     "label": null,
+     "options": [
+      "dauerndes",
+      "plötzliches",
+      "Gesundheitsschaden",
+      "eng begrenztes",
+      "Fahrlässigkeit",
+      "Versicherungsfall",
+      "außen",
+      "innen",
+      "Belastung",
+      "langwieriges"
+     ],
+     "answer": "außen"
+    },
+    {
+     "label": null,
+     "options": [
+      "dauerndes",
+      "plötzliches",
+      "Gesundheitsschaden",
+      "eng begrenztes",
+      "Fahrlässigkeit",
+      "Versicherungsfall",
+      "außen",
+      "innen",
+      "Belastung",
+      "langwieriges"
+     ],
+     "answer": "Belastung"
+    },
+    {
+     "label": null,
+     "options": [
+      "dauerndes",
+      "plötzliches",
+      "Gesundheitsschaden",
+      "eng begrenztes",
+      "Fahrlässigkeit",
+      "Versicherungsfall",
+      "außen",
+      "innen",
+      "Belastung",
+      "langwieriges"
+     ],
+     "answer": "Gesundheitsschaden"
+    }
+   ],
+   "cat": "UV",
+   "src": "ddwtos",
+   "id": "1uuak7cquln5"
+  },
+  {
+   "kind": "gaps",
+   "text": "Die Leistungsansprüche werden in der Unfallversicherung - im Gegensatz zur Kranken- und Pensionsversicherung - 1 festgestellt. Man spricht vom sogenannten 2 Prinzip.",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "von Amts wegen",
+      "auf Vorschlag",
+      "auf Antrag"
+     ],
+     "answer": "von Amts wegen"
+    },
+    {
+     "label": null,
+     "options": [
+      "Ex-post-",
+      "Ex-contractu-",
+      "Ex-offo-"
+     ],
+     "answer": "Ex-offo-"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "uxigcd1po44z"
+  },
+  {
+   "kind": "gaps",
+   "text": "Die freiwillige Selbstversicherung nach dem ASVG können 1 mit 2 in Anspruch nehmen.",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "pflichtversicherte selbstständig Erwerbstätige",
+      "nicht pflichtversicherte selbstständig Erwerbstätige",
+      "Betriebsführer"
+     ],
+     "answer": "nicht pflichtversicherte selbstständig Erwerbstätige"
+    },
+    {
+     "label": null,
+     "options": [
+      "Betriebssitz im EU-Ausland",
+      "Gewerbeschein",
+      "Betriebssitz im Inland"
+     ],
+     "answer": "Betriebssitz im Inland"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "15pemjq1a3yh"
+  },
+  {
+   "kind": "gaps",
+   "text": "Mitglieder der im Gesetz taxativ aufgezählten freiwilligen Hilfsorganisationen sind bei/in 1 , 2 und 3 unfallversichert",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "Ausbildung",
+      "Pension",
+      "Urlaub"
+     ],
+     "answer": "Ausbildung"
+    },
+    {
+     "label": null,
+     "options": [
+      "Übung",
+      "Freizeitaktivitäten",
+      "Festlichkeiten"
+     ],
+     "answer": "Übung"
+    },
+    {
+     "label": null,
+     "options": [
+      "Einsatz",
+      "Wandertagen",
+      "Ausflügen"
+     ],
+     "answer": "Einsatz"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "16rd2c4ph8bn"
+  },
+  {
+   "kind": "gaps",
+   "text": "Die Bemessungsgrundlage für die Zusatzversicherung für 1 beträgt das 2 der festen Bemessungsgrundlage für 3",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "Mitglieder der freiwilligen Hilfsorganisationen",
+      "Kindergartenkinder, Schüler und Studenten",
+      "Betriebsführer"
+     ],
+     "answer": "Mitglieder der freiwilligen Hilfsorganisationen"
+    },
+    {
+     "label": null,
+     "options": [
+      "vierfache",
+      "doppelte",
+      "eineinhalbfache"
+     ],
+     "answer": "eineinhalbfache"
+    },
+    {
+     "label": null,
+     "options": [
+      "selbstständige Erwerbstätige",
+      "Kindergartenkinder, Schüler und Studenten",
+      "Jagd- und Fischereipächter"
+     ],
+     "answer": "selbstständige Erwerbstätige"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "1fq30z5zm8te"
+  },
+  {
+   "kind": "gaps",
+   "text": "Der erweiterte Versicherungsschutz der Zusatzversicherung schützt Mitglieder der freiwilligen Hilfsorganisationen nicht nur bei Ausbildung, Übung und Einsatz, sondern zusätzlich auch bei 1 und 2 Aufgaben",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "übertragenen",
+      "gesetzlichen",
+      "freiwilligen"
+     ],
+     "answer": "gesetzlichen"
+    },
+    {
+     "label": null,
+     "options": [
+      "technischen",
+      "gefährlichen",
+      "satzungsmäßigen"
+     ],
+     "answer": "satzungsmäßigen"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "vs2dul114clv"
+  },
+  {
+   "kind": "gaps",
+   "text": "Arbeitsunfälle sind jene Unfälle, die 1 infolge der in der Unfallversicherung 2 erleiden.",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "Staats-/EU-Bürger",
+      "versicherte Personen",
+      "unversicherte Personen"
+     ],
+     "answer": "versicherte Personen"
+    },
+    {
+     "label": null,
+     "options": [
+      "taxativ aufgezählten Tatbestände",
+      "genannten Unfallmechanismen",
+      "versicherten Tätigkeit"
+     ],
+     "answer": "versicherten Tätigkeit"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "gtq4o81r6x3k"
+  },
+  {
+   "kind": "gaps",
+   "text": "Nennen Sie zwei Personengruppen, für die Beiträge aus Bundesmitteln für die Unfallversicherung bezahlt werden!\n\n1\n\n2",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "Arbeiter und Angestellte",
+      "Schüler, Studenten und Kindergartenkinder",
+      "Pensionisten"
+     ],
+     "answer": "Schüler, Studenten und Kindergartenkinder"
+    },
+    {
+     "label": null,
+     "options": [
+      "fachkundige Laienrichter, Schöffen und Geschworene",
+      "Selbständige und Bauern",
+      "Arbeitslose"
+     ],
+     "answer": "fachkundige Laienrichter, Schöffen und Geschworene"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "12mkzfg1annn"
+  },
+  {
+   "kind": "gaps",
+   "text": "Die Kausalität wird nach 1 und nach 2 Gesichtspunkten geprüft (=doppelte Kausalität)",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "rechtlichen",
+      "technischen",
+      "geschichtlichen",
+      "qualifizierten"
+     ],
+     "answer": "rechtlichen"
+    },
+    {
+     "label": null,
+     "options": [
+      "medizinischen",
+      "chemischen",
+      "mathematischen",
+      "physischen"
+     ],
+     "answer": "medizinischen"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "mep51jxxb6cz"
+  },
+  {
+   "kind": "choice",
+   "text": "Für welche Gruppe an Personen trat schon Ende des 19. Jahrhunderts ein Unfallversicherungsgesetz in Kraft?",
+   "options": [
+    "Selbstständige",
+    "Arbeiter",
+    "Angestellte",
+    "Kindergartenkinder, Schüler und Studenten"
+   ],
+   "correct": [
+    1
+   ],
+   "cat": "UV",
+   "src": "multichoice",
+   "id": "17llvsy1dvud"
+  },
+  {
+   "kind": "choice",
+   "text": "Was wird im Rahmen des Kausalitätsprinzips bei der medizinischen Kausalität geprüft?",
+   "options": [
+    "ob die Unfallheilbehandlung in eigenen oder externen Einrichtungen durchgeführt wird",
+    "ob der Gesundheitsschaden Folge des Unfalls/ der Krankheit ist",
+    "ob der Unfall/ die Krankheit mit der versicherten Tätigkeit im Zusammenhang steht",
+    "für welche Dauer der Krankenstand des Versicherten anzusetzen ist"
+   ],
+   "correct": [
+    1
+   ],
+   "cat": "UV",
+   "src": "multichoice",
+   "id": "qu1ju8naljc6"
+  },
+  {
+   "kind": "choice",
+   "text": "Wem gegenüber haftet der Dienstgeber für den Fall, dass er den Arbeitsunfall vorsätzlich herbeigeführt hat?",
+   "options": [
+    "Gegenüber dem Unfallversicherungsträger",
+    "Gegenüber dem Bund",
+    "Gegenüber dem Dachverband",
+    "Gegenüber dem Arbeitnehmer"
+   ],
+   "correct": [
+    0,
+    3
+   ],
+   "cat": "UV",
+   "src": "multichoice",
+   "id": "20ccw0if91u6"
+  },
+  {
+   "kind": "choice",
+   "text": "Welche freiwilligen Versicherungen kennt die Unfallversicherung nach dem ASVG?",
+   "options": [
+    "Selbstversicherung",
+    "Teilversicherung",
+    "Höherversicherung",
+    "Vollversicherung"
+   ],
+   "correct": [
+    0,
+    2
+   ],
+   "cat": "UV",
+   "src": "multichoice",
+   "id": "1qznz6r1roya"
+  },
+  {
+   "kind": "choice",
+   "text": "Welche Vorteile bietet die Zusatzversicherung für Mitglieder der freiwilligen Hilfsorganisationen",
+   "options": [
+    "garantierte Bemessungsgrundlage",
+    "einen Zuschuss zur Entgeltfortzahlung",
+    "einen Kinderzuschuss",
+    "bessere Sachleistungen",
+    "eine Zusatzrente",
+    "erweiterter Versicherungsschutz"
+   ],
+   "correct": [
+    0,
+    5
+   ],
+   "cat": "UV",
+   "src": "multichoice",
+   "id": "1pjpi7g1q3ni"
+  },
+  {
+   "kind": "choice",
+   "text": "Nennen Sie die drei Prinzipien der Unfallversicherung!",
+   "options": [
+    "Finalitätsprinzip",
+    "Kausalitätsprinzip",
+    "Finanzierungsprinzip",
+    "Amtswegigkeitsprinzip (ex offo-Prinzip)",
+    "Minimalprinzip",
+    "Antragsprinzip"
+   ],
+   "correct": [
+    1,
+    2,
+    3
+   ],
+   "cat": "UV",
+   "src": "multichoice",
+   "id": "4wbmlp4kxos1"
+  },
+  {
+   "kind": "choice",
+   "text": "Was wird im Rahmen des Kausalitätsprinzips bei der rechtlichen Kausalität geprüft?",
+   "options": [
+    "ob und in welcher Höhe der Zuschuss zur Entgeltfortzahlung (EFZ) ausbezahlt wird",
+    "ob der Gesundheitsschaden Folge des Unfalls/ der Krankheit ist",
+    "ob der Unfall/die Krankheit mit der versicherten Tätigkeit im Zusammenhang steht",
+    "welcher Unfallversicherungsträger für das Leistungsverfahren zuständig ist"
+   ],
+   "correct": [
+    2
+   ],
+   "cat": "UV",
+   "src": "multichoice",
+   "id": "l22128uwwlsk"
+  },
+  {
+   "kind": "choice",
+   "text": "Die Höherversicherung in der Unfallversicherung ist ausschließlich im ASVG vorgesehen.",
+   "options": [
+    "Wahr",
+    "Falsch"
+   ],
+   "correct": [
+    0
+   ],
+   "cat": "UV",
+   "src": "truefalse",
+   "id": "2dgtq21cawlj"
+  },
+  {
+   "kind": "choice",
+   "text": "Die Selbstversicherung in der Unfallversicherung ist ausschließlich im ASVG vorgesehen.",
+   "options": [
+    "Wahr",
+    "Falsch"
+   ],
+   "correct": [
+    1
+   ],
+   "cat": "UV",
+   "src": "truefalse",
+   "id": "37idvp1lmfqv"
+  },
+  {
+   "kind": "choice",
+   "text": "Der \"Arbeitsunfall\" wird im B-KUVG als \"Dienstunfall\" bezeichnet.",
+   "options": [
+    "Wahr",
+    "Falsch"
+   ],
+   "correct": [
+    0
+   ],
+   "cat": "UV",
+   "src": "truefalse",
+   "id": "r082fb2weiv7"
+  }
+ ],
+ "failed": [],
+ "category": "UV",
+ "total": 45
+}

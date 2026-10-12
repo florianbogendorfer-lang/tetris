@@ -1494,6 +1494,14 @@ function antwortZeile(text, richtig, teile) {
   return z;
 }
 
+function kartenArt(card) {
+  if (card.kind === 'text') return 'Eingabe';
+  if (card.kind === 'gaps') {
+    return card.blanks.length === 1 ? '1 Lücke' : card.blanks.length + ' Lücken';
+  }
+  return card.correct.length > 1 ? 'Mehrfachauswahl' : 'Auswahl';
+}
+
 function trefferKarte(card, teile) {
   var box = el('div', 'card hit');
 
@@ -1504,6 +1512,10 @@ function trefferKarte(card, teile) {
   fach.style.borderColor = 'var(--f' + boxOf(card) + ')';
   fach.style.color = 'var(--f' + boxOf(card) + 't)';
   kopf.appendChild(fach);
+  // Ohne Kennzeichnung sieht eine Freitextkarte aus wie eine Auswahlfrage,
+  // bei der alles richtig ist. Beim Lernen bleibt die Art verdeckt, hier
+  // stehen ohnehin alle Antworten da.
+  kopf.appendChild(el('span', 'tag', kartenArt(card)));
   box.appendChild(kopf);
 
   // Lückenmarken im Fragetext lesbar machen
@@ -1526,7 +1538,11 @@ function trefferKarte(card, teile) {
       });
     });
   } else {
-    card.accepted.forEach(function (a) { liste.appendChild(antwortZeile(a, true, teile)); });
+    liste.appendChild(el('div', 'blbl', 'Erwartete Eingabe'));
+    // accepted[0] ist die ungeteilte Musterlösung ("A oder B"); stehen die
+    // Einzelfassungen dahinter, ist sie nur Wiederholung.
+    var gueltig = card.accepted.length > 1 ? card.accepted.slice(1) : card.accepted;
+    gueltig.forEach(function (a) { liste.appendChild(antwortZeile(a, true, teile)); });
   }
   box.appendChild(liste);
   return box;

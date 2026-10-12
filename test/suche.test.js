@@ -36,7 +36,9 @@ async function suche(p, begriff) {
   ok(await p.locator('#s-search').isVisible() && !(await p.locator('#s-home').isVisible()),
      'öffnet den Suchbildschirm');
   ok(await p.locator('#btn-home').isVisible(), 'Rückweg zur Übersicht ist da');
-  ok(/344/.test(await p.locator('#search-info').textContent()),
+  const umfang = await p.evaluate(() =>
+    JSON.parse(document.getElementById('seed').textContent).cards.length);
+  ok(new RegExp(umfang + ' Karten').test(await p.locator('#search-info').textContent()),
      'Hinweis nennt den Umfang: "' + (await p.locator('#search-info').textContent()) + '"');
 
   console.log('\n== Treffer in der Frage ==');
@@ -93,7 +95,8 @@ async function suche(p, begriff) {
 
   console.log('\n== Randfälle ==');
   const leer = await suche(p, '   ');
-  ok(leer.treffer === 0 && /344/.test(leer.info), 'leere Eingabe zeigt nur den Hinweis');
+  ok(leer.treffer === 0 && new RegExp(umfang + ' Karten').test(leer.info),
+     'leere Eingabe zeigt nur den Hinweis');
   const nichts = await suche(p, 'xyzqwertz');
   ok(nichts.treffer === 0 && /Kein Treffer/.test(nichts.info), 'kein Treffer wird gemeldet');
   const viel = await suche(p, 'e');

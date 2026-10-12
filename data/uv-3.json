@@ -1,0 +1,1868 @@
+{
+ "cards": [
+  {
+   "kind": "choice",
+   "text": "Bei welchen Fällen muss eine Minderung der Erwerbsfähigkeit um zumindest 50%\nbetragen, damit ein Anspruch auf Versehrtenrente gegeben ist?",
+   "options": [
+    "Künstler",
+    "Studenten",
+    "Waisen",
+    "Pensionisten",
+    "Selbständige",
+    "Schüler",
+    "Kindergartenkinder"
+   ],
+   "correct": [
+    1,
+    5,
+    6
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "yqvtbi11a5df"
+  },
+  {
+   "kind": "choice",
+   "text": "Welche Gesetze sehen einen Anspruch auf Kinderzuschuss für Schwerversehrte bei einer Versehrtenrente vor?",
+   "options": [
+    "GSVG",
+    "ASVG",
+    "B-KUVG",
+    "BSVG",
+    "FSVG"
+   ],
+   "correct": [
+    1,
+    2
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "cq8o3ipbhmcq"
+  },
+  {
+   "kind": "choice",
+   "text": "Welches Gesetz sieht keinen Anspruch auf Kinderzuschuss für Schwerversehrte bei einer Versehrtenrente vor?",
+   "options": [
+    "GSVG",
+    "FSVG",
+    "B-KUVG",
+    "ASVG",
+    "BSVG"
+   ],
+   "correct": [
+    4
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "n3p4vs1otgkf"
+  },
+  {
+   "kind": "choice",
+   "text": "Wie lange kann ein Kinderzuschuss zur Versehrtenrente eines Schwerversehrten gewährt werden?",
+   "options": [
+    "unbefristet, bei Erwerbsunfähigkeit des Kindes",
+    "Bis zur Pension des Versehrten",
+    "Bis zur Vollendung des 18. Lebensjahres des Kindes",
+    "Auf Antrag maximal bis zur Vollendung des 27. Lebensjahres",
+    "Unbefristet"
+   ],
+   "correct": [
+    0,
+    2,
+    3
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "xrc96d1puszs"
+  },
+  {
+   "kind": "choice",
+   "text": "Wer gilt beim Kinderzuschuss bis zur Vollendung des 18. Lebensjahres als Kind?",
+   "options": [
+    "Stiefkinder",
+    "Schwiegerkinder",
+    "Enkel",
+    "Kleinkinder",
+    "Wahlkinder",
+    "(leibliche) Kinder",
+    "Pflegekinder"
+   ],
+   "correct": [
+    0,
+    2,
+    4,
+    5
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "sdmakp16g0mj"
+  },
+  {
+   "kind": "choice",
+   "text": "Welche besondere Voraussetzung muss gegeben sein, damit Stiefkinder die Kindeseigenschaft im Rahmen es Kinderzuschusses erfüllen?",
+   "options": [
+    "Müssen ihren gewöhnlichen Aufenthalt im Inland haben.",
+    "Erhalten vom Versicherten einen Unterhalt.",
+    "Müssen in Hausgemeinschaft mit dem Versicherten leben.",
+    "Wurden vom Versicherten adoptiert"
+   ],
+   "correct": [
+    2
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "hhhph41auojz"
+  },
+  {
+   "kind": "choice",
+   "text": "In welchem Fall bleibt die Kindeseigenschaft zeitlich unbegrenzt bestehen?",
+   "options": [
+    "solange die Eltern im gemeinsamen Haushalt für den Lebensunterhalt aufkommen",
+    "wenn es bis zum 18. Lebensjahr keinen Pflichtschulabschluss hat",
+    "solange das Kind noch vor Ende der Kindeseigenschaft infolge Krankheit oder Gebrechen erwerbsunfähig ist",
+    "solange die Eltern gemäß § 231 ABGB unterhaltspflichtig sind"
+   ],
+   "correct": [
+    2
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "119fx0kdx99g"
+  },
+  {
+   "kind": "choice",
+   "text": "Es gibt bei der Versehrtenrente für Schwerversehrte ein Höchstausmaß. Welchen Wert dürfen Versehrtenrente, Zusatzrente und Kinderzuschüsse zusammen nicht übersteigen?",
+   "options": [
+    "die Höchstbeitragsgrundlage gemäß § 45 ASVG",
+    "die Bemessungsgrundlage des Versehrten",
+    "die Höchstbemessungsgrundlage",
+    "die Beitragsgrundlage im Zeitpunkt der Zuerkennung der Leistung"
+   ],
+   "correct": [
+    1
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "1cugtot15whg"
+  },
+  {
+   "kind": "choice",
+   "text": "Mit welchen Ansprüchen erreichen Vollrentner das Höchstausmaß bei der Versehrtenrente?",
+   "options": [
+    "wenn der Versehrte neben seiner Rente auch noch verwitwet ist",
+    "mit der Versehrtenrente und der Zusatzrente",
+    "wenn die Anerkennung über die Generalklausel gemäß § 177 Abs. 2 ASVG erfolgte",
+    "wenn die orthopädische MdE mit 100% beurteilt wurde"
+   ],
+   "correct": [
+    1
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "z5fh1p9msg0t"
+  },
+  {
+   "kind": "choice",
+   "text": "Für Kindergartenkinder, Schüler und Studenten fällt die Versehrtenrente erst zu dem Zeitpunkt an, wenn",
+   "options": [
+    "die Schulausbildung abgeschlossen wurde.",
+    "die Schulausbildung bzw. das Studium voraussichtlich abgeschlossen gewesen wäre und der Eintritt ins Erwerbsleben erfolgt wäre.",
+    "wenn die Unterhaltspflicht der Eltern endet.",
+    "wenn die Berufsausbildung abgeschlossen wurde."
+   ],
+   "correct": [
+    1
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "1nwp5px1r11c"
+  },
+  {
+   "kind": "choice",
+   "text": "Für welchen Zeitraum kann der Unfallversicherungsträger die Rente als vorläufige Rente gewähren?",
+   "options": [
+    "für das erste Jahr nach Eintritt des Versicherungsfalls",
+    "für die ersten zwei Jahre nach Eintritt des Versicherungsfalls",
+    "für die ersten 6 Monate nach Eintritt des Versicherungsfalles",
+    "für die ersten drei Jahre nach Eintritt des Versicherungsfalls"
+   ],
+   "correct": [
+    1
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "16u9liy1h2em"
+  },
+  {
+   "kind": "choice",
+   "text": "Bis zu welchem Zeitpunkt muss eine Dauerrente im Rahmen der Versehrtenrente festgestellt werden?",
+   "options": [
+    "spätestens nach einem Jahr nach Eintritt des Versicherungsfalles",
+    "sie muss jedes Jahr neu festgestellt werden.",
+    "spätestens nach Ablauf von zwei Jahren nach Eintritt des Versicherungsfalls",
+    "spätestens zu Beginn des zweiten Jahres nach Eintritt des Versicherungsfalles"
+   ],
+   "correct": [
+    2
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "3gmb7qbcht7i"
+  },
+  {
+   "kind": "choice",
+   "text": "Wann spricht man von einer wesentlichen Änderung der Verhältnisse bei der Festlegung einer Versehrtenrente?",
+   "options": [
+    "wenn durch\ndie Änderung Schwerversehrtheit entsteht oder wegfällt",
+    "wenn sich die MdE über Jahr hindurch um 5 % geändert hat",
+    "wenn die MdE sich um 5% geändert hat",
+    "wenn ein Spitalsaufenthalt notwendig wurde",
+    "wenn die MdE sich um 10% geändert hat",
+    "wenn durch die Änderung ein Rentenanspruch entsteht oder wegfällt",
+    "wenn die MdE durch mehr als drei Monaten um mind. 10% geändert wird"
+   ],
+   "correct": [
+    0,
+    5,
+    6
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "s3x4ym1u9uxd"
+  },
+  {
+   "kind": "choice",
+   "text": "Eine vorläufige Rente kann....",
+   "options": [
+    "nur in Jahresabständen seit der letzten Feststellung neu festgestellt werden",
+    "jederzeit bei einer wesentlichen Änderung neu festgestellt werden",
+    "bis zur Feststellung der Dauerrente nicht neu festgestellt werden",
+    "bei jeder Änderung neu festgestellt werden"
+   ],
+   "correct": [
+    3
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "1j9xex03yzfx"
+  },
+  {
+   "kind": "choice",
+   "text": "Nennen Sie die Voraussetzungen für die Bildung einer Gesamtrente!",
+   "options": [
+    "ein Versicherter wird durch mehrere Arbeitsunfälle/Berufskrankheiten geschädigt und die MdE aus allen Versicherungsfällen erreicht zumindest 20% bzw. 50%",
+    "Eine Gesamtrente wird nur bei Vorliegen von Arbeitsunfällen gewährt",
+    "Der Versicherte muss verheiratet sein",
+    "Der Versicherte muss mindestens 24 Monate in der Unfallversicherung versichert gewesen sein",
+    "Eine Gesamtrente wird nur bei Vorliegen von Berufskrankheiten gewährt"
+   ],
+   "correct": [
+    0
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "dz5hjksw4rei"
+  },
+  {
+   "kind": "choice",
+   "text": "Welche Bemessungsgrundlage ist zur Berechnung der Gesamtrente heranzuziehen?",
+   "options": [
+    "die Bemessungsgrundlage des ersten Versicherungsfalles",
+    "die Bemessungsgrundlage des letzten Versicherungsfalles",
+    "die höchste in Betracht kommende Bemessungsgrundlage",
+    "es wird eine Gesamtbemessungsgrundlage gebildet"
+   ],
+   "correct": [
+    2
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "8jgoma1orslt"
+  },
+  {
+   "kind": "choice",
+   "text": "Welche Geldleistung ist im BSVG im Hinblick auf den späten Betriebsrentenanfall vorgesehen?",
+   "options": [
+    "Schmerzensgeld",
+    "kleine Versehrtengeld",
+    "Pension",
+    "kleine Versehrtenrente",
+    "Abfindung",
+    "große Versehrtenrente",
+    "große Versehrtengeld"
+   ],
+   "correct": [
+    1,
+    6
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "1aitb2z1fpzg"
+  },
+  {
+   "kind": "choice",
+   "text": "Kindergartenkinder, Schüler und Studenten haben Anspruch auf Versehrtengeld, wenn ...",
+   "options": [
+    "wenn zum fiktiven Zeitpunkt des Eintrittes ins Erwerbsleben eine MdE von 50% vorliegt",
+    "wenn eine 20%ige MdE nach Beendigung der Unfallheilbehandlung vorliegt",
+    "über drei Monate nach Eintritt des Versicherungsfalls eine MdE von 20% vorliegt.",
+    "über drei Monate nach Eintritt des Versicherungsfalls eine MdE von 50% vorliegt.",
+    "nach Beendigung der Schulausbildung eine MdE von 50% vorliegt"
+   ],
+   "correct": [
+    2
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "1gg9elp8pkol"
+  },
+  {
+   "kind": "choice",
+   "text": "Wer hat Anspruch auf Pflegegeld aus der Unfallversicherung?",
+   "options": [
+    "Kindergartenkinder, Schüler und Studenten mit einer MdE von 100%",
+    "Pensionisten",
+    "Vollrentenbezieher",
+    "Kindergartenkinder, Schüler und Studenten bei Bezug einer Versehrtenrente"
+   ],
+   "correct": [
+    0,
+    2
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "mpqvlc1gnyhn"
+  },
+  {
+   "kind": "choice",
+   "text": "Welche Leistungen können bzw. müssen im Fall des Todes durch die Unfallversicherung erbracht werden?",
+   "options": [
+    "Zusatzrente",
+    "Witwenbeihilfe",
+    "Kinderzuschuss",
+    "Witwen-/Witwerrente",
+    "Trauerschmerzensgeld",
+    "Waisenrente",
+    "Teilersatz der Bestattungskosten",
+    "Überführungskosten",
+    "Versehrtenrente",
+    "Teilersatz für Ersatzarbeitskräfte"
+   ],
+   "correct": [
+    1,
+    3,
+    5,
+    6,
+    7,
+    9
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "auhx98gh0iaq"
+  },
+  {
+   "kind": "choice",
+   "text": "Der Tod des Versicherten wurde durch einen Arbeitsunfall verursacht. Hat auch die geschiedene Ehepartnerin Anspruch auf eine Witwenrente?",
+   "options": [
+    "ja, aber nur, wenn die Witwe wenigstens die Hälfte ihrer Erwerbsfähigkeit länger als drei Monate verloren hat",
+    "nein, hat sie nicht",
+    "ja, wenn die geschiedene Ehepartnerin Anspruch auf Unterhalt hatte."
+   ],
+   "correct": [
+    2
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "11dxmb1hov10"
+  },
+  {
+   "kind": "choice",
+   "text": "Nach welchem Gesetz ist keine Abfertigung der Witwen-/Witwerrente vorgesehen?",
+   "options": [
+    "BSVG",
+    "SVSG",
+    "ASVG",
+    "B-KUVG",
+    "FSVG"
+   ],
+   "correct": [
+    3
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "6a5fip1s67zv"
+  },
+  {
+   "kind": "choice",
+   "text": "Es kommt zu einem Arbeitsunfall mit tödlichem Ausgang (noch kein Rentenbezug!). Ab welchem Zeitpunkt fallen Hinterbliebenenrenten an?",
+   "options": [
+    "mit dem Tag der Antragstellung",
+    "ab dem Stichtag, der in der Pensionsversicherung herangezogen wird",
+    "Mit dem Bescheiddatum",
+    "ab dem Todestag"
+   ],
+   "correct": [
+    3
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "1ghj5zn1bm07"
+  },
+  {
+   "kind": "choice",
+   "text": "Welcher UV-Träger führt die Unfallversicherung für Kindergartenkinder, Schüler und Studenten durch?",
+   "options": [
+    "SVS",
+    "AUVA",
+    "ÖGK",
+    "BVAEB"
+   ],
+   "correct": [
+    1
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "1beygej8s4vq"
+  },
+  {
+   "kind": "choice",
+   "text": "Welche Bemessungsgrundlage kommt für Kindergartenkinder, Schüler und Studenten zur Anwendung?",
+   "options": [
+    "eine feste Bemessungsgrundlage, gestaffelt nach dem Lebensalter",
+    "die Bemessungsgrundlage nach freiem Ermessen",
+    "die Bemessungsgrundlage nach den allgemeinen Beitragsgrundlagen",
+    "die Bemessungsgrundlage in sonstigen Fällen",
+    "die Bemessungsgrundlage für Personen unter 30"
+   ],
+   "correct": [
+    0
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "is8z0u6vp4yi"
+  },
+  {
+   "kind": "choice",
+   "text": "Wie hat der Versicherungsträger über die Erhöhung, Herabsetzung, Entziehung, Weitergewährung, das Ruhen, sowie das Verwirken und Versagen von Rentenansprüchen auszusprechen?",
+   "options": [
+    "mittels eingeschriebenen Brief",
+    "durch eine Mitteilung",
+    "mittels telefonischer Auskunft",
+    "mittels Bescheid"
+   ],
+   "correct": [
+    3
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "7aoddacyowsk"
+  },
+  {
+   "kind": "choice",
+   "text": "Weshalb kann ein Anspruch auf Rente oder Übergangsgeld erlöschen?",
+   "options": [
+    "wegen eines neuerlichen Versicherungsfalles",
+    "wegen des Todes des Anspruchsberechtigten",
+    "wegen Wiederverehelichung",
+    "wegen des Wegfalls der Voraussetzungen",
+    "wegen der Vollendung des 18. Lebensjahres",
+    "wegen eines Auslandaufenthaltes"
+   ],
+   "correct": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "977jc5ti9cr9"
+  },
+  {
+   "kind": "choice",
+   "text": "Welche Bemessungsgrundlagen kennen Sie aus der Unfallversicherung?",
+   "options": [
+    "Besondere Bemessungsgrundlage für Personen unter 30 Jahren",
+    "Bemessungsgrundlage für Pensionisten",
+    "Bemessungsgrundlage für Waisen",
+    "Bemessungsgrundlage für Unfälle auf Wegen",
+    "Besondere Bemessungsgrundlage für Personen über 30 Jahren",
+    "Bemessungsgrundlage für Witwe",
+    "Bemessungsgrundlage nach festen Beträgen"
+   ],
+   "correct": [
+    0,
+    6
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "slz2jls4dvm3"
+  },
+  {
+   "kind": "choice",
+   "text": "Welche\nBemessungsgrundlagen aus dem ASVG kennen Sie?",
+   "options": [
+    "Bemessungsgrundlage für Hinterbliebene",
+    "Bemessungsgrundlage für Waisen",
+    "Bemessungsgrundlage für Landwirte",
+    "Bemessungsgrundlage für Beamte",
+    "Bemessungsgrundlage unter Berücksichtigung der Beitragsgrundlagen",
+    "Bemessungsgrundlage nach billigem Ermessen",
+    "Besondere Bemessungsgrundlage für Personen unter 30 Jahren"
+   ],
+   "correct": [
+    4,
+    5,
+    6
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "syrfuz17o55q"
+  },
+  {
+   "kind": "gaps",
+   "text": "Anspruch auf eine Versehrtenrente nach dem ASVG besteht im Fall der Anerkennung einer Berufskrankheit nach der Generalklausel nur dann, wenn die Minderung der Erwerbsfähigkeit 1 2 nach dem Eintritt des Versicherungsfalles hinaus mindestens 3 beträgt.",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "1 Jahr",
+      "über",
+      "50%",
+      "6 Monate",
+      "3 Monate",
+      "30%",
+      "10%",
+      "20%",
+      "unter"
+     ],
+     "answer": "über"
+    },
+    {
+     "label": null,
+     "options": [
+      "1 Jahr",
+      "über",
+      "50%",
+      "6 Monate",
+      "3 Monate",
+      "30%",
+      "10%",
+      "20%",
+      "unter"
+     ],
+     "answer": "3 Monate"
+    },
+    {
+     "label": null,
+     "options": [
+      "1 Jahr",
+      "über",
+      "50%",
+      "6 Monate",
+      "3 Monate",
+      "30%",
+      "10%",
+      "20%",
+      "unter"
+     ],
+     "answer": "50%"
+    }
+   ],
+   "cat": "UV",
+   "src": "ddwtos",
+   "id": "1jwrb0uw1pww"
+  },
+  {
+   "kind": "gaps",
+   "text": "Für die Feststellung der Höhe einer Versehrtenrente sind der Grad der 1 und die 2 maßgebend.",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "Behinderung",
+      "Bemessungsgrundlage",
+      "Minderung der Erwerbsfähigkeit",
+      "Beitragsgrundlage",
+      "Höchstbemessungsgrundlage"
+     ],
+     "answer": "Minderung der Erwerbsfähigkeit"
+    },
+    {
+     "label": null,
+     "options": [
+      "Behinderung",
+      "Bemessungsgrundlage",
+      "Minderung der Erwerbsfähigkeit",
+      "Beitragsgrundlage",
+      "Höchstbemessungsgrundlage"
+     ],
+     "answer": "Bemessungsgrundlage"
+    }
+   ],
+   "cat": "UV",
+   "src": "ddwtos",
+   "id": "g8m11m1q3v3f"
+  },
+  {
+   "kind": "gaps",
+   "text": "Anspruch auf Versehrtenrente besteht, wenn die 1 über 2 um zumindest 3 gemindert ist.",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "Verletzungsfolgen des Arbeitsunfalls/der Berufskrankheit",
+      "Erwerbsunfähigkeit des Versehrten durch die Folgen des Arbeitsunfalls/der Berufskrankheit",
+      "Erwerbsfähigkeit des Versehrten durch die Folgen des Arbeitsunfalls/der Berufskrankheit",
+      "Invalidität des Versehrten durch die Folgen des Arbeitsunfalls/der Berufskrankheit."
+     ],
+     "answer": "Erwerbsfähigkeit des Versehrten durch die Folgen des Arbeitsunfalls/der Berufskrankheit"
+    },
+    {
+     "label": null,
+     "options": [
+      "3 Monate nach Eintritt des Versicherungsfalls",
+      "1 Jahr nach Eintritt des Versicherungsfalls",
+      "1 Monat nach Eintritt des Versicherungsfalls",
+      "6 Wochen nach Eintritt des Versicherungsfalls"
+     ],
+     "answer": "3 Monate nach Eintritt des Versicherungsfalls"
+    },
+    {
+     "label": null,
+     "options": [
+      "50%",
+      "20%",
+      "10%",
+      "30%"
+     ],
+     "answer": "20%"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "iip4g1tr26t4"
+  },
+  {
+   "kind": "gaps",
+   "text": "Im BSVG gebührt die Betriebsrente nur dann, wenn und solange eine Minderung der Erwerbsfähigkeit 1 nach Eintritt des Versicherungsfalls hinaus im Ausmaß um zumindest 2 vorliegt und der Versicherte zum Zeitpunkt des Rentenanfalls noch keine 3 bezieht.",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "über ein Jahr",
+      "unter 3 Monaten",
+      "unter einem Jahr",
+      "über 6 Wochen",
+      "über 3 Monate"
+     ],
+     "answer": "über ein Jahr"
+    },
+    {
+     "label": null,
+     "options": [
+      "30%",
+      "70%",
+      "50%",
+      "20%"
+     ],
+     "answer": "20%"
+    },
+    {
+     "label": null,
+     "options": [
+      "Alterspension/Ruhegenuss",
+      "Korridorpension",
+      "Berufsunfähigkeitspension",
+      "Sozialhilfe"
+     ],
+     "answer": "Alterspension/Ruhegenuss"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "rrlobn1tlgxx"
+  },
+  {
+   "kind": "gaps",
+   "text": "Die Minderung der Erwerbsfähigkeit (MdE) drückt aus, in welchem Ausmaß der Versehrte aufgrund der Folgen des Versicherungsfalls 1 eingeschränkt ist. Die Beurteilung der MdE erfolgt durch 2 . Der Beruf des Versehrten hat 3 .",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "in seiner Tätigkeit",
+      "am allgemeinen Arbeitsmarkt",
+      "in seiner Erwerbstätigkeit"
+     ],
+     "answer": "am allgemeinen Arbeitsmarkt"
+    },
+    {
+     "label": null,
+     "options": [
+      "die AUVA",
+      "die BVAEB",
+      "die SVS",
+      "Fachärzte"
+     ],
+     "answer": "Fachärzte"
+    },
+    {
+     "label": null,
+     "options": [
+      "keine Bedeutung",
+      "eine Auswirkung",
+      "eine Bedeutung"
+     ],
+     "answer": "keine Bedeutung"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "1wjt58jbdevx"
+  },
+  {
+   "kind": "gaps",
+   "text": "Die Vollrente im Rahmen der Versehrtenrente beträgt 1 2 .",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "1/4",
+      "2/4",
+      "1/3",
+      "2/3"
+     ],
+     "answer": "2/3"
+    },
+    {
+     "label": null,
+     "options": [
+      "der Berechnungsgrundlage",
+      "der Bemessungsgrundlage",
+      "der Erwerbsunfähigkeit"
+     ],
+     "answer": "der Bemessungsgrundlage"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "1jcjb481e61n"
+  },
+  {
+   "kind": "gaps",
+   "text": "Der Kinderzuschuss wird in der Höhe von 1 der Versehrtenrente einschließlich Zusatzrente gezahlt. Er ist im 2 nicht vorgesehen.",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "10%",
+      "20%",
+      "5%",
+      "15%"
+     ],
+     "answer": "10%"
+    },
+    {
+     "label": null,
+     "options": [
+      "BSVG",
+      "ASVG",
+      "GSVG",
+      "B-KUVG"
+     ],
+     "answer": "BSVG"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "129el8t1yeex"
+  },
+  {
+   "kind": "gaps",
+   "text": "Das Ruhen eines Geldleistungsanspruches tritt 1 ein?",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "mit dem Tag der Bekanntgabe des Ruhensgrundes",
+      "mit dem Tag nach Eintritt des Ruhensgrundes",
+      "mit dem Tag des Eintritts des Ruhensgrundes",
+      "in der Unfallversicherung nicht"
+     ],
+     "answer": "mit dem Tag des Eintritts des Ruhensgrundes"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "1lwn8nvp4pbl"
+  },
+  {
+   "kind": "gaps",
+   "text": "Das Ruhen eines Geldleistungsanspruches endet grundsätzlich 1",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "mit dem Tag des Wegfalls des Ruhensgrundes",
+      "mit dem Monatsletzten, der dem Wegfall des Ruhensgrundes folgt",
+      "mit dem Monatsersten, der dem Wegfall des Ruhensgrundes folgt",
+      "gar nicht, da es kein Ruhen in der Unfallversicherung gibt",
+      "am Tag nach dem Wegfall des Ruhensgrundes"
+     ],
+     "answer": "mit dem Tag des Wegfalls des Ruhensgrundes"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "t7rskvo3cbt1"
+  },
+  {
+   "kind": "gaps",
+   "text": "Anspruch auf Integritätsabgeltung hat, wer durch einen Arbeitsunfall oder Berufskrankheit, welcher/e auf grob fahrlässige Außerachtlassung von 1 zurückzuführen ist, eine dauernde und erhebliche Beeinträchtigung der 2 und 3 erleidet und Anspruch auf 4 hat.",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "Arbeitnehmerschutzvorschriften",
+      "Arbeitsschutzbestimmungen",
+      "Berufsschutzgesetz",
+      "Arbeitsrechtvorschriften"
+     ],
+     "answer": "Arbeitnehmerschutzvorschriften"
+    },
+    {
+     "label": null,
+     "options": [
+      "organischen",
+      "körperlichen",
+      "körperlichen Wahrnehmung",
+      "sinnlichen"
+     ],
+     "answer": "körperlichen"
+    },
+    {
+     "label": null,
+     "options": [
+      "geistigen Integrität",
+      "übersinnlichen Wahrnehmung",
+      "geistigen Wahrnehmung"
+     ],
+     "answer": "geistigen Integrität"
+    },
+    {
+     "label": null,
+     "options": [
+      "Integritätsabgeltung",
+      "Schmerzensgeld",
+      "Pflegegeld",
+      "Versehrtenrente"
+     ],
+     "answer": "Versehrtenrente"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "1rm5yls117b4"
+  },
+  {
+   "kind": "gaps",
+   "text": "Um Anspruch auf Pflegegeld aus der Unfallversicherung zu haben, muss der Pflegebedarf auf 1 oder eine 2 zurückzuführen sein. Der ständige Pfleggebedarf hat für einen Zeitraum von voraussichtlich mindestens 3 und im Ausmaß von mehr als 4 vorliegen.",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "Unfall",
+      "Arbeitsunfall",
+      "Freizeitunfall"
+     ],
+     "answer": "Arbeitsunfall"
+    },
+    {
+     "label": null,
+     "options": [
+      "Krankheit",
+      "Berufskrankheit",
+      "ansteckende Krankheit"
+     ],
+     "answer": "Berufskrankheit"
+    },
+    {
+     "label": null,
+     "options": [
+      "3 Monate",
+      "6 Monate",
+      "12 Monate"
+     ],
+     "answer": "6 Monate"
+    },
+    {
+     "label": null,
+     "options": [
+      "60 Stunden pro Monat",
+      "65 Stunden pro Monat",
+      "180 Stunden pro Monat"
+     ],
+     "answer": "65 Stunden pro Monat"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "czp2hwrygf3e"
+  },
+  {
+   "kind": "gaps",
+   "text": "In welcher Höhe gebührt ein Teilersatz der Bestattungskosten?\n\nASVG: 1\n\nBSVG: 2\n\nB-KUVG: 3",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "1/15 der Bemessungsgrundlage, mit Mindestbetrag",
+      "60% der Bemessungsgrundlage",
+      "40% der Bemessungsgrundlage",
+      "1/15 der gesamtsolidarischen Bemessungsgrundlage",
+      "die monatliche Bemessungsgrundlage",
+      "1/15 der Beitragsgrundlage",
+      "20% der Versehrtenrente"
+     ],
+     "answer": "1/15 der Bemessungsgrundlage, mit Mindestbetrag"
+    },
+    {
+     "label": null,
+     "options": [
+      "1/15 der Bemessungsgrundlage, mit Mindestbetrag",
+      "60% der Bemessungsgrundlage",
+      "40% der Bemessungsgrundlage",
+      "1/15 der gesamtsolidarischen Bemessungsgrundlage",
+      "die monatliche Bemessungsgrundlage",
+      "1/15 der Beitragsgrundlage",
+      "20% der Versehrtenrente"
+     ],
+     "answer": "1/15 der gesamtsolidarischen Bemessungsgrundlage"
+    },
+    {
+     "label": null,
+     "options": [
+      "1/15 der Bemessungsgrundlage, mit Mindestbetrag",
+      "60% der Bemessungsgrundlage",
+      "40% der Bemessungsgrundlage",
+      "1/15 der gesamtsolidarischen Bemessungsgrundlage",
+      "die monatliche Bemessungsgrundlage",
+      "1/15 der Beitragsgrundlage",
+      "20% der Versehrtenrente"
+     ],
+     "answer": "die monatliche Bemessungsgrundlage"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "7ixbffr9oxm7"
+  },
+  {
+   "kind": "gaps",
+   "text": "In welcher Höhe gebührt die Witwen-/Witwerbeihilfe?\n\nASVG: 1\n\nB-KUVG: 2",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "das 6-fache der monatlichen Beitragsgrundlage",
+      "60% der Beitragsgrundlage",
+      "60% der Bemessungsgrundlage",
+      "40% der Bemessungsgrundlage",
+      "40% der Beitragsgrundlage",
+      "das 6-fache der monatlichen Bemessungsgrundlage",
+      "1/15 der Bemessungsgrundlage",
+      "das 3-fache der monatlichen Bemessungsgrundlage"
+     ],
+     "answer": "40% der Bemessungsgrundlage"
+    },
+    {
+     "label": null,
+     "options": [
+      "das 6-fache der monatlichen Beitragsgrundlage",
+      "60% der Beitragsgrundlage",
+      "60% der Bemessungsgrundlage",
+      "40% der Bemessungsgrundlage",
+      "40% der Beitragsgrundlage",
+      "das 6-fache der monatlichen Bemessungsgrundlage",
+      "1/15 der Bemessungsgrundlage",
+      "das 3-fache der monatlichen Bemessungsgrundlage"
+     ],
+     "answer": "das 6-fache der monatlichen Bemessungsgrundlage"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "16x14wvn0r0p"
+  },
+  {
+   "kind": "gaps",
+   "text": "Die Waisenrente beträgt\n\n- für ein einfach verwaistes Kind 1 und\n\n- für ein doppelt verwaistes Kind 2 der 3 .",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "50%",
+      "20%",
+      "40%",
+      "30%",
+      "10%"
+     ],
+     "answer": "20%"
+    },
+    {
+     "label": null,
+     "options": [
+      "50%",
+      "20%",
+      "40%",
+      "30%",
+      "10%"
+     ],
+     "answer": "30%"
+    },
+    {
+     "label": null,
+     "options": [
+      "monatlichen Beitragsgrundlage",
+      "monatlichen Bemessungsgrundlage",
+      "Beitragsgrundlage",
+      "Bemessungsgrundlage"
+     ],
+     "answer": "Bemessungsgrundlage"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "dgwqjv1niefm"
+  },
+  {
+   "kind": "gaps",
+   "text": "Die Hinterbliebenenrenten dürfen zusammen 1 nicht übersteigen. Innerhalb dieses Höchstausmaßes sind sie gegebenenfalls 2 .",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "die monatliche Bemessungsgrundlage",
+      "80% der Bemessungsgrundlage",
+      "die Beitragsgrundlage",
+      "die Bemessungsgrundlage"
+     ],
+     "answer": "80% der Bemessungsgrundlage"
+    },
+    {
+     "label": null,
+     "options": [
+      "anzupassen",
+      "verhältnismäßig zu kürzen",
+      "verhältnismäßig zu erhöhen"
+     ],
+     "answer": "verhältnismäßig zu kürzen"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "6ikkj0m88zqm"
+  },
+  {
+   "kind": "gaps",
+   "text": "Für Kindergartenkinder, Schüler und Studenten gebührt unter gewissen Voraussetzungen eine Versehrtenrente. Jedenfalls muss eine Minderung der Erwerbsfähigkeit von mindestens 1 vorliegen.",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "50%",
+      "100%",
+      "20%",
+      "30%"
+     ],
+     "answer": "50%"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "5h7ri2zkq94y"
+  },
+  {
+   "kind": "gaps",
+   "text": "Der Rentenanfall bei Kindergartenkindern, Schülern und Studenten erfolgt erst zu jenem Zeitpunkt, an dem die Schulausbildung bzw. das Studium voraussichtlich abgeschlossen gewesen und der 1 erfolgt wäre.",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "Eintritt in eine Lehre",
+      "ein Universitätsstudium",
+      "Eintritt ins Erwerbsleben"
+     ],
+     "answer": "Eintritt ins Erwerbsleben"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "mppuaj1ngq86"
+  },
+  {
+   "kind": "gaps",
+   "text": "Anspruch auf Entgeltfortzahlung Zuschuss bei Krankheit besteht ab dem 1 der Entgeltfortzahlung für insgesamt 2 pro Arbeits-/Kalenderjahr, sofern die Arbeitsunfähigkeit länger als 3 aufeinander folgende Tage gedauert hat.",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "1. Tag",
+      "10. Tag",
+      "11.Tag",
+      "3. Tag"
+     ],
+     "answer": "11.Tag"
+    },
+    {
+     "label": null,
+     "options": [
+      "180 Tage",
+      "30 Tage",
+      "42 Tage",
+      "10 Tage"
+     ],
+     "answer": "42 Tage"
+    },
+    {
+     "label": null,
+     "options": [
+      "11",
+      "3",
+      "10",
+      "1"
+     ],
+     "answer": "10"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "1rdadmq12p8f"
+  },
+  {
+   "kind": "gaps",
+   "text": "Anspruch auf EFZ-Zuschuss nach einem Unfall besteht ab dem 1 der Entgeltfortzahlung für insgesamt 2 pro Arbeits-/Kalenderjahr, sofern die Arbeitsunfähigkeit länger als 3 aufeinander folgende Tage gedauert hat.",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "30. Tag",
+      "ersten Tag",
+      "10. Tag"
+     ],
+     "answer": "ersten Tag"
+    },
+    {
+     "label": null,
+     "options": [
+      "180 Tage",
+      "30 Tage",
+      "42 Tage",
+      "10 Tage"
+     ],
+     "answer": "42 Tage"
+    },
+    {
+     "label": null,
+     "options": [
+      "10",
+      "5",
+      "3",
+      "11"
+     ],
+     "answer": "3"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "osbba3m0z86f"
+  },
+  {
+   "kind": "gaps",
+   "text": "Bei den Bemessungsgrundlagen nach dem ASVG und 1 handelt es sich um 2 bemessungsgrundlagen, während im 3 eine monatliche Bemessungsgrundlage gebildet wird.",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "FSVG",
+      "BSVG",
+      "ASVG",
+      "B-KUVG",
+      "GSVG",
+      "APG"
+     ],
+     "answer": "BSVG"
+    },
+    {
+     "label": null,
+     "options": [
+      "Tages",
+      "Jahres",
+      "Monats"
+     ],
+     "answer": "Jahres"
+    },
+    {
+     "label": null,
+     "options": [
+      "FSVG",
+      "BSVG",
+      "ASVG",
+      "B-KUVG",
+      "GSVG",
+      "APG"
+     ],
+     "answer": "B-KUVG"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "10imjw41l9ya"
+  },
+  {
+   "kind": "gaps",
+   "text": "Die Besondere Bemessungsgrundlage für Personen unter 1 Jahren kommt für jene Versicherten zur Anwendung, die sich zum Zeitpunkt des Eintritts des Versicherungsfalls noch in einer Berufsausbildung befunden haben. Ein klassisches Beispiel hierfür sind 2 .",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "30",
+      "24",
+      "18",
+      "27"
+     ],
+     "answer": "30"
+    },
+    {
+     "label": null,
+     "options": [
+      "Studenten",
+      "Kindergartenkinder",
+      "Schüler",
+      "Schwerversehrte",
+      "Lehrlinge"
+     ],
+     "answer": "Lehrlinge"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "18j2en1kgpqn"
+  },
+  {
+   "kind": "gaps",
+   "text": "Eine nicht unfallversicherte Person erleidet einen Unfall, der einem 1 gleichgestellt ist. Da in einem solchen Fall keine andere Bemessungsgrundlage errechnet werden kann, ist die Bemessungsgrundlage nach 2 3 zu bilden.",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "Arbeitsunfall",
+      "Freizeitunfall"
+     ],
+     "answer": "Arbeitsunfall"
+    },
+    {
+     "label": null,
+     "options": [
+      "freiem",
+      "willkührlichem",
+      "billigem"
+     ],
+     "answer": "billigem"
+    },
+    {
+     "label": null,
+     "options": [
+      "Gefühl",
+      "Ermessen",
+      "Erwarten"
+     ],
+     "answer": "Ermessen"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "17d8jc3n0moj"
+  },
+  {
+   "kind": "gaps",
+   "text": "Um Versehrtengeld nach dem BSVG zu erhalten, muss unter anderem ein Jahr nach Eintritt des Versicherungsfalls noch eine bestimmte Minderung der Erwerbsfähigkeit gegeben sein.",
+   "blanks": [
+    {
+     "label": "Wie hoch (in %) muss diese beim „kleinen“ Versehrtengeld sein?",
+     "options": [
+      "ein täglich fixer Betrag",
+      "Der Betrag der monatlichen Vollrente",
+      "60% der Bemessungsgrundlage",
+      "die Bemessungsgrundlage",
+      "20% der Bemessungsgrundlage",
+      "mindestens 30%"
+     ],
+     "answer": "mindestens 30%"
+    },
+    {
+     "label": "Als kleines Versehrtengeld gebührt?",
+     "options": [
+      "ein täglich fixer Betrag",
+      "Der Betrag der monatlichen Vollrente",
+      "60% der Bemessungsgrundlage",
+      "die Bemessungsgrundlage",
+      "20% der Bemessungsgrundlage",
+      "mindestens 30%"
+     ],
+     "answer": "ein täglich fixer Betrag"
+    }
+   ],
+   "cat": "UV",
+   "src": "match",
+   "id": "16pg6g0htkgx"
+  },
+  {
+   "kind": "gaps",
+   "text": "Um Versehrtengeld nach dem BSVG zu erhalten, muss unter anderem ein Jahr nach Eintritt des Versicherungsfalls noch eine bestimmte Minderung der Erwerbsfähigkeit gegeben sein.",
+   "blanks": [
+    {
+     "label": "Wie hoch (in %) muss diese beim „großen“ Versehrtengeld sein?",
+     "options": [
+      "60% der Bemessungsgrundlage",
+      "mindestens 30%",
+      "50% der Bemessungsgrundlage",
+      "mindestens 50%",
+      "in Höhe der Bemessungsgrundlage",
+      "ein täglich fixer Betrag"
+     ],
+     "answer": "mindestens 50%"
+    },
+    {
+     "label": "Das große Versehrtengeld gebührt in Höhe von...",
+     "options": [
+      "60% der Bemessungsgrundlage",
+      "mindestens 30%",
+      "50% der Bemessungsgrundlage",
+      "mindestens 50%",
+      "in Höhe der Bemessungsgrundlage",
+      "ein täglich fixer Betrag"
+     ],
+     "answer": "60% der Bemessungsgrundlage"
+    }
+   ],
+   "cat": "UV",
+   "src": "match",
+   "id": "1g461ynk5dfr"
+  },
+  {
+   "kind": "choice",
+   "text": "Wer\ngilt als Schwerversehrter?",
+   "options": [
+    "nur Personen, die beim Eintritt des Versicherungsfalls Schwerarbeit nach den Regelungen der Pensionsversicherung geleistet haben",
+    "wer Anspruch auf eine oder mehrere Versehrtenrenten nach dem ASVG oder einem anderen Bundesgesetz von zusammen mindestens 50% hat",
+    "wer Anspruch auf eine oder mehrere Versehrtenrenten nach dem ASVG oder einem anderen Bundesgesetz von zusammen mindestens 20% hat"
+   ],
+   "correct": [
+    1
+   ],
+   "cat": "UV",
+   "src": "multichoiceset",
+   "id": "r5y9ic1q2cd4"
+  },
+  {
+   "kind": "choice",
+   "text": "In welchen Fällen gebührt einem Schwerversehrten eine Zusatzrente von 20% ihrer Versehrtenrente?",
+   "options": [
+    "Bei einer Minderung der Erwerbsfähigkeit von 50% bis 70%",
+    "Bei einer Minderung der Erwerbsfähigkeit von 50% bis 100%",
+    "Bei einer Minderung der Erwerbsfähigkeit von 20% bis 50%",
+    "Bei einer Minderung der Erwerbsfähigkeit von 50% bis 69%",
+    "Bei einer Minderung der Erwerbsfähigkeit von 70% bis 100%",
+    "Bei einer Minderung der Erwerbsfähigkeit von 50% bis unter 70%"
+   ],
+   "correct": [
+    3,
+    5
+   ],
+   "cat": "UV",
+   "src": "multichoiceset",
+   "id": "ibgcry7dy9a2"
+  },
+  {
+   "kind": "choice",
+   "text": "In welchen Fällen gebührt Schwerversehrten eine Zusatzrente von 50% ihrer Versehrtenrente?",
+   "options": [
+    "Bei einer Minderung der Erwerbsfähigkeit ab 70% bis 100%",
+    "Bei einer Minderung der Erwerbsfähigkeit ab 70%",
+    "Bei einer Minderung der Erwerbsfähigkeit ab 69%",
+    "Bei einer Minderung der Erwerbsfähigkeit ab 60% bis 70%",
+    "Bei einer Minderung der Erwerbsfähigkeit ab 20% bis 70%",
+    "Bei einer Minderung der Erwerbsfähigkeit ab 69% bis 100%",
+    "Bei einer Minderung der Erwerbsfähigkeit ab 50% bis 70%"
+   ],
+   "correct": [
+    0,
+    1
+   ],
+   "cat": "UV",
+   "src": "multichoiceset",
+   "id": "nntbtdsjjz41"
+  },
+  {
+   "kind": "choice",
+   "text": "In welchen Fällen kann die Kindeseigenschaft für den Bezug eines Kinderzuschusses maximal bis zum vollendetem 27.Lebensjahr auf Antrag aufrecht bleiben?",
+   "options": [
+    "wenn neben der Vollzeitbeschäftigung ein ordentliches Studium absolviert wird",
+    "wenn das Kind als außerordentlicher Student ein Studium ernsthaft und zielstrebig betreibt",
+    "wenn das Kind die Schulausbildung abgeschlossen hat",
+    "wenn das Kind Teilnehmer eines freiwilligen Sozialjahres, Umweltschutzjahres bzw. Gedenkdienst, Friedensdienst ist oder Sozialdienst im Ausland leistet",
+    "wenn und solange das Kind ein Studium ernsthaft und zielstrebig betreibt bzw. Familienbeihilfe bezieht",
+    "wenn und solange sich das Kind in Schul- oder Berufsausbildung befindet, die die Arbeitskraft überwiegend beansprucht",
+    "wenn das Kind die Berufsausbildung abgeschlossen hat"
+   ],
+   "correct": [
+    3,
+    4,
+    5
+   ],
+   "cat": "UV",
+   "src": "multichoiceset",
+   "id": "1gvr965pp31v"
+  },
+  {
+   "kind": "choice",
+   "text": "Wann fällt die Betriebsrente nach dem BSVG an?",
+   "options": [
+    "ein Jahr nach dem Tag, an dem der Eintritt des Versicherungsfalls folgt",
+    "Mit Eintritt des Versicherungsfalles",
+    "ein Jahr nach Eintritt des Versicherungsfalles",
+    "spätestens mit Beginn der 27. Woche nach Eintritt des Versicherungsfalles"
+   ],
+   "correct": [
+    0
+   ],
+   "cat": "UV",
+   "src": "multichoiceset",
+   "id": "1jn5ywhn6q1s"
+  },
+  {
+   "kind": "choice",
+   "text": "Wann fällt die Versehrtenrente an, wenn ein Anspruch auf Krankengeld nach dem ASVG besteht?",
+   "options": [
+    "drei Monate nach Eintritt des Versicherungsfalles",
+    "spätestens mit Beginn der 27. Woche",
+    "ein Jahr nach dem Tag, der dem Eintritt des Versicherungsfalles folgt",
+    "mit dem Tag nach Wegfall des Krankengeldes",
+    "mit Beginn des dritten Monats nach Eintritt des Versicherungsfalles"
+   ],
+   "correct": [
+    1,
+    3
+   ],
+   "cat": "UV",
+   "src": "multichoiceset",
+   "id": "3zuom91sc2tj"
+  },
+  {
+   "kind": "choice",
+   "text": "Wann fällt die Versehrtenrente für selbständig Erwerbstätige an?",
+   "options": [
+    "ein Jahr nach Eintritt des Versicherungsfalles",
+    "Mit Beginn des dritten Monats nach Eintritt des Versicherungsfalles",
+    "mit dem Tag nach Eintritt des Versicherungsfalles",
+    "Mit Ablauf des dritten Monats nach Eintritt des Versicherungsfalles"
+   ],
+   "correct": [
+    1
+   ],
+   "cat": "UV",
+   "src": "multichoiceset",
+   "id": "1l8x1q61b0qa"
+  },
+  {
+   "kind": "choice",
+   "text": "Wann fällt die Versehrtenrente für geringfügig Beschäftigte an?",
+   "options": [
+    "Mit dem Tag nach Wegfall des Krankengeldes",
+    "Mit Ende des dritten Monats nach Eintritt des Versicherungsfalles",
+    "Mit dem Tag nach Eintritt des Versicherungsfalles",
+    "Mit dem Beginn des 3. Monats nach Eintritt des Versicherungsfalles",
+    "spätestens mit der 27. Woche nach Eintritt des Versicherungsfalles"
+   ],
+   "correct": [
+    2
+   ],
+   "cat": "UV",
+   "src": "multichoiceset",
+   "id": "1oru9xm1ch45"
+  },
+  {
+   "kind": "choice",
+   "text": "Wann fällt nach dem B-KUVG die Versehrtenrente an?",
+   "options": [
+    "mit dem Tag nach Wegfall der durch den Dienstunfall oder die Berufskrankheit verursachten Arbeitsunfähigkeit",
+    "spätestens nach Ablauf von drei Monaten nach Eintritt des Versicherungsfalls",
+    "spätestens nach Ablauf von zwei Monaten nach Eintritt des Versicherungsfalls",
+    "spätestens mit Beginn des 3. Monats nach Eintritt des Versicherungsfalls",
+    "spätestens mit der 27. Woche"
+   ],
+   "correct": [
+    0,
+    1
+   ],
+   "cat": "UV",
+   "src": "multichoiceset",
+   "id": "qhnulolctqba"
+  },
+  {
+   "kind": "choice",
+   "text": "Wann kann eine Dauerrente grundsätzlich neu festgestellt werden?",
+   "options": [
+    "bei wesentlicher Änderung der Verhältnisse",
+    "auf Antrag des Versehrten immer",
+    "nach einem Spitalsaufenthalt",
+    "jederzeit",
+    "in Jahresabständen seit der letzten Feststellung"
+   ],
+   "correct": [
+    4
+   ],
+   "cat": "UV",
+   "src": "multichoiceset",
+   "id": "1c1fkfyo0dw3"
+  },
+  {
+   "kind": "choice",
+   "text": "Wann ist die Gesamtrente spätestens zu bilden?",
+   "options": [
+    "spätestens nach Ablauf von 3 Jahren nach Eintritt des Versicherungsfalles",
+    "mit dem Tag nach Wegfall des Krankengeldes",
+    "spätestens mit Beginn des dritten Jahres nach Eintritt des Versicherungsfalles",
+    "mit erstmaliger Feststellung der Versehrtenrente"
+   ],
+   "correct": [
+    2
+   ],
+   "cat": "UV",
+   "src": "multichoiceset",
+   "id": "11exz7osi7fw"
+  },
+  {
+   "kind": "choice",
+   "text": "Welche Leistung gibt es, die dem Versicherten einen Ersatz für Schmerzen, Verunstaltung, verminderte Lebensfreude und psychische Beeinträchtigung bietet?",
+   "options": [
+    "Integritätsabgeltung",
+    "Versehrtengeld",
+    "Taggeld",
+    "Schmerzensgeld",
+    "Versehrtenrente"
+   ],
+   "correct": [
+    0
+   ],
+   "cat": "UV",
+   "src": "multichoiceset",
+   "id": "eo7hdf1pklko"
+  },
+  {
+   "kind": "choice",
+   "text": "Die Integritätsabgeltung ist...",
+   "options": [
+    "eine monatlich ausbezahlte Geldleistung, die dauerhaft gewährt wird",
+    "ein Schmerzensgeld",
+    "eine einmalige Geldleistung",
+    "auf die Versehrtenrente anzurechnen"
+   ],
+   "correct": [
+    2
+   ],
+   "cat": "UV",
+   "src": "multichoiceset",
+   "id": "ml8km4evack4"
+  },
+  {
+   "kind": "choice",
+   "text": "Nach welchem Sozialversicherungsgesetz, welches die Unfallversicherung beinhaltet, ist die Integritätsabgeltung nicht vorgesehen?",
+   "options": [
+    "FSVG",
+    "SVSG",
+    "BSVG",
+    "ASVG",
+    "B-KUVG"
+   ],
+   "correct": [
+    4
+   ],
+   "cat": "UV",
+   "src": "multichoiceset",
+   "id": "lkqemzwastm"
+  },
+  {
+   "kind": "choice",
+   "text": "Wie oft im Jahr wird das Pflegegeld ausbezahlt?",
+   "options": [
+    "6 Mal im Jahr",
+    "12 Mal im Jahr",
+    "14 Mal im Jahr"
+   ],
+   "correct": [
+    1
+   ],
+   "cat": "UV",
+   "src": "multichoiceset",
+   "id": "5vgtsx1gxyul"
+  },
+  {
+   "kind": "choice",
+   "text": "Wer zahlt in den Fällen, in denen die AUVA der zuständige UV-Träger ist, das Pflegegeld für den Versicherten aus?",
+   "options": [
+    "AUVA",
+    "PVA",
+    "BVAEB",
+    "SVS"
+   ],
+   "correct": [
+    1
+   ],
+   "cat": "UV",
+   "src": "multichoiceset",
+   "id": "1pqvye5kn7lx"
+  },
+  {
+   "kind": "choice",
+   "text": "Anspruch auf einen Teilersatz der Bestattungskosten hat/haben...",
+   "options": [
+    "das Bestattungsunternehmen",
+    "die Witwe/der Witwer",
+    "die Erben",
+    "jene Person, die die Bestattungskosten tatsächlich bezahlt hat, unabhängig von einer verwandtschaftlichen Beziehung",
+    "die Waise"
+   ],
+   "correct": [
+    3
+   ],
+   "cat": "UV",
+   "src": "multichoiceset",
+   "id": "rt6jqi10fhx1"
+  },
+  {
+   "kind": "choice",
+   "text": "Wie heißt jene einmalige Leistung im ASVG und B-KUVG, die eine Witwe bekommt, wenn ein Schwerversehrter stirbt, der Tod aber nicht Folge eines Arbeitsunfalles oder einer Berufskrankheit war?",
+   "options": [
+    "Witwenbeihilfe",
+    "sie bekommt keine Leistung, da keine Kausalität gegeben ist",
+    "Witwenrente",
+    "Witwenabfertigung"
+   ],
+   "correct": [
+    0
+   ],
+   "cat": "UV",
+   "src": "multichoiceset",
+   "id": "zipddw1elf5d"
+  },
+  {
+   "kind": "choice",
+   "text": "In welcher Höhe gebührt grundsätzlich die Witwen-/Witwerrente?",
+   "options": [
+    "40% der Bemessungsgrundlage",
+    "20% der Bemessungsgrundlage",
+    "20% der Beitragsgrundlage",
+    "40% der Beitragsgrundlage"
+   ],
+   "correct": [
+    1
+   ],
+   "cat": "UV",
+   "src": "multichoiceset",
+   "id": "16tmpyv1trmp"
+  },
+  {
+   "kind": "choice",
+   "text": "Welches Gesetz sieht keine Erhöhung der Witwen-/Witwerrente auf 40% vor?",
+   "options": [
+    "BSVG",
+    "SVSG",
+    "ASVG",
+    "B-KUVG"
+   ],
+   "correct": [
+    0
+   ],
+   "cat": "UV",
+   "src": "multichoiceset",
+   "id": "1p2m5jb1dyxo"
+  },
+  {
+   "kind": "choice",
+   "text": "Welche Gesetze sehen eine Erhöhung der Witwen-/Witwerrente vor?",
+   "options": [
+    "SVSG",
+    "B-KUVG",
+    "ASVG",
+    "BSVG",
+    "ABGB"
+   ],
+   "correct": [
+    1,
+    2
+   ],
+   "cat": "UV",
+   "src": "multichoiceset",
+   "id": "6051g9g1z9y"
+  },
+  {
+   "kind": "choice",
+   "text": "Im Falle einer Wiederverehelichung erlischt der Anspruch auf Witwen-/Witwerrente. In welcher Höhe erhält nach ASVG und BSVG die Witwe/der Witwer eine Abfertigung?",
+   "options": [
+    "20% der Bemessungsgrundlage",
+    "40% der Bemessungsgrundlage",
+    "der Anspruch erlischt automatisch",
+    "35-fache Bezug der 20%igen Witwen-/Witwerrente"
+   ],
+   "correct": [
+    3
+   ],
+   "cat": "UV",
+   "src": "multichoiceset",
+   "id": "59q741ns76sf"
+  },
+  {
+   "kind": "choice",
+   "text": "Auf welche der folgenden Leistungen können Kindergartenkinder, Schüler und Studenten Anspruch haben?",
+   "options": [
+    "Familiengeld",
+    "Pflegegeld",
+    "Versehrtenrente",
+    "Versehrtengeld",
+    "Taggeld"
+   ],
+   "correct": [
+    1,
+    2,
+    3
+   ],
+   "cat": "UV",
+   "src": "multichoiceset",
+   "id": "1u1d38qtb9pr"
+  },
+  {
+   "kind": "choice",
+   "text": "Wie hoch ist, abgesehen vom Zuschlag für Sonderzahlungen, grundsätzlich der Zuschuss an den Dienstgeber für Entgeltfortzahlung?",
+   "options": [
+    "100%",
+    "70%",
+    "40%",
+    "50%"
+   ],
+   "correct": [
+    3
+   ],
+   "cat": "UV",
+   "src": "multichoiceset",
+   "id": "1txn3fk1cxak"
+  },
+  {
+   "kind": "text",
+   "text": "Wie wird die Versehrtenrente im BSVG genannt?",
+   "solution": "Betriebsrente",
+   "accepted": [
+    "Betriebsrente"
+   ],
+   "cat": "UV",
+   "src": "shortanswer",
+   "id": "s5ozv1r3uqnj"
+  },
+  {
+   "kind": "text",
+   "text": "Ist der Versehrte aufgrund der Folgen eines Arbeitsunfalls bzw. einer Berufskrankheit völlig erwerbsunfähig (100% MdE), so hat er Anspruch auf die _____ .",
+   "solution": "Vollrente",
+   "accepted": [
+    "Vollrente"
+   ],
+   "cat": "UV",
+   "src": "shortanswer",
+   "id": "1rrufkh1t6ug"
+  },
+  {
+   "kind": "text",
+   "text": "Wie hoch ist der Kinderzuschuss als Zusatzleistung für Schwerversehrte bei einer Versehrtenrente?",
+   "solution": "10% der Versehrtenrente zuzüglich Zusatzrente, gedeckelt mit Höchstbetrag",
+   "accepted": [
+    "10% der Versehrtenrente zuzüglich Zusatzrente, gedeckelt mit Höchstbetrag"
+   ],
+   "cat": "UV",
+   "src": "shortanswer",
+   "id": "20o0jg18u0m0"
+  },
+  {
+   "kind": "choice",
+   "text": "Ein Schwerversehrter erhält eine Zusatzrente von 50% der Versehrtenrente nur dann, wenn die Minderung der Erwerbsfähigkeit 100% beträgt.",
+   "options": [
+    "Wahr",
+    "Falsch"
+   ],
+   "correct": [
+    1
+   ],
+   "cat": "UV",
+   "src": "truefalse",
+   "id": "5iajun1p3537"
+  },
+  {
+   "kind": "choice",
+   "text": "Für die Ermittlung der Bemessungsgrundlage nach dem ASVG sind alle Dienstverhältnisse, Erwerbstätigkeiten oder sonstige Tätigkeiten, die in der Pflichtversicherung in der UV nach dem ASVG und BSVG einbezogen sind, zu berücksichtigen.",
+   "options": [
+    "Wahr",
+    "Falsch"
+   ],
+   "correct": [
+    0
+   ],
+   "cat": "UV",
+   "src": "truefalse",
+   "id": "9qfyimxpkah8"
+  },
+  {
+   "kind": "choice",
+   "text": "Die Bemessungsgrundlage unter Berücksichtigung der Beitragsgrundlagen ist die Bemessungsgrundlage für die selbständig Erwerbstätigen.",
+   "options": [
+    "Wahr",
+    "Falsch"
+   ],
+   "correct": [
+    1
+   ],
+   "cat": "UV",
+   "src": "truefalse",
+   "id": "g202c011r1pa"
+  },
+  {
+   "kind": "choice",
+   "text": "Die Bemessungsgrundlage für selbständig erwerbstätige Personen wird als „Bemessungsgrundlage nach festen Beträgen“ bezeichnet.",
+   "options": [
+    "Wahr",
+    "Falsch"
+   ],
+   "correct": [
+    0
+   ],
+   "cat": "UV",
+   "src": "truefalse",
+   "id": "1q9h7d91bbsp"
+  },
+  {
+   "kind": "choice",
+   "text": "Wenn der Land- bzw. Forstwirt auch eine nach ASVG pflichtversicherte Tätigkeit ausübt kommt es bei der Bemessung der Leistungen nach dem BSVG zu einem Günstigkeitsvergleich.",
+   "options": [
+    "Wahr",
+    "Falsch"
+   ],
+   "correct": [
+    0
+   ],
+   "cat": "UV",
+   "src": "truefalse",
+   "id": "10d55b0ok05i"
+  }
+ ],
+ "failed": [],
+ "category": "UV",
+ "total": 85
+}

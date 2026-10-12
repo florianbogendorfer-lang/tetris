@@ -1,0 +1,790 @@
+{
+ "cards": [
+  {
+   "kind": "choice",
+   "text": "Nennen Sie Umstände, die den ursächlichen Zusammenhang im Rahmen eines Arbeitsunfalls ausschließen!",
+   "options": [
+    "die von einem Dritten geschaffene Gefahr",
+    "verbotswidriges\nHandeln",
+    "selbstgeschaffene Gefahr",
+    "innere Ursache",
+    "unternehmerische Tätigkeit",
+    "eigenwirtschaftliche Tätigkeit"
+   ],
+   "correct": [
+    2,
+    3,
+    5
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "1glmrem1s1vt"
+  },
+  {
+   "kind": "choice",
+   "text": "Nennen Sie Beispiele für „Unfälle auf Wegen“, welche ebenfalls als Arbeitsunfall gelten!",
+   "options": [
+    "Arbeitsweg",
+    "Weg zum beruflichen Fortbildungskurs",
+    "Weg zur Betriebsratswahl",
+    "Weg zur Arbeiterkammerwahl"
+   ],
+   "correct": [
+    0
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "37ima2f058og"
+  },
+  {
+   "kind": "choice",
+   "text": "Nennen Sie Beispiele für „Unfälle bei anderen Tätigkeiten“, welche ebenfalls als Arbeitsunfall gelten!",
+   "options": [
+    "Tätigkeiten als Teilnehmer an der Betriebsdemokratie",
+    "bei der Rettung eines Menschen aus Lebensgefahr",
+    "bei der Wahl einer gesetzlichen beruflichen Interessenvertretung",
+    "bei Nachbarschaftshilfe",
+    "bei der Inanspruchnahme von Interessensvertretungen"
+   ],
+   "correct": [
+    4
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "1i5b4or1hdqe"
+  },
+  {
+   "kind": "choice",
+   "text": "Nennen Sie Beispiele für „Unfälle in land- und forstwirtschaftlichen Betrieben“, welche ebenfalls als Arbeitsunfall gelten!",
+   "options": [
+    "Nachbarschaftshilfe",
+    "Befriedigung lebensnotwendiger Bedürfnisse",
+    "Arbeiten an landwirtschaftlichen Gebäuden",
+    "Arbeitsweg",
+    "Hilfeleistungen bei Unglücksfällen",
+    "Herbeiholung eines Arztes oder einer Hebamme"
+   ],
+   "correct": [
+    0,
+    2
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "1rpwaju1dp5z"
+  },
+  {
+   "kind": "choice",
+   "text": "Nennen Sie Beispiele für „den Arbeitsunfällen gleichgestellte Unfälle“ (jene Fälle, bei denen es Voraussetzung ist, dass die Person unfallversichert ist), welche ebenfalls als Arbeitsunfall gelten!",
+   "options": [
+    "Herbeiholung eines Arztes oder einer Hebamme",
+    "Hilfeleistungen bei Unglücksfällen",
+    "Befriedigung lebensnotwendiger Bedürfnisse",
+    "Nachbarschaftshilfe",
+    "Rettung eines Menschen aus Lebensgefahr",
+    "Unterstützung eines Sicherheitsorgans bei einer Amtshandlung",
+    "Häusliche und andere Tätigkeiten",
+    "Wahl einer gesetzlichen beruflichen Interessensvertretung"
+   ],
+   "correct": [
+    7
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "1mnzu8813ebt"
+  },
+  {
+   "kind": "choice",
+   "text": "Nennen Sie Beispiele für „Unfälle bei individuellen Hilfeleistungen“, welche ebenfalls als Arbeitsunfall gelten!",
+   "options": [
+    "Unterstützung eines Sicherheitsorgans bei einer Amtshandlung",
+    "Hilfeleistung bei Arbeiten an landwirtschaftlichen Gebäuden",
+    "Hilfeleistung als Teilnehmer an der Betriebsdemokratie",
+    "Nachbarschaftshilfe"
+   ],
+   "correct": [
+    0
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "1t3hn5w13o4m"
+  },
+  {
+   "kind": "choice",
+   "text": "Wann besteht bei Fällen mit Generalklauseln bei der Berufskrankheit ein Anspruch auf Versehrtenrente?",
+   "options": [
+    "nur dann, wenn eine Minderung der Erwerbsfähigkeit von zumindest 50% über 3 Monate nach Eintritt des Versicherungsfalls vorliegt",
+    "nur dann, wenn eine Minderung der Erwerbsfähigkeit von zumindest 20% über 3 Monate nach Eintritt des Versicherungsfalls vorliegt",
+    "nur dann, wenn eine Minderung der Erwerbsfähigkeit von zumindest 60% über 3 Monate nach Eintritt des Versicherungsfalls vorliegt"
+   ],
+   "correct": [
+    0
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "1x05dh5vp6ki"
+  },
+  {
+   "kind": "choice",
+   "text": "Nennen Sie Aufgaben der Unfallversicherung nach ASVG!",
+   "options": [
+    "Arbeitsmedizinische Betreuung",
+    "Gesundheitsvorsorge",
+    "Verhütung von Arbeitsunfällen und Berufskrankheiten",
+    "Unfallheilbehandlung",
+    "Krankenbehandlung"
+   ],
+   "correct": [
+    0,
+    2,
+    3
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "l4fys21s3gff"
+  },
+  {
+   "kind": "choice",
+   "text": "Nennen Sie Beispiele für Sachleistungen, die aus der Unfallversicherung erbracht werden!",
+   "options": [
+    "Verhütung von Arbeitsunfällen und Berufskrankheiten",
+    "Unfallheilbehandlung",
+    "Hilfsmittel",
+    "Heilbehelfe",
+    "Rehabilitation"
+   ],
+   "correct": [
+    0,
+    1,
+    4
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "mdu2cww3jlae"
+  },
+  {
+   "kind": "choice",
+   "text": "Nennen Sie Beispiele für Geldleistungen, die aus der Unfallversicherung erbracht werden!",
+   "options": [
+    "Teilersatz der Ersatzarbeitskräfte",
+    "Witwenbeihilfe",
+    "Versehrtengeld im ASVG und BSVG",
+    "Abfindung",
+    "Pensionsvorschuss"
+   ],
+   "correct": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "wjo4ws1futw2"
+  },
+  {
+   "kind": "choice",
+   "text": "Nennen Sie Maßnahmen zur Verhütung von Arbeitsunfällen und Berufskrankheiten!",
+   "options": [
+    "Schutzimpfungen",
+    "Kuraufenthalte",
+    "es gibt Präventionszentren",
+    "Reihenuntersuchungen",
+    "Werbekampagnen",
+    "Beratungen und Schulungen",
+    "Publikationen",
+    "Messungen",
+    "es gibt Unfallkrankenhäuser"
+   ],
+   "correct": [
+    0,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "a2d5q715kjnf"
+  },
+  {
+   "kind": "choice",
+   "text": "Nennen Sie Maßnahmen, die im Rahmen der „Vorsorge für Erste Hilfe“ angeboten werden!",
+   "options": [
+    "Kosten für Kurse zur Ausbildung werden übernommen",
+    "Kosten für Hilfsmittel werden übernommen",
+    "Kurse zur Ausbildung werden angeboten"
+   ],
+   "correct": [
+    0,
+    2
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "hngjz717bu4v"
+  },
+  {
+   "kind": "choice",
+   "text": "Wo führt der Unfallversicherungsträger die Unfallheilbehandlung nach Arbeitsunfällen bzw. Berufskrankheiten durch?",
+   "options": [
+    "in geeigneten Einrichtungen",
+    "in fremden Einrichtungen",
+    "in eigenen Einrichtungen"
+   ],
+   "correct": [
+    2
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "q7aw5yfodb8k"
+  },
+  {
+   "kind": "choice",
+   "text": "Nennen Sie Arten von eigenen Einrichtungen der Unfallversicherungsträger!",
+   "options": [
+    "Unfallkrankenhäuser",
+    "Rehabilitationszentren",
+    "Gruppenpraxen"
+   ],
+   "correct": [
+    0,
+    1
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "12wn037ffkyr"
+  },
+  {
+   "kind": "choice",
+   "text": "Was sind Mittel der Unfallheilbehandlung?",
+   "options": [
+    "Krankenbehandlung",
+    "medizinische Hauskrankenpflege",
+    "Heilmittel",
+    "soziale Rehabilitation",
+    "ärztliche Hilfe"
+   ],
+   "correct": [
+    2,
+    4
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "15p2r261m2q6"
+  },
+  {
+   "kind": "choice",
+   "text": "Welche Maßnahmen der Rehabilitation gibt es?",
+   "options": [
+    "medizinische Maßnahmen",
+    "soziale Maßnahmen",
+    "ärztliche Maßnahmen",
+    "therapeutische Maßnahmen",
+    "berufliche Maßnahmen",
+    "schulische Maßnahmen"
+   ],
+   "correct": [
+    0,
+    1,
+    4
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "ofwht1fw5moj"
+  },
+  {
+   "kind": "choice",
+   "text": "Welche Leistung hat der Unfallversicherungsträger nach ASVG und BSVG während der beruflichen Ausbildung im Rahmen der beruflichen Rehabilitation zu gewähren?",
+   "options": [
+    "Übergangsgeld",
+    "Übergangszuschuss",
+    "Übergangsdarlehen"
+   ],
+   "correct": [
+    0
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "zfno3s240qis"
+  },
+  {
+   "kind": "choice",
+   "text": "Was ist das Höchstausmaß für das Übergangsgeld inklusive Erhöhungen für die Angehörigen?",
+   "options": [
+    "die Höhe der Bemessungsgrundlage",
+    "die Höhe des Einkommens",
+    "die Höhe der Beitragsgrundlage"
+   ],
+   "correct": [
+    0
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "12dcl6u1ps9l"
+  },
+  {
+   "kind": "choice",
+   "text": "Nach welchem Gesetz ist kein Übergangsgeld vorgesehen?",
+   "options": [
+    "ASVG",
+    "B-KUVG",
+    "GSVG"
+   ],
+   "correct": [
+    1
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "6sc3euoek47e"
+  },
+  {
+   "kind": "choice",
+   "text": "Wie sieht es aus mit einem Selbstbehalt des Versehrten beim Bezug von Körperersatzstücken, orthopädischen Behelfen und anderen Hilfsmitteln im Rahmen der Rehabilitation?",
+   "options": [
+    "der Selbstbehalt beträgt 10% der tatsächlichen Kosten",
+    "der Selbstbehalt beträgt 20% der tatsächlichen Kosten",
+    "es ist kein Selbstbehalt zu zahlen",
+    "der Selbstbehalt beträgt 20% der Rechnung bzw. den Mindestkostenanteil"
+   ],
+   "correct": [
+    2
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "140gxp81ibw3"
+  },
+  {
+   "kind": "choice",
+   "text": "Was wird für die Ermittlung der Bemessungsgrundlage im ASVG berücksichtigt?",
+   "options": [
+    "alle BSVG-versicherte Tätigkeiten",
+    "alle ASVG-versicherte Tätigkeiten",
+    "nur BSVG-versicherte Tätigkeiten",
+    "nur ASVG-versicherte Tätigkeiten"
+   ],
+   "correct": [
+    0,
+    1
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "1kxa975hc1qh"
+  },
+  {
+   "kind": "choice",
+   "text": "Was für eine Bemessungsgrundlage haben die selbständig Erwerbstätigen in der Land- und Forstwirtschaft und ihre mittätigen Familienangehörigen?",
+   "options": [
+    "eine Bemessungsgrundlage nach billigem Ermessen",
+    "eine Bemessungsgrundlage in sonstigen Fällen",
+    "eine feste Bemessungsgrundlage"
+   ],
+   "correct": [
+    2
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "qr68r02y824m"
+  },
+  {
+   "kind": "choice",
+   "text": "Wann kommt es bei der Bemessung der Leistungen nach dem BSVG zu einem Günstigkeitsvergleich?",
+   "options": [
+    "wenn der Land- bzw. Forstwirt auch eine nach GSVG pflichtversicherte Tätigkeit ausübt",
+    "wenn der Land- bzw. Forstwirt auch eine nach ASVG pflichtversicherte Tätigkeit ausübt",
+    "wenn der Land- bzw. Forstwirt auch eine nach B-KUVG pflichtversicherte Tätigkeit ausübt"
+   ],
+   "correct": [
+    1
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "1myn5ujyu7dy"
+  },
+  {
+   "kind": "choice",
+   "text": "Wie wird die Versehrtenrente im BSVG genannt?",
+   "options": [
+    "landwirtschaftliche Rente",
+    "Unternehmensrente",
+    "betriebliche Rente",
+    "Betriebsrente"
+   ],
+   "correct": [
+    3
+   ],
+   "cat": "UV",
+   "src": "answersselect",
+   "id": "x0vth6dnswes"
+  },
+  {
+   "kind": "gaps",
+   "text": "Die Krankenbehandlung in der Krankenversicherung muss ausreichend und zweckmäßig sein, sie darf das Maß des Notwendigen jedoch nicht überschreiten. Im Unterschied dazu\nerfolgt die Unfallheilbehandlung 1 und wird 2 gewährt, solange es medizinisch Sinn macht.",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "mit allen ausgewählten Mitteln",
+      "mit allen bekannten Mitteln",
+      "mit allen geeigneten Mitteln"
+     ],
+     "answer": "mit allen geeigneten Mitteln"
+    },
+    {
+     "label": null,
+     "options": [
+      "ohne zeitliche Begrenzung",
+      "ohne medizinische Begrenzung",
+      "ohne finanzielle Begrenzung"
+     ],
+     "answer": "ohne zeitliche Begrenzung"
+    }
+   ],
+   "cat": "UV",
+   "src": "ddwtos",
+   "id": "1b9m67manunf"
+  },
+  {
+   "kind": "gaps",
+   "text": "Die Leistungen der medizinischen Rehabilitation sind 1 und werden als Teil der 2 gesehen.",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "freiwillige Leistungen",
+      "Pflichtaufgaben",
+      "Pflichtleistungen"
+     ],
+     "answer": "Pflichtleistungen"
+    },
+    {
+     "label": null,
+     "options": [
+      "Krankenbehandlung",
+      "Unfallheilbehandlung",
+      "ärztlichen Behandlung"
+     ],
+     "answer": "Unfallheilbehandlung"
+    }
+   ],
+   "cat": "UV",
+   "src": "ddwtos",
+   "id": "1pssjijzqgda"
+  },
+  {
+   "kind": "gaps",
+   "text": "Berufskrankheiten sind 1 durch die versicherte Tätigkeit.",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "Schädigungen der Gesundheit",
+      "schädliche Folgen",
+      "gesundheitliche Folgen"
+     ],
+     "answer": "Schädigungen der Gesundheit"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "lgvbxtn104zv"
+  },
+  {
+   "kind": "gaps",
+   "text": "Die Berufskrankheiten sind in einer Liste, der 1 zum 2 vollständig (taxativ) aufgezählt.",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "Anlage 1",
+      "Anlage 2",
+      "Anlage 3"
+     ],
+     "answer": "Anlage 1"
+    },
+    {
+     "label": null,
+     "options": [
+      "ASVG",
+      "GSVG",
+      "BSVG"
+     ],
+     "answer": "ASVG"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "vgsjql1gqr4p"
+  },
+  {
+   "kind": "gaps",
+   "text": "Laut Generalklausel gilt eine Krankheit im Einzelfall als Berufskrankheit, wenn bestimmte Voraussetzungen erfüllt sind. Nennen Sie eine dieser Voraussetzungen!\n\n1",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "die Krankheit darf ihrer Art nach nicht in Anlage 1 zum ASVG enthalten sein",
+      "die Krankheit darf ihrer Art nach nicht in Anlage 2 zum ASVG enthalten sein",
+      "die Krankheit darf ihrer Art nach nicht in Anlage 3 zum ASVG enthalten sein"
+     ],
+     "answer": "die Krankheit darf ihrer Art nach nicht in Anlage 1 zum ASVG enthalten sein"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "pvfavj1uo05b"
+  },
+  {
+   "kind": "gaps",
+   "text": "Nennen Sie eine Maßnahme der beruflichen Rehabilitation!\n\n1",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "Darlehen zum Ankauf eines PKW",
+      "Zuschuss/Darlehen zur behindertengerechten Adaptierung der Wohnräume",
+      "berufliche Ausbildungs- und Umschulungsmaßnahmen"
+     ],
+     "answer": "berufliche Ausbildungs- und Umschulungsmaßnahmen"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "ttcng6rx1egy"
+  },
+  {
+   "kind": "gaps",
+   "text": "Nennen Sie eine Maßnahme der sozialen Rehabilitation!\n\n1",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "Zuschuss/Darlehen zur behindertengerechten Adaptierung der Wohnräume",
+      "berufliche Ausbildungs- und Umschulungsmaßnahmen",
+      "Zuschüsse/Darlehen zur Beschaffung von Arbeitsausrüstung oder –kleidung"
+     ],
+     "answer": "Zuschuss/Darlehen zur behindertengerechten Adaptierung der Wohnräume"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "vjbg2x121dv5"
+  },
+  {
+   "kind": "gaps",
+   "text": "Das Übergangsgeld gebührt nach dem ASVG in Höhe von 1 Prozent und nach dem BSVG in Höhe von 2 Prozent der Bemessungsgrundlage.",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "50",
+      "70",
+      "60"
+     ],
+     "answer": "60"
+    },
+    {
+     "label": null,
+     "options": [
+      "40",
+      "20",
+      "30"
+     ],
+     "answer": "40"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "ybo20y19vjim"
+  },
+  {
+   "kind": "gaps",
+   "text": "Die Bemessungsgrundlage unter Berücksichtigung der Beitragsgrundlagen ist die Bemessungsgrundlage für die 1 .",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "selbständig Erwerbstätigen",
+      "Kindergartenkinder, Schüler und Studenten",
+      "unselbständig Erwerbstätigen"
+     ],
+     "answer": "unselbständig Erwerbstätigen"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "1czge4tqn92e"
+  },
+  {
+   "kind": "gaps",
+   "text": "Die Besondere Bemessungsgrundlage für Personen unter 30 Jahren kommt für jene Versicherten zur Anwendung, die sich zum Zeitpunkt des Eintritts des Versicherungsfalls 1 befunden haben. Ein\n\nklassisches Beispiel hierfür sind 2 .",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "noch in einer Schulausbildung",
+      "noch in einem Studium",
+      "noch in einer Berufsausbildung"
+     ],
+     "answer": "noch in einer Berufsausbildung"
+    },
+    {
+     "label": null,
+     "options": [
+      "Studenten",
+      "Lehrlinge",
+      "Schüler"
+     ],
+     "answer": "Lehrlinge"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "1wcv8knctd0x"
+  },
+  {
+   "kind": "gaps",
+   "text": "Die Bemessungsgrundlage für selbständig erwerbstätige Personen wird als „Bemessungsgrundlage 1 “ bezeichnet.",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "nach billigem Ermessen",
+      "unter Berücksichtigung der Beitragsgrundlagen",
+      "nach festen Beträgen",
+      "in sonstigen Fällen"
+     ],
+     "answer": "nach festen Beträgen"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "7txopmnfs76e"
+  },
+  {
+   "kind": "gaps",
+   "text": "Eine nicht unfallversicherte Person erleidet einen Unfall, der einem Arbeitsunfall gleichgestellt ist. Da in einem solchen Fall keine andere Bemessungsgrundlage errechnet werden kann, ist die Bemessungsgrundlage 1 zu bilden.",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "nach billigem Ermessen",
+      "in sonstigen Fällen",
+      "nach festen Beträgen"
+     ],
+     "answer": "nach billigem Ermessen"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "1yowle9b07j5"
+  },
+  {
+   "kind": "gaps",
+   "text": "Bei der Bildung der Bemessungsgrundlage nach dem B-KUVG kommt eine Höchstbemessungsgrundlage 1 .\nBemessungsgrundlage ist (in der Regel): 2 .",
+   "blanks": [
+    {
+     "label": null,
+     "options": [
+      "zur Anwendung",
+      "nicht zur Anwendung"
+     ],
+     "answer": "nicht zur Anwendung"
+    },
+    {
+     "label": null,
+     "options": [
+      "das Jahreseinkommen im Kalenderjahr vor Eintritt des Versicherungsfalles",
+      "das Gehalt im Zeitpunkt des Eintrittes des Versicherungsfalles"
+     ],
+     "answer": "das Gehalt im Zeitpunkt des Eintrittes des Versicherungsfalles"
+    }
+   ],
+   "cat": "UV",
+   "src": "gapselect",
+   "id": "15pjfvhpd9fn"
+  },
+  {
+   "kind": "choice",
+   "text": "Folgende Geldleistungen aus der Unfallversicherung sind einmalige Beträge:",
+   "options": [
+    "Kinderzuschuss",
+    "Übergangsgeld",
+    "Integritätsabgeltung",
+    "Witwen(Witwer)beihilfe"
+   ],
+   "correct": [
+    2,
+    3
+   ],
+   "cat": "UV",
+   "src": "multichoice",
+   "id": "17d3njc1pqc6"
+  },
+  {
+   "kind": "choice",
+   "text": "Welche Bemessungsgrundlagen gibt es in der Unfallversicherung nach ASVG?",
+   "options": [
+    "Bemessungsgrundlage für Unfälle auf Wegen",
+    "Bemessungsgrundlage zum Stichtag",
+    "Bemessungsgrundlage nach festen Beträgen",
+    "Bemessungsgrundlage für Schwerversehrte",
+    "Besondere Bemessungsgrundlage für Personen unter 30 Jahren",
+    "Bemessungsgrundlage nach billigem Ermessen"
+   ],
+   "correct": [
+    2,
+    4,
+    5
+   ],
+   "cat": "UV",
+   "src": "multichoice",
+   "id": "12677oqwtjf2"
+  },
+  {
+   "kind": "choice",
+   "text": "Verbotswidriges Handeln schließt die Annahme eines Arbeitsunfalls aus.",
+   "options": [
+    "Wahr",
+    "Falsch"
+   ],
+   "correct": [
+    1
+   ],
+   "cat": "UV",
+   "src": "truefalse",
+   "id": "1olgycj17c0p"
+  },
+  {
+   "kind": "choice",
+   "text": "Bei den Bemessungsgrundlagen nach dem ASVG und BSVG handelt es sich um Jahresbemessungsgrundlagen, während im B-KUVG eine monatliche Bemessungsgrundlage gebildet wird.",
+   "options": [
+    "Wahr",
+    "Falsch"
+   ],
+   "correct": [
+    0
+   ],
+   "cat": "UV",
+   "src": "truefalse",
+   "id": "1cx4nyrkbrxn"
+  },
+  {
+   "kind": "choice",
+   "text": "Im ASVG gibt es folgende Arten von Bemessungsgrundlagen:\n\nBemessungsgrundlage unter Berücksichtigung der Beitragsgrundlagen\n\nBesondere Bemessungsgrundlage für Personen unter 30 Jahren\n\nBemessungsgrundlage nach festen Beträgen\n\nBemessungsgrundlage in sonstigen Fällen\n\nBemessungsgrundlage nach billigem Ermessen",
+   "options": [
+    "Wahr",
+    "Falsch"
+   ],
+   "correct": [
+    0
+   ],
+   "cat": "UV",
+   "src": "truefalse",
+   "id": "16snrt616gpm"
+  }
+ ],
+ "failed": [],
+ "category": "UV",
+ "total": 42
+}

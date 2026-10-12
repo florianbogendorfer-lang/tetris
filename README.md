@@ -14,8 +14,9 @@ Lernfortschritt liegt im `localStorage` des Browsers.
 3. Am Handy: die Datei z. B. in iCloud/Drive ablegen und von dort öffnen, oder
    im Browser als Lesezeichen bzw. „Zum Home-Bildschirm“ ablegen.
 
-Mitgeliefert sind die **344 KV-Fragen**. UV, PV und RECHT importierst du selbst
-(siehe unten) — dafür ist kein neuer Build nötig.
+Mitgeliefert sind **516 Fragen**: 344 aus KV und 172 aus UV (drei Fragenboxen).
+PV und RECHT importierst du selbst (siehe unten) — dafür ist kein neuer Build
+nötig.
 
 ## Die fünf Fächer
 
@@ -141,11 +142,17 @@ erhalten, solange die Fragen dieselben sind.
 andere Auswahl und Reihenfolge der Antworten, also sind das faktisch eigene
 Karten.
 
+Ein Themenbereich darf aus mehreren Fragenboxen bestehen — beim Build werden
+alle `data/*.json` zusammengeführt und doppelte Kennungen durchnummeriert, damit
+sich zwei Karten nicht den Lernfortschritt teilen. **In der App ersetzt ein
+Import den Bereich dagegen**; mehrere Boxen für denselben Bereich gehören also
+in den Build, nicht nacheinander in die Importmaske.
+
 ### Unterstützte Fragetypen
 
 | Moodle | in der Kartei |
 |---|---|
-| `answersselect`, `multichoice` | Einfach- und Mehrfachauswahl |
+| `answersselect`, `multichoiceset`, `multichoice` | Einfach- und Mehrfachauswahl |
 | `truefalse` | Wahr/Falsch |
 | `shortanswer` | freie Eingabe (mehrere Schreibweisen zählen) |
 | `gapselect` | Lückentext mit Auswahl je Lücke |
@@ -162,7 +169,7 @@ zurück nach dem Leeren der Browserdaten.
 
 ```
 npm install                                   # nur playwright, für die Tests
-node src/build-data.js <seite.html> KV > data/kv.json   # Fragen auslesen
+node src/build-data.js <seite.html> UV > data/uv-1.json # Fragen auslesen
 npm run build                                 # lernkartei.html bauen
 npm test                                      # Browser-Tests
 ```

@@ -18,6 +18,22 @@ for (const f of fs.readdirSync(dir).filter(f => f.endsWith('.json')).sort()) {
   console.log(`  ${f}: ${set.cards.length} Karten (${set.category})`);
 }
 
+/* Die Kennungen werden beim Auslesen nur je Datei eindeutig gemacht. Ein
+   Themenbereich besteht aber aus mehreren Fragenboxen, und dieselbe Frage
+   kann in zweien stehen - dann teilten sich zwei Karten eine Kennung und
+   damit ihren Lernfortschritt. Hier wird über alle Dateien hinweg
+   nachgezaehlt; die Reihenfolge ist durch die sortierten Dateinamen fest. */
+const gesehen = Object.create(null);
+let umbenannt = 0;
+for (const c of cards) {
+  const basis = c.id.replace(/-\d+$/, '');
+  gesehen[basis] = (gesehen[basis] || 0) + 1;
+  const neu = basis + (gesehen[basis] > 1 ? '-' + gesehen[basis] : '');
+  if (neu !== c.id) umbenannt++;
+  c.id = neu;
+}
+if (umbenannt) console.log(`  ${umbenannt} doppelte Kennungen durchnummeriert`);
+
 // "</script>" im JSON würde den Block vorzeitig schließen.
 const json = JSON.stringify({ cards }).replace(/</g, '\\u003c');
 

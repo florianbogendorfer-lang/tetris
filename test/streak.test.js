@@ -35,16 +35,25 @@ const SOLVE = (right) => {
   await p.goto(APP);
   await p.click('#btn-start');
 
+  /* Absichtlich falsch zu antworten gelingt nicht immer: bei einigen Fragen
+     sind alle Optionen richtig, dort gibt es keine falsche Wahl. Darum wird
+     festgehalten, wie die App tatsächlich gewertet hat - genau das müssen
+     die Kästchen zeigen. */
   const muster = [];
+  let gewollt = 0, erreicht = 0;
   for (let i = 0; i < 40; i++) {
-    const r = i % 3 !== 0;                 // Muster: jede dritte falsch
-    muster.push(r ? 1 : 0);
+    const r = i % 3 !== 0;                 // Vorsatz: jede dritte falsch
     await p.evaluate(SOLVE, r);
     const btn = p.locator('#btn-check');
     if (await btn.isVisible() && (await btn.innerText()) === 'Prüfen') await btn.click();
     await p.waitForSelector('#q-verdict .verdict');
+    const richtig = (await p.locator('#q-verdict .verdict').getAttribute('class')).includes('ok');
+    muster.push(richtig ? 1 : 0);
+    if (!r) { gewollt++; if (!richtig) erreicht++; }
     await p.click('#btn-check');
   }
+  ok(erreicht >= gewollt - 4,
+     erreicht + ' von ' + gewollt + ' Falschantworten gelangen (Rest: Fragen ohne falsche Option)');
 
   console.log('== Kopfzeile ==');
   ok(!(await p.locator('#crumb .run').count()), 'Sitzungszähler ist weg');
@@ -67,7 +76,7 @@ const SOLVE = (right) => {
   ok(JSON.stringify(st.kaesten) === JSON.stringify(st.hist),
      'Kästchen entsprechen den letzten 30 Antworten');
   ok(JSON.stringify(st.kaesten) === JSON.stringify(muster.slice(-30)),
-     'und stimmen mit dem eingegebenen Muster überein');
+     'und geben die Wertung Antwort für Antwort wieder');
   const gruen = st.kaesten.filter(x => x).length;
   ok(gruen === muster.slice(-30).filter(x=>x).length,
      gruen + ' grün (richtig), ' + (30-gruen) + ' rot (falsch)');

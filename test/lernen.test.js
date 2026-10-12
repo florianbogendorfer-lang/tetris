@@ -89,8 +89,23 @@ const SOLVE = (right) => {
 
   console.log('\n== Übersicht ==');
   ok(await p.locator('#tiles .tile').count() === 5, 'fünf Kacheln (Alle + 4 Bereiche)');
-  ok((await p.locator('#tiles .tile').nth(1).innerText()).includes('344'), 'KV zeigt 344 Fragen');
-  ok(await p.locator('#tiles .tile').nth(2).isDisabled(), 'UV deaktiviert (nicht importiert)');
+  // Zahlen aus den eingebauten Daten ableiten statt festschreiben - welche
+  // Themenbereiche mitgeliefert werden, ändert sich mit jedem Import.
+  const bestand = await p.evaluate(() => {
+    const c = JSON.parse(document.getElementById('seed').textContent).cards;
+    const z = {};
+    c.forEach(x => { z[x.cat] = (z[x.cat] || 0) + 1; });
+    return { je: z, gesamt: c.length };
+  });
+  const kacheln = await p.evaluate(() => [...document.querySelectorAll('#tiles .tile')]
+    .map(t => ({ name: t.querySelector('.name').textContent, text: t.innerText, aus: t.disabled })));
+  ok(kacheln[0].text.includes(String(bestand.gesamt)),
+     '"Alle" zeigt alle ' + bestand.gesamt + ' Karten');
+  ok(kacheln.slice(1).every(k => bestand.je[k.name]
+       ? !k.aus && k.text.includes(String(bestand.je[k.name]))
+       : k.aus),
+     'jeder mitgelieferte Bereich ist aktiv mit seiner Zahl, die übrigen gesperrt: ' +
+     kacheln.slice(1).map(k => k.name + (k.aus ? ' (aus)' : ' ' + (bestand.je[k.name] || 0))).join(', '));
   const pcts = await p.locator('#boxes .pct').allInnerTexts();
   ok(JSON.stringify(pcts) === JSON.stringify(['100 %','0 %','0 %','0 %','0 %']),
      'Startverteilung 100/0/0/0/0 — bekommen: ' + pcts.join(' '));
@@ -169,14 +184,17 @@ const SOLVE = (right) => {
   ok(!(await p.locator('#q-tags .tag').first().isVisible()),
      'gemischt: Bereich ist vor dem Antworten verdeckt');
   await answer(true);
-  ok((await p.locator('#q-tags .tag').first().innerText()) === 'KV',
-     'nach dem Prüfen steht der Bereich da');
+  // Gemischt kann jeder mitgelieferte Bereich kommen, nicht nur KV.
+  const gezeigt = await p.locator('#q-tags .tag').first().innerText();
+  ok(Object.keys(bestand.je).indexOf(gezeigt) >= 0,
+     'nach dem Prüfen steht der Bereich da: ' + gezeigt);
   await p.click('#btn-check');
   await p.click('#btn-home');
-  await p.locator('#tiles .tile').nth(1).click();       // nur KV
+  const ersterBereich = kacheln.slice(1).find(k => !k.aus).name;
+  await p.locator('#tiles .tile', { hasText: ersterBereich }).first().click();
   await p.click('#btn-start');
-  ok((await p.locator('#q-tags .tag').first().innerText()) === 'KV',
-     'einzelne Kartei: Bereich steht von Anfang an da');
+  ok((await p.locator('#q-tags .tag').first().innerText()) === ersterBereich,
+     'einzelne Kartei (' + ersterBereich + '): Bereich steht von Anfang an da');
   await p.click('#btn-home');
   await p.locator('#tiles .tile').first().click();
 
@@ -328,7 +346,8 @@ const SOLVE = (right) => {
   console.log('\n== Verwaltung ==');
   await p.click('#btn-home');           // "Verwalten" ist beim Lernen ausgeblendet
   await p.click('#btn-manage');
-  ok((await p.locator('#sets .item').innerText()).includes('344'), 'Fragensatz KV gelistet');
+  const satz = await p.locator('#sets .item').first().innerText();
+  ok(/\d+ Fragen/.test(satz), 'Fragensätze gelistet: "' + satz.replace(/\n/g, ' ') + '"');
   await p.screenshot({ path: SHOT + '03-manage.png', fullPage: true });
   await p.click('[data-theme="dark"]');
   await p.click('#btn-home');
