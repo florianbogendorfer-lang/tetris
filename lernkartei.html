@@ -1967,49 +1967,6 @@ function trefferKarte(card, teile) {
   return box;
 }
 
-/* Ein Klick in die Suchleiste fügt ein, was in der Zwischenablage liegt:
-   Begriff irgendwo markieren, kopieren, hierher klicken, Treffer da.
-
-   Dabei ist dreierlei zu beachten. Aus der Zwischenablage zu lesen verlangt
-   eine frische Nutzerhandlung und eine Freigabe, darum hängt es am Klick und
-   nicht am Fokus — mit der Tabulatortaste ins Feld fügt nichts ein. Wer bloß
-   die Schreibmarke versetzen will, soll seinen Suchbegriff nicht verlieren,
-   darum kommt derselbe Text kein zweites Mal; erst neu Kopiertes fügt wieder
-   ein. Und der Griff zur Zwischenablage dauert, das Feld kann sich unterdessen
-   geändert haben: das kleine × der Suchleiste etwa räumt es erst, nachdem der
-   Klick durch ist. Was dann nicht mehr so dasteht wie beim Klick, wird in Ruhe
-   gelassen. */
-var zuletztEingefuegt = null;   // was zuletzt von dort kam
-var ablageGesperrt = false;     // Freigabe verweigert → Hinweis auf Strg+V
-
-function ablageEinfuegen() {
-  var feld = $('q');
-  var vorher = feld.value;
-  if (!navigator.clipboard || !navigator.clipboard.readText) return;
-
-  navigator.clipboard.readText().then(function (text) {
-    // Mehrzeiliges auf eine Zeile ziehen; gesucht wird ohnehin wortweise.
-    text = String(text || '').replace(/\s+/g, ' ').trim();
-    if (!text || text === zuletztEingefuegt) return;
-    if (feld.value !== vorher) return;          // unterdessen getippt/geräumt
-    if (text === vorher) { zuletztEingefuegt = text; return; }
-
-    zuletztEingefuegt = text;
-    feld.focus();
-    feld.select();
-    /* execCommand hängt sich in den Rückgängig-Stapel des Browsers ein: ein
-       ungewolltes Einfügen nimmt Strg+Z zurück. Es löst auch selbst "input"
-       aus, die Suche läuft also mit. */
-    var gesetzt = false;
-    try { gesetzt = document.execCommand('insertText', false, text); } catch (e) {}
-    if (!gesetzt) { feld.value = text; suchAusgabe(); }
-  }, function () {
-    // Keine Freigabe für die Zwischenablage — dann eben von Hand.
-    ablageGesperrt = true;
-    if (!feld.value) suchAusgabe();
-  });
-}
-
 function suchAusgabe() {
   var frage = $('q').value;
   var info = $('search-info');
@@ -2019,9 +1976,7 @@ function suchAusgabe() {
   var res = suchen(frage);
   if (!res.teile.length) {
     info.textContent = 'Durchsucht werden Fragetext und alle Antwortmöglichkeiten von ' +
-                       deck.length + ' Karten.' +
-                       (ablageGesperrt ? ' Die Zwischenablage ist für diese Seite' +
-                                         ' gesperrt — einfügen geht mit Strg+V.' : '');
+                       deck.length + ' Karten.';
     return;
   }
 
@@ -2234,13 +2189,11 @@ $('btn-check').onclick = function () { if (ui.locked) next(); else grade(); };
 $('btn-search').onclick = function () {
   screen('search');
   $('crumb').textContent = '';
-  zuletztEingefuegt = null;   // beim Neuaufruf darf dasselbe wieder herein
   suchAusgabe();
   // Am Handy nicht die Tastatur aufziehen, dort nervt das mehr als es hilft.
   if (!('ontouchstart' in window)) $('q').focus();
 };
 $('q').oninput = suchAusgabe;
-$('q').onclick = ablageEinfuegen;
 $('q').onkeydown = function (e) { if (e.key === 'Escape') { $('q').value = ''; suchAusgabe(); } };
 
 $('btn-pick').onclick = function () { $('file').click(); };
