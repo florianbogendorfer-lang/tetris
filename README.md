@@ -117,11 +117,15 @@ Antippen wählt aus, nochmal antippen nimmt zurück, **Prüfen** wertet. Das gil
 für jede Auswahlfrage, auch wenn nur eine Antwort stimmt: sonst würde die
 Bedienung verraten, wie viele Antworten gesucht sind.
 
-Die Antwortknöpfe sind mit `1`–`9`, danach `Q W E R T Z U I O P` beschriftet;
-dieselbe Taste wählt die Antwort aus. Bei Lückentexten läuft die Nummerierung
-über alle Lücken durch, damit jede Taste eindeutig bleibt. Die Lücken selbst
-sind eingekreist nummeriert (①②③), damit sie nicht mit den Tasten kollidieren.
-`Enter` prüft bzw. blättert weiter.
+Die Antwortknöpfe sind mit `1`–`9` beschriftet, danach mit den Buchstaben
+reihenweise von oben nach unten (`Q W E R T Z U I O P`, `A S D F G H J K L`,
+`Y X C V B N M`); dieselbe Taste wählt die Antwort aus. Bei Lückentexten läuft
+die Nummerierung über alle Lücken durch, damit jede Taste eindeutig bleibt —
+eine Frage mit fünf Lücken kommt damit auf fünfzig Knöpfe und also über die
+Tastatur hinaus. Wofür es keine Taste gibt, bleibt unbeschriftet und wird
+angeklickt; eine erfundene `37` sähe aus wie ein Kürzel, wäre aber keines. Die
+Lücken selbst sind eingekreist nummeriert (①②③), damit sie nicht mit den Tasten
+kollidieren. `Enter` prüft bzw. blättert weiter.
 
 Wie viele Antworten richtig sind, wird **nicht** verraten — so wie in Moodle
 auch. Wer es doch will, schaltet es unter *Verwalten → Einstellungen* ein.
@@ -138,9 +142,9 @@ Alles passiert im Browser; es wird nichts hochgeladen. Ein erneuter Import
 desselben Themenbereichs ersetzt den alten Satz — der Lernfortschritt bleibt
 erhalten, solange die Fragen dieselben sind.
 
-**Doppelte Fragen bleiben absichtlich erhalten.** Moodle zieht pro Versuch eine
-andere Auswahl und Reihenfolge der Antworten, also sind das faktisch eigene
-Karten.
+Kommt dieselbe Frage in einer Box mehrfach vor, gehört sie
+[zusammengelegt](#mehrere-vorkommen-derselben-frage) — die Vorkommen
+unterscheiden sich nur darin, welche Antworten Moodle gerade zieht.
 
 Ein Themenbereich darf aus mehreren Fragenboxen bestehen — beim Build werden
 alle `data/*.json` zusammengeführt und doppelte Kennungen durchnummeriert, damit
@@ -148,24 +152,32 @@ sich zwei Karten nicht den Lernfortschritt teilen. **In der App ersetzt ein
 Import den Bereich dagegen**; mehrere Boxen für denselben Bereich gehören also
 in den Build, nicht nacheinander in die Importmaske.
 
-### Mehrere Durchgänge derselben Box
+### Mehrere Vorkommen derselben Frage
 
-Moodle zeigt je Durchgang nur eine **Stichprobe** aus dem Antwortvorrat einer
-Frage — einmal fünf von zwölf Möglichkeiten, das nächste Mal alle zwölf. Wer
-dieselbe Box ein zweites Mal speichert, hat deshalb Antworten in der Hand, die
-beim ersten Mal gar nicht auftauchten.
+Moodle zeigt je Frage nur eine **Stichprobe** aus ihrem Antwortvorrat — einmal
+fünf von zwölf Möglichkeiten, das nächste Mal alle zwölf. Wer dieselbe Frage
+mehrfach vor sich hat, sieht deshalb Antworten, die ein einzelnes Vorkommen gar
+nicht zeigt. Das passiert auf zwei Wegen: als Dublette innerhalb einer Box, oder
+weil dieselbe Box ein zweites Mal gespeichert wurde.
 
 ```
+node src/merge-data.js data/kv.json --dubletten
 node src/merge-data.js data/uv-2.json weiterer-durchgang.html
 ```
 
-Das spielt die neuen Möglichkeiten in die vorhandenen Karten ein, statt neue
-anzulegen: Kartenzahl und Kennungen bleiben, der Lernfortschritt also auch. Eine
-Antwort, die in einem Durchgang richtig und im anderen falsch ist, deutet auf
-einen Irrtum hin — solche Fragen bleibt das Werkzeug unverändert und meldet sie.
+Beides lässt sich auch in einem Aufruf verbinden. Die Möglichkeiten wandern in
+die vorhandenen Karten, statt neue anzulegen; Kennungen bleiben und damit der
+Lernfortschritt. Bei `--dubletten` bleibt je Frage das erste Vorkommen stehen,
+die übrigen fallen weg.
+
+Eine Antwort, die einmal richtig und einmal falsch ist, deutet auf einen Irrtum
+hin — solche Fragen bleiben unverändert und werden gemeldet. Dasselbe gilt bei
+ungleicher Lückenzahl: dann ist es trotz gleichen Wortlauts nicht dieselbe
+Frage.
 
 Zuordnungsfragen würfelt Moodle auch zeilenweise durch, und zwei verschiedene
-Fragen können denselben Vorspann haben; sie werden daher über ihre
+Fragen können denselben Vorspann haben — die beiden zum kleinen und zum großen
+Versehrtengeld nach dem BSVG tun das. Sie werden daher über ihre
 Zeilenbeschriftungen auseinandergehalten, nicht über die Position.
 
 ### Unterstützte Fragetypen
@@ -200,7 +212,7 @@ npm test                                      # Browser-Tests
 | `src/app.template.html` | Oberfläche und Lernlogik |
 | `src/build-data.js` | führt den Parser in Chromium aus, schreibt `data/*.json` |
 | `src/build.js` | fügt Vorlage + Parser + Fragen zu `lernkartei.html` |
-| `src/merge-data.js` | spielt weitere Durchgänge in einen `data/*.json` ein |
+| `src/merge-data.js` | legt Dubletten und weitere Durchgänge in einem `data/*.json` zusammen |
 | `test/*.test.js` | Playwright-Tests (Lernen, Verlauf, Streak, Achse, Suche, Bestand, Import) |
 
 Der Parser läuft bewusst im Browser statt in Node: die App muss ihn ohnehin

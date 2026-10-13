@@ -1,16 +1,18 @@
-/* Spielt weitere Durchgaenge derselben Fragenbox in einen vorhandenen
-   Fragensatz ein.
+/* Bringt einen Fragensatz auf den vollen Antwortvorrat.
 
-   Moodle zeigt je Durchgang nur eine Stichprobe aus dem Antwortvorrat einer
-   Frage - mal sieben von neun Moeglichkeiten, mal andere sieben. Wer einen
-   zweiten Durchgang derselben Box speichert, hat daher Antworten in der Hand,
-   die im ersten gar nicht auftauchten. Dieses Werkzeug legt sie zusammen.
+   Moodle zeigt je Frage nur eine Stichprobe aus ihrem Antwortvorrat - mal
+   fuenf von zwoelf Moeglichkeiten, mal andere fuenf. Wer dieselbe Frage
+   mehrfach vor sich hat, sei es als Dublette in einer Box oder in einem
+   zweiten gespeicherten Durchgang, hat damit Antworten in der Hand, die ein
+   einzelnes Vorkommen gar nicht zeigt.
 
-   Die Kennungen der vorhandenen Karten bleiben, damit der Lernfortschritt
-   nicht verlorengeht; sie passen danach nicht mehr zum Inhalt, was nichts
-   macht, weil sie nur als Schluessel dienen.
+   Die Kennungen der bleibenden Karten aendern sich nicht, damit der
+   Lernfortschritt erhalten bleibt; sie passen danach nicht mehr zum Inhalt,
+   was nichts macht, weil sie nur als Schluessel dienen.
 
-   Aufruf: node src/merge-data.js <ziel.json> <durchgang.html> [...] */
+   Aufruf: node src/merge-data.js <ziel.json> [--dubletten] [durchgang.html ...]
+     --dubletten   Karten derselben Frage zu einer zusammenlegen
+     durchgang.html  weiterer gespeicherter Durchgang derselben Box */
 const { chromium } = require('/opt/node22/lib/node_modules/playwright');
 const fs = require('fs');
 const path = require('path');
@@ -57,10 +59,11 @@ async function lies(datei) {
 }
 
 (async () => {
-  const ziel = process.argv[2];
-  const quellen = process.argv.slice(3);
-  if (!ziel || !quellen.length) {
-    console.error('Aufruf: node src/merge-data.js <ziel.json> <durchgang.html> [...]');
+  const argv = process.argv.slice(2);
+  const dubletten = argv.includes('--dubletten');
+  const [ziel, ...quellen] = argv.filter(a => a !== '--dubletten');
+  if (!ziel || (!quellen.length && !dubletten)) {
+    console.error('Aufruf: node src/merge-data.js <ziel.json> [--dubletten] [durchgang.html ...]');
     process.exit(1);
   }
 
@@ -71,9 +74,14 @@ async function lies(datei) {
      Die vorhandenen Karten kommen mit hinein, damit ein Widerspruch auch dann
      auffaellt, wenn er zwischen zwei Karten derselben Datei steckt. */
   const vorrat = new Map();
-  const einlesen = (cards, woher) => {
+  const luecken = new Map();     // Kennung -> gesehene Lueckenzahlen
+  const einlesen = cards => {
     for (const c of cards) {
       const k = kennung(c);
+      if (c.kind === 'gaps') {
+        if (!luecken.has(k)) luecken.set(k, new Set());
+        luecken.get(k).add(c.blanks.length);
+      }
       if (!vorrat.has(k)) vorrat.set(k, new Map());
       const faecherMap = vorrat.get(k);
       for (const { fach, opts } of faecher(c)) {
@@ -81,14 +89,13 @@ async function lies(datei) {
         const m = faecherMap.get(fach);
         for (const [roh, ok] of opts) {
           const t = norm(roh);
-          if (!m.has(t)) m.set(t, { roh, status: new Set(), woher: new Set() });
+          if (!m.has(t)) m.set(t, { roh, status: new Set() });
           m.get(t).status.add(ok);
-          m.get(t).woher.add(woher);
         }
       }
     }
   };
-  einlesen(satz.cards, ziel);
+  einlesen(satz.cards);
 
   for (const q of quellen) {
     const res = await lies(q);
@@ -97,18 +104,21 @@ async function lies(datei) {
     res.failed.forEach(f => console.error(`  ! Nr ${f.nr} [${f.type}] ${f.text}`));
     const unbekannt = res.cards.filter(c => !vorrat.has(kennung(c)));
     if (unbekannt.length) {
-      console.error(`  ! ${unbekannt.length} Frage(n) ohne Gegenstueck im Ziel — werden übergangen:`);
+      console.error(`  ! ${unbekannt.length} Frage(n) ohne Gegenstück im Ziel — werden übergangen:`);
       unbekannt.slice(0, 5).forEach(c => console.error('    ' + norm(c.text).slice(0, 100)));
     }
-    einlesen(res.cards.filter(c => vorrat.has(kennung(c))), q);
+    einlesen(res.cards.filter(c => vorrat.has(kennung(c))));
   }
 
   /* Fragen, bei denen dieselbe Antwort einmal richtig und einmal falsch ist,
-     bleiben unangetastet: dort steckt ein Irrtum, und raten hilft niemandem. */
+     bleiben unangetastet: dort steckt ein Irrtum, und raten hilft niemandem.
+     Dasselbe gilt bei ungleicher Lueckenzahl - dann ist es trotz gleichen
+     Wortlauts nicht dieselbe Frage. */
   const strittig = new Set();
   for (const [k, faecherMap] of vorrat)
     for (const [, m] of faecherMap)
       for (const [, v] of m) if (v.status.size > 1) strittig.add(k);
+  for (const [k, n] of luecken) if (n.size > 1) strittig.add(k);
   if (strittig.size) {
     console.error(`\n! ${strittig.size} Frage(n) mit widersprüchlichen Antworten — unverändert gelassen:`);
     for (const k of strittig) console.error('  ' + k.split('␟')[1].slice(0, 110));
@@ -116,14 +126,20 @@ async function lies(datei) {
 
   /* Zusammenlegen. Die vorhandene Reihenfolge bleibt vorne, Neues haengt
      hinten an - die App mischt beim Üben ohnehin selbst. */
-  let karten = 0, neueOpts = 0;
+  let ergaenzt = 0, neueOpts = 0, gefallen = 0;
   const bericht = [];
+  const erste = new Map();        // Kennung -> Karte, die bleibt
+  const behalten = [];
+
   for (const c of satz.cards) {
     const k = kennung(c);
-    if (strittig.has(k)) continue;
+    if (strittig.has(k)) { behalten.push(c); continue; }
+    if (dubletten && erste.has(k)) { gefallen++; continue; }   // Dublette faellt weg
+    erste.set(k, c);
+    behalten.push(c);
+
     const faecherMap = vorrat.get(k);
     let dazu = 0;
-
     const ergaenze = (vorhandene, fach) => {
       const m = faecherMap.get(fach);
       if (!m) return [];
@@ -150,10 +166,14 @@ async function lies(datei) {
       c.accepted = c.accepted.concat(neu.map(v => v.roh));
     }
 
-    if (dazu) { karten++; neueOpts += dazu; bericht.push([dazu, norm(c.text).slice(0, 90)]); }
+    if (dazu) { ergaenzt++; neueOpts += dazu; bericht.push([dazu, norm(c.text).slice(0, 90)]); }
   }
 
+  satz.cards = behalten;
   fs.writeFileSync(ziel, JSON.stringify(satz, null, 1));
-  console.error(`\n${karten} Karte(n) ergänzt, ${neueOpts} neue Antwortmöglichkeit(en):`);
-  bericht.sort((a, b) => b[0] - a[0]).forEach(([n, t]) => console.error(`  +${n}  ${t}`));
+
+  if (dubletten) console.error(`\n${gefallen} Dublette(n) zusammengelegt, ${behalten.length} Karten bleiben.`);
+  console.error(`${ergaenzt} Karte(n) ergänzt, ${neueOpts} neue Antwortmöglichkeit(en):`);
+  bericht.sort((a, b) => b[0] - a[0]).slice(0, 25).forEach(([n, t]) => console.error(`  +${n}  ${t}`));
+  if (bericht.length > 25) console.error(`  … und ${bericht.length - 25} weitere`);
 })();

@@ -1,6 +1,12 @@
 const { chromium } = require('playwright');
+const fs = require('fs');
 const path = require('path');
-const APP = 'file://' + path.join(__dirname, '..', 'lernkartei.html');
+const DATEI = path.join(__dirname, '..', 'lernkartei.html');
+const APP = 'file://' + DATEI;
+/* Die Reihenfolge der Tastenkürzel kommt aus der App selbst — der Test
+   prüft, dass sie durchgehend angewandt wird, nicht wie sie lautet. */
+const KEYS = (fs.readFileSync(DATEI, 'utf8').match(/var KEYS = ([^;]+);/)[1]
+  .match(/'([^']*)'/g) || []).map(x => x.slice(1, -1)).join('');
 const SHOT = process.env.SHOT_DIR ? process.env.SHOT_DIR + '/' : require('os').tmpdir() + '/lk-';
 let fails = 0;
 const ok = (c, m) => { console.log((c ? '  OK   ' : '  FAIL ') + m); if (!c) fails++; };
@@ -262,19 +268,30 @@ const SOLVE = (right) => {
   }
   ok(mehrfach, 'eine Frage mit mindestens drei Lücken im Text gefunden');
   const keys = await p.locator('#q-body .opt .k').allInnerTexts();
-  ok(new Set(keys).size === keys.length,
-     'jede Taste kommt nur einmal vor: ' + keys.join(' '));
-  ok(keys.join('') === '123456789QWERTZUIOP'.slice(0, keys.length),
+  const belegt = keys.filter(Boolean);
+  ok(new Set(belegt).size === belegt.length,
+     'jede Taste kommt nur einmal vor: ' + belegt.join(' '));
+  ok(keys.join('') === KEYS.slice(0, keys.length),
      'durchgehend nummeriert über alle Lücken: ' + keys.join(' '));
-  // die Taste der letzten Lücke drücken
-  const last = keys[keys.length - 1];
+  /* Reicht die Tastatur nicht, bleibt die Beschriftung leer — eine erfundene
+     "37" sähe aus wie ein Kürzel, wäre aber keines. */
+  ok(belegt.every(k => k.length === 1),
+     'keine Beschriftung, die keine Taste ist: ' + belegt.filter(k => k.length !== 1).join(' '));
+  ok(keys.slice(belegt.length).every(k => k === ''),
+     'die leeren Beschriftungen stehen alle am Ende');
+
+  // Eine Taste aus einer späteren Lücke drücken: sie muss dorthin treffen.
+  const last = belegt[belegt.length - 1];
   await p.keyboard.press(last.toLowerCase());
-  const gap = await p.evaluate(() => {
+  const gap = await p.evaluate(k => {
     const b = document.querySelector('#q-body .opt[aria-pressed="true"]');
-    return b ? { blank: b.dataset.blank, text: b.querySelector('.t').textContent } : null;
-  });
-  ok(gap && gap.blank === String(await p.locator('#q-body .blank').count() - 1),
-     'Taste "' + last + '" trifft die letzte Lücke: ' + JSON.stringify(gap));
+    const soll = document.querySelector('#q-body .opt[data-key="' + k + '"]');
+    return b ? { blank: b.dataset.blank, text: b.querySelector('.t').textContent,
+                 richtige: b === soll } : null;
+  }, last);
+  ok(gap && gap.richtige && Number(gap.blank) > 0,
+     'Taste "' + last + '" trifft ihre Antwort in Lücke ' +
+     (gap ? Number(gap.blank) + 1 : '?') + ': ' + JSON.stringify(gap));
   const marks = await p.locator('#q-text .gap').allInnerTexts();
   ok(marks.some(m => /[\u2460-\u2473]/.test(m)),
      'Lücken im Text sind eingekreist nummeriert: ' + marks.join(' '));
@@ -354,6 +371,40 @@ const SOLVE = (right) => {
   await p.screenshot({ path: SHOT + '04-dark.png', fullPage: true });
   await p.click('#btn-start');
   await p.screenshot({ path: SHOT + '05-dark-question.png', fullPage: true });
+
+  /* Weil über alle Lücken hinweg durchgezählt wird, kommt die größte Frage auf
+     mehr Knöpfe, als die Tastatur Tasten hat. Der Zufall der Kartenziehung
+     führt da nicht verlässlich hin, also wird sie allein ins Deck gestellt. */
+  console.log('\n== Mehr Antworten als Tasten ==');
+  const pg = await b.newPage({ viewport: { width: 390, height: 900 } });
+  pg.on('pageerror', e => { console.log('  JS-FEHLER:', String(e)); fails++; });
+  await pg.goto(APP);
+  const riesig = await pg.evaluate(() => {
+    const cards = JSON.parse(document.getElementById('seed').textContent).cards;
+    const zahl = c => c.kind === 'gaps' ? c.blanks.reduce((s, b) => s + b.options.length, 0)
+                    : c.kind === 'choice' ? c.options.length : 0;
+    const c = cards.slice().sort((a, b) => zahl(b) - zahl(a))[0];
+    const sets = {};
+    [...new Set(cards.map(x => x.cat))].forEach(k => {
+      sets[k] = { cards: k === c.cat ? [c] : [], at: Date.now(), file: 'test' };
+    });
+    localStorage.setItem('lk.sets.v1', JSON.stringify(sets));
+    return { n: zahl(c), text: c.text.replace(/[\uE000\uE001]/g, '|').slice(0, 70) };
+  });
+  await pg.goto(APP);
+  await pg.click('#btn-start');
+  const gk = await pg.locator('#q-body .opt .k').allInnerTexts();
+  const gb = gk.filter(Boolean);
+  ok(gk.length === riesig.n, riesig.n + ' Antwortknöpfe: ' + riesig.text);
+  ok(riesig.n > KEYS.length, 'die Tastatur reicht dafür nicht (' + KEYS.length + ' Tasten)');
+  ok(gb.join('') === KEYS, 'die Tasten sind der Reihe nach vergeben: ' + gb.join(' '));
+  ok(gk.slice(KEYS.length).every(k => k === ''),
+     'die übrigen ' + (gk.length - KEYS.length) + ' Knöpfe tragen keine erfundene Nummer');
+  // Anklicken muss auch ohne Kürzel gehen.
+  await pg.locator('#q-body .opt').last().click();
+  ok(await pg.locator('#q-body .opt[aria-pressed="true"]').count() === 1,
+     'ein Knopf ohne Kürzel lässt sich trotzdem wählen');
+  await pg.screenshot({ path: SHOT + '06-viele-antworten.png', fullPage: true });
 
   ok(errs.length === 0, 'keine JS-Fehler' + (errs.length ? ': ' + errs.slice(0, 4).join(' | ') : ''));
   await b.close();

@@ -243,6 +243,7 @@ h1,h2,h3{margin:0;line-height:1.25;font-weight:650}
   flex:none;width:28px;height:28px;border-radius:8px;border:1.5px solid var(--line-2);
   display:grid;place-items:center;font-size:13px;font-weight:700;color:var(--ink-2);margin-top:1px;
 }
+.opt .k:empty{border-color:transparent}
 .opt .t{flex:1;padding-top:2px;overflow-wrap:break-word;hyphens:auto}
 .opt[aria-pressed="true"]{background:var(--pick-soft);border-color:var(--pick)}
 .opt[aria-pressed="true"] .k{background:var(--pick);border-color:var(--pick);color:var(--panel)}
@@ -803,10 +804,14 @@ function shuffled(n) {
    Frage anzeigen
    ===================================================================== */
 
-// Beschriftung der Antwortknöpfe: erst die Ziffern, danach die obere
-// Buchstabenreihe — so liegt jede Taste dort, wo der Finger schon ist.
-var KEYS = '123456789QWERTZUIOP';
-function keyLabel(pos) { return KEYS.charAt(pos) || String(pos + 1); }
+/* Beschriftung der Antwortknöpfe: erst die Ziffern, danach die Buchstaben
+   reihenweise von oben nach unten — so liegt jede Taste dort, wo der Finger
+   schon ist. Weil über alle Lücken hinweg durchgezählt wird, kommt eine Frage
+   mit fünf Lücken auf fünfzig Knöpfe und damit über die Tastatur hinaus; wofür
+   es keine Taste gibt, bekommt auch keine Beschriftung. Eine erfundene "37"
+   sähe aus wie ein Kürzel, wäre aber keines. */
+var KEYS = '123456789' + 'QWERTZUIOP' + 'ASDFGHJKL' + 'YXCVBNM';
+function keyLabel(pos) { return KEYS.charAt(pos); }
 
 // Lücken werden eingekreist nummeriert. Die Antwortknöpfe tragen eckige
 // Ziffern und zählen über alle Lücken hinweg durch — sonst gäbe es die
@@ -907,7 +912,8 @@ function optionButton(hotkey, label) {
   var b = el('button', 'opt');
   b.type = 'button';
   b.setAttribute('aria-pressed', 'false');
-  b.dataset.key = hotkey;
+  // Ohne Kürzel kein data-key, sonst fände die Tastensuche einen leeren Treffer.
+  if (hotkey) b.dataset.key = hotkey;
   b.appendChild(el('span', 'k', hotkey));
   b.appendChild(el('span', 't', label));
   return b;
