@@ -148,6 +148,26 @@ sich zwei Karten nicht den Lernfortschritt teilen. **In der App ersetzt ein
 Import den Bereich dagegen**; mehrere Boxen für denselben Bereich gehören also
 in den Build, nicht nacheinander in die Importmaske.
 
+### Mehrere Durchgänge derselben Box
+
+Moodle zeigt je Durchgang nur eine **Stichprobe** aus dem Antwortvorrat einer
+Frage — einmal fünf von zwölf Möglichkeiten, das nächste Mal alle zwölf. Wer
+dieselbe Box ein zweites Mal speichert, hat deshalb Antworten in der Hand, die
+beim ersten Mal gar nicht auftauchten.
+
+```
+node src/merge-data.js data/uv-2.json weiterer-durchgang.html
+```
+
+Das spielt die neuen Möglichkeiten in die vorhandenen Karten ein, statt neue
+anzulegen: Kartenzahl und Kennungen bleiben, der Lernfortschritt also auch. Eine
+Antwort, die in einem Durchgang richtig und im anderen falsch ist, deutet auf
+einen Irrtum hin — solche Fragen bleibt das Werkzeug unverändert und meldet sie.
+
+Zuordnungsfragen würfelt Moodle auch zeilenweise durch, und zwei verschiedene
+Fragen können denselben Vorspann haben; sie werden daher über ihre
+Zeilenbeschriftungen auseinandergehalten, nicht über die Position.
+
 ### Unterstützte Fragetypen
 
 | Moodle | in der Kartei |
@@ -180,6 +200,7 @@ npm test                                      # Browser-Tests
 | `src/app.template.html` | Oberfläche und Lernlogik |
 | `src/build-data.js` | führt den Parser in Chromium aus, schreibt `data/*.json` |
 | `src/build.js` | fügt Vorlage + Parser + Fragen zu `lernkartei.html` |
+| `src/merge-data.js` | spielt weitere Durchgänge in einen `data/*.json` ein |
 | `test/*.test.js` | Playwright-Tests (Lernen, Verlauf, Streak, Achse, Suche, Bestand, Import) |
 
 Der Parser läuft bewusst im Browser statt in Node: die App muss ihn ohnehin

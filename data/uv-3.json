@@ -10,12 +10,16 @@
     "Pensionisten",
     "Selbständige",
     "Schüler",
-    "Kindergartenkinder"
+    "Kindergartenkinder",
+    "bei einer Berufskrankheit nach der Generalklausel",
+    "Bezieher von Familienbeihilfe",
+    "Bauern"
    ],
    "correct": [
     1,
     5,
-    6
+    6,
+    7
    ],
    "cat": "UV",
    "src": "answersselect",
@@ -488,11 +492,16 @@
     "Bemessungsgrundlage für Unfälle auf Wegen",
     "Besondere Bemessungsgrundlage für Personen über 30 Jahren",
     "Bemessungsgrundlage für Witwe",
-    "Bemessungsgrundlage nach festen Beträgen"
+    "Bemessungsgrundlage nach festen Beträgen",
+    "Bemessungsgrundlage nach variablen Beträgen",
+    "Bemessungsgrundlage zum Stichtag",
+    "Bemessungsgrundlage für Schwerversehrte",
+    "Bemessungsgrundlage nach billigem Ermessen"
    ],
    "correct": [
     0,
-    6
+    6,
+    10
    ],
    "cat": "UV",
    "src": "answersselect",
@@ -508,12 +517,16 @@
     "Bemessungsgrundlage für Beamte",
     "Bemessungsgrundlage unter Berücksichtigung der Beitragsgrundlagen",
     "Bemessungsgrundlage nach billigem Ermessen",
-    "Besondere Bemessungsgrundlage für Personen unter 30 Jahren"
+    "Besondere Bemessungsgrundlage für Personen unter 30 Jahren",
+    "Bemessungsgrundlage für Schwerversehrte",
+    "Bemessungsgrundlage für Witwe",
+    "Bemessungsgrundlage in sonstigen Fällen"
    ],
    "correct": [
     4,
     5,
-    6
+    6,
+    9
    ],
    "cat": "UV",
    "src": "answersselect",

@@ -9,7 +9,8 @@
     "selbstgeschaffene Gefahr",
     "innere Ursache",
     "unternehmerische Tätigkeit",
-    "eigenwirtschaftliche Tätigkeit"
+    "eigenwirtschaftliche Tätigkeit",
+    "äußere Ursache"
    ],
    "correct": [
     2,
@@ -27,10 +28,12 @@
     "Arbeitsweg",
     "Weg zum beruflichen Fortbildungskurs",
     "Weg zur Betriebsratswahl",
-    "Weg zur Arbeiterkammerwahl"
+    "Weg zur Arbeiterkammerwahl",
+    "Weg zur Befriedigung lebensnotwendiger Bedürfnisse"
    ],
    "correct": [
-    0
+    0,
+    4
    ],
    "cat": "UV",
    "src": "answersselect",
@@ -44,10 +47,15 @@
     "bei der Rettung eines Menschen aus Lebensgefahr",
     "bei der Wahl einer gesetzlichen beruflichen Interessenvertretung",
     "bei Nachbarschaftshilfe",
-    "bei der Inanspruchnahme von Interessensvertretungen"
+    "bei der Inanspruchnahme von Interessensvertretungen",
+    "bei der Befriedigung lebensnotwendiger Bedürfnisse",
+    "häusliche und andere Tätigkeiten",
+    "Besuch beruflicher Schulungs- oder Fortbildungskurse"
    ],
    "correct": [
-    4
+    4,
+    5,
+    6
    ],
    "cat": "UV",
    "src": "answersselect",
@@ -62,11 +70,13 @@
     "Arbeiten an landwirtschaftlichen Gebäuden",
     "Arbeitsweg",
     "Hilfeleistungen bei Unglücksfällen",
-    "Herbeiholung eines Arztes oder einer Hebamme"
+    "Herbeiholung eines Arztes oder einer Hebamme",
+    "Haushaltstätigkeiten"
    ],
    "correct": [
     0,
-    2
+    2,
+    6
    ],
    "cat": "UV",
    "src": "answersselect",
@@ -83,10 +93,14 @@
     "Rettung eines Menschen aus Lebensgefahr",
     "Unterstützung eines Sicherheitsorgans bei einer Amtshandlung",
     "Häusliche und andere Tätigkeiten",
-    "Wahl einer gesetzlichen beruflichen Interessensvertretung"
+    "Wahl einer gesetzlichen beruflichen Interessensvertretung",
+    "bei beruflichen Abschlussprüfungen",
+    "Teilnahme an der Betriebsdemokratie"
    ],
    "correct": [
-    7
+    7,
+    8,
+    9
    ],
    "cat": "UV",
    "src": "answersselect",
@@ -99,10 +113,15 @@
     "Unterstützung eines Sicherheitsorgans bei einer Amtshandlung",
     "Hilfeleistung bei Arbeiten an landwirtschaftlichen Gebäuden",
     "Hilfeleistung als Teilnehmer an der Betriebsdemokratie",
-    "Nachbarschaftshilfe"
+    "Nachbarschaftshilfe",
+    "Herbeiholung eines Arztes, einer Hebamme",
+    "Hilfeleistung bei der Befriedigung lebensnotwendiger Bedürfnisse",
+    "Hilfeleistungen bei sonstigen Unglücksfällen"
    ],
    "correct": [
-    0
+    0,
+    4,
+    6
    ],
    "cat": "UV",
    "src": "answersselect",
@@ -114,7 +133,8 @@
    "options": [
     "nur dann, wenn eine Minderung der Erwerbsfähigkeit von zumindest 50% über 3 Monate nach Eintritt des Versicherungsfalls vorliegt",
     "nur dann, wenn eine Minderung der Erwerbsfähigkeit von zumindest 20% über 3 Monate nach Eintritt des Versicherungsfalls vorliegt",
-    "nur dann, wenn eine Minderung der Erwerbsfähigkeit von zumindest 60% über 3 Monate nach Eintritt des Versicherungsfalls vorliegt"
+    "nur dann, wenn eine Minderung der Erwerbsfähigkeit von zumindest 60% über 3 Monate nach Eintritt des Versicherungsfalls vorliegt",
+    "nur dann, wenn eine Minderung der Erwerbsfähigkeit von zumindest 30% über 3 Monate nach Eintritt des Versicherungsfalls vorliegt"
    ],
    "correct": [
     0
@@ -131,12 +151,20 @@
     "Gesundheitsvorsorge",
     "Verhütung von Arbeitsunfällen und Berufskrankheiten",
     "Unfallheilbehandlung",
-    "Krankenbehandlung"
+    "Krankenbehandlung",
+    "Rehabilitation",
+    "Entschädigung",
+    "Zuschuss zur Entgeltfortzahlung",
+    "Forschung nach den wirksamsten Mitteln und Methoden zur Verhütung von Arbeitsunfällen und Berufskrankheiten"
    ],
    "correct": [
     0,
     2,
-    3
+    3,
+    5,
+    6,
+    7,
+    8
    ],
    "cat": "UV",
    "src": "answersselect",
@@ -150,12 +178,15 @@
     "Unfallheilbehandlung",
     "Hilfsmittel",
     "Heilbehelfe",
-    "Rehabilitation"
+    "Rehabilitation",
+    "Anstaltspflege",
+    "Erste Hilfe"
    ],
    "correct": [
     0,
     1,
-    4
+    4,
+    6
    ],
    "cat": "UV",
    "src": "answersselect",
@@ -169,13 +200,26 @@
     "Witwenbeihilfe",
     "Versehrtengeld im ASVG und BSVG",
     "Abfindung",
-    "Pensionsvorschuss"
+    "Pensionsvorschuss",
+    "Zuschüsse / Darlehen",
+    "Witwenpension",
+    "Überführungskosten",
+    "Besondere Unterstützung während der Unfallheilbehandlung",
+    "Integritätsabgeltung",
+    "Witwen-, Witwer-, Waisenrenten",
+    "Teilersatz der Bestattungskosten"
    ],
    "correct": [
     0,
     1,
     2,
-    3
+    3,
+    5,
+    7,
+    8,
+    9,
+    10,
+    11
    ],
    "cat": "UV",
    "src": "answersselect",
@@ -230,7 +274,8 @@
    "options": [
     "in geeigneten Einrichtungen",
     "in fremden Einrichtungen",
-    "in eigenen Einrichtungen"
+    "in eigenen Einrichtungen",
+    "in medizinischen Einrichtungen"
    ],
    "correct": [
     2
@@ -245,7 +290,8 @@
    "options": [
     "Unfallkrankenhäuser",
     "Rehabilitationszentren",
-    "Gruppenpraxen"
+    "Gruppenpraxen",
+    "Arztpraxen"
    ],
    "correct": [
     0,
@@ -263,11 +309,16 @@
     "medizinische Hauskrankenpflege",
     "Heilmittel",
     "soziale Rehabilitation",
-    "ärztliche Hilfe"
+    "ärztliche Hilfe",
+    "Heilbehelfe",
+    "Hilfsmittel",
+    "Pflege in Kranken-, Kur- und sonstigen Anstalten"
    ],
    "correct": [
     2,
-    4
+    4,
+    5,
+    7
    ],
    "cat": "UV",
    "src": "answersselect",
@@ -299,7 +350,8 @@
    "options": [
     "Übergangsgeld",
     "Übergangszuschuss",
-    "Übergangsdarlehen"
+    "Übergangsdarlehen",
+    "Ausbildungsgeld"
    ],
    "correct": [
     0
@@ -329,7 +381,8 @@
    "options": [
     "ASVG",
     "B-KUVG",
-    "GSVG"
+    "GSVG",
+    "BSVG"
    ],
    "correct": [
     1
@@ -377,7 +430,8 @@
    "options": [
     "eine Bemessungsgrundlage nach billigem Ermessen",
     "eine Bemessungsgrundlage in sonstigen Fällen",
-    "eine feste Bemessungsgrundlage"
+    "eine feste Bemessungsgrundlage",
+    "eine Bemessungsgrundlage unter Berücksichtigung der Beitragsgrundlagen"
    ],
    "correct": [
     2

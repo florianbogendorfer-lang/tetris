@@ -142,10 +142,14 @@
     "Selbstständig Erwerbstätige",
     "Bedienstete in einem privatrechtlichen Dienstverhältnis",
     "Knappen",
-    "Bedienstete der AUVA"
+    "Bedienstete der AUVA",
+    "bestimmte Bedienstete der Wiener Linien GmbH",
+    "Bedienstete von Eisenbahnbetrieben"
    ],
    "correct": [
-    2
+    2,
+    4,
+    5
    ],
    "cat": "UV",
    "src": "answersselect",
